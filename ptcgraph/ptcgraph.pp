@@ -120,6 +120,7 @@ const
   FullscreenGraph: Boolean = False;
 
 var
+  WindowTitle: AnsiString;
   PTCWrapperObject: TPTCWrapperThread;
 
 {******************************************************************************}
@@ -619,7 +620,7 @@ begin
   LogLn('Initializing mode ' + strf(XResolution) + ', ' + strf(YResolution) + ' 16 colours');
 {$ENDIF logging}
   { open the console }
-  ptc_InternalOpen(ParamStr(0), XResolution, YResolution, PTCFormat8, Pages);
+  ptc_InternalOpen(WindowTitle, XResolution, YResolution, PTCFormat8, Pages);
   PTCWidth := XResolution;
   PTCHeight := YResolution;
   CurrentActivePage := 0;
@@ -644,7 +645,7 @@ begin
   LogLn('Initializing mode ' + strf(XResolution) + ', ' + strf(YResolution) + ' 256 colours');
 {$ENDIF logging}
   { open the console }
-  ptc_InternalOpen(ParamStr(0), XResolution, YResolution, PTCFormat8, Pages);
+  ptc_InternalOpen(WindowTitle, XResolution, YResolution, PTCFormat8, Pages);
   PTCWidth := XResolution;
   PTCHeight := YResolution;
   CurrentActivePage := 0;
@@ -659,7 +660,7 @@ begin
   LogLn('Initializing mode ' + strf(XResolution) + ', ' + strf(YResolution) + ' 4 colours, palette ' + strf(CGAPalette));
 {$ENDIF logging}
   { open the console }
-  ptc_InternalOpen(ParamStr(0), XResolution, YResolution, PTCFormat8, 1);
+  ptc_InternalOpen(WindowTitle, XResolution, YResolution, PTCFormat8, 1);
   PTCWidth := XResolution;
   PTCHeight := YResolution;
   CurrentActivePage := 0;
@@ -674,7 +675,7 @@ begin
   LogLn('Initializing mode ' + strf(XResolution) + ', ' + strf(YResolution) + ' 2 colours');
 {$ENDIF logging}
   { open the console }
-  ptc_InternalOpen(ParamStr(0), XResolution, YResolution, PTCFormat8, Pages);
+  ptc_InternalOpen(WindowTitle, XResolution, YResolution, PTCFormat8, Pages);
   PTCWidth := XResolution;
   PTCHeight := YResolution;
   CurrentActivePage := 0;
@@ -689,7 +690,7 @@ begin
   LogLn('Initializing mode ' + strf(XResolution) + ', ' + strf(YResolution) + ' 2 colours');
 {$ENDIF logging}
   { open the console }
-  ptc_InternalOpen(ParamStr(0), XResolution, YResolution, PTCFormat8, Pages);
+  ptc_InternalOpen(WindowTitle, XResolution, YResolution, PTCFormat8, Pages);
   PTCWidth := XResolution;
   PTCHeight := YResolution;
   CurrentActivePage := 0;
@@ -704,7 +705,7 @@ begin
   LogLn('Initializing mode ' + strf(XResolution) + ', ' + strf(YResolution) + ' 32768 colours');
 {$ENDIF logging}
   { open the console }
-  ptc_InternalOpen(ParamStr(0), XResolution, YResolution, PTCFormat15, Pages);
+  ptc_InternalOpen(WindowTitle, XResolution, YResolution, PTCFormat15, Pages);
   PTCWidth := XResolution;
   PTCHeight := YResolution;
   CurrentActivePage := 0;
@@ -717,7 +718,7 @@ begin
   LogLn('Initializing mode ' + strf(XResolution) + ', ' + strf(YResolution) + ' 65536 colours');
 {$ENDIF logging}
   { open the console }
-  ptc_InternalOpen(ParamStr(0), XResolution, YResolution, PTCFormat16, Pages);
+  ptc_InternalOpen(WindowTitle, XResolution, YResolution, PTCFormat16, Pages);
   PTCWidth := XResolution;
   PTCHeight := YResolution;
   CurrentActivePage := 0;
@@ -2786,6 +2787,7 @@ end;
   end;
 
 initialization
+  WindowTitle := ParamStr(0);
   PTCFormat8 := TPTCFormatFactory.CreateNew(8);
   PTCFormat15 := TPTCFormatFactory.CreateNew(16, $7C00, $03E0, $001F);
   PTCFormat16 := TPTCFormatFactory.CreateNew(16, $F800, $07E0, $001F);

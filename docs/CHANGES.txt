@@ -3,6 +3,8 @@
    Control key modifier status under Windows; This eliminates a problem, where
    the alt key appears "stuck", after alt-tabbing away from the application,
    then focusing back to it with a mouse click.
+ - ptcgraph now has a global string variable WindowTitle, which allows you to
+   set the window title, before calling InitGraph
  - ptcgraph was extended to also support resolutions, different than the ones,
    defined by VESA. This means that you can now use ptcgraph with resolutions,
    higher than 1280x1024 and widescreen (e.g. 16:9 or 16:10) aspect ratios, as
