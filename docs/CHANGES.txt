@@ -1,4 +1,8 @@
 0.99.next
+ - use an alternative method (via GetKeyState) for obtaining the Alt, Shift and
+   Control key modifier status under Windows; This eliminates a problem, where
+   the alt key appears "stuck", after alt-tabbing away from the application,
+   then focusing back to it with a mouse click.
  - ptcgraph was extended to also support resolutions, different than the ones,
    defined by VESA. This means that you can now use ptcgraph with resolutions,
    higher than 1280x1024 and widescreen (e.g. 16:9 or 16:10) aspect ratios, as

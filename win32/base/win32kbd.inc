@@ -93,17 +93,12 @@ begin
     press := (message = WM_KEYDOWN) or (message = WM_SYSKEYDOWN);
 
     { update modifiers }
-    if wParam = VK_MENU then
-      { alt }
-      FAlt := press
-    else
-      if wParam = VK_SHIFT then
-        { shift }
-        FShift := press
-      else
-        if wParam = VK_CONTROL then
-          { control }
-          FControl := press;
+    { alt }
+    FAlt := (GetKeyState(VK_MENU) and $8000) <> 0;
+    { shift }
+    FShift := (GetKeyState(VK_SHIFT) and $8000) <> 0;
+    { control }
+    FControl := (GetKeyState(VK_CONTROL) and $8000) <> 0;
 
     { enter monitor if multithreaded }
     if FMultithreaded then
