@@ -4,7 +4,7 @@
 
 [package]
 name=ptc-examples
-version=0.99.14.1
+version=0.99.15
 
 [target]
 programs=area buffer clear clip con_info console hicolor image keyboard \

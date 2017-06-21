@@ -1,6 +1,6 @@
 {
     This file is part of the PTCPas framebuffer library
-    Copyright (C) 2001-2013 Nikolay Nikolov (nickysn@users.sourceforge.net)
+    Copyright (C) 2001-2013, 2016, 2017 Nikolay Nikolov (nickysn@users.sourceforge.net)
     Original C++ version by Christian Nentwich (c.nentwich@cs.ucl.ac.uk)
 
     This library is free software; you can redistribute it and/or
@@ -27,7 +27,7 @@
 
     You should have received a copy of the GNU Lesser General Public
     License along with this library; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 }
 
 constructor TX11Console.Create;
@@ -37,7 +37,8 @@ begin
   inherited Create;
 
   { default flags }
-  FFlags := [PTC_X11_TRY_XSHM, PTC_X11_TRY_XF86VIDMODE, PTC_X11_TRY_XINPUT2];
+  FFlags := [PTC_X11_TRY_XSHM, PTC_X11_TRY_XF86VIDMODE, PTC_X11_TRY_XINPUT2,
+             PTC_X11_TRY_XIM];
 
   FTitle := '';
 
@@ -178,6 +179,16 @@ begin
   if AOption = 'xinput2 off' then
   begin
     FFlags := FFlags - [PTC_X11_TRY_XINPUT2];
+    exit;
+  end;
+  if (AOption = 'xim') or (AOption = 'xim on') then
+  begin
+    FFlags := FFlags + [PTC_X11_TRY_XIM];
+    exit;
+  end;
+  if AOption = 'xim off' then
+  begin
+    FFlags := FFlags - [PTC_X11_TRY_XIM];
     exit;
   end;
   if AOption = 'default cursor' then

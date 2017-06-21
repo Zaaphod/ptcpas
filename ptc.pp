@@ -27,7 +27,7 @@
 
     You should have received a copy of the GNU Lesser General Public
     License along with this library; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 }
 
 {$MODE objfpc}
@@ -69,7 +69,7 @@ uses
 {$ENDIF FPDOC}
 
 const
-  PTCPAS_VERSION = 'PTCPas 0.99.14.1';
+  PTCPAS_VERSION = 'PTCPas 0.99.15';
 
 type
   PUint8  = ^Uint8;
@@ -134,24 +134,24 @@ uses
 uses
   BaseUnix, Unix
   {$IFDEF X11}
-    , ctypes, x, p_xlib, p_xutil, xatom, keysym, p_xkblib
+    , ctypes, x, xlib, xutil, xatom, p_keysym, xkblib
     {$IFDEF ENABLE_X11_EXTENSION_XRANDR}
-    , p_xrandr
+    , xrandr
     {$ENDIF ENABLE_X11_EXTENSION_XRANDR}
     {$IFDEF ENABLE_X11_EXTENSION_XF86VIDMODE}
-    , p_xf86vmode
+    , xf86vmode
     {$ENDIF ENABLE_X11_EXTENSION_XF86VIDMODE}
     {$IFDEF ENABLE_X11_EXTENSION_XF86DGA}
-    , p_xf86dga
+    , xf86dga
     {$ENDIF ENABLE_X11_EXTENSION_XF86DGA}
     {$IFDEF ENABLE_X11_EXTENSION_XSHM}
-    , p_xshm, ipc
+    , xshm, ipc
     {$ENDIF ENABLE_X11_EXTENSION_XSHM}
     {$IFDEF ENABLE_X11_EXTENSION_GLX}
-    , p_glx
+    , glx
     {$ENDIF ENABLE_X11_EXTENSION_GLX}
     {$IFDEF ENABLE_X11_EXTENSION_XINPUT2}
-    , p_XI2, p_XInput2
+    , XI2, XInput2
     {$ENDIF ENABLE_X11_EXTENSION_XINPUT2}
   {$ENDIF X11}
   {$IFDEF COCOA}
@@ -159,13 +159,6 @@ uses
   {$ENDIF COCOA}
   ;
 {$ENDIF UNIX}
-
-{$IFDEF X11}
-const
-  {$WARNING these must be added to unit X}
-  GenericEvent = 35;
-  LASTEvent = 36;
-{$ENDIF X11}
 
 { this little procedure is not a good reason to include the whole sysutils
   unit :) }

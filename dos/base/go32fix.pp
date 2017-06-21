@@ -50,12 +50,12 @@ interface
           max_pages_in_paging_file,
           reserved0,
           reserved1,
-          reserved2: longint;
+          reserved2 : longint;
        end;
 
        tseginfo = record
-          offset: pointer;
-          segment: word;
+          offset  : pointer;
+          segment : word;
        end;
 
        trealregs = record
@@ -84,102 +84,102 @@ interface
       end;
 
     { this works only with real DPMI }
-    function allocate_ldt_descriptors(count: word): word;
-    function free_ldt_descriptor(d: word): boolean;
-    function segment_to_descriptor(seg: word): word;
-    function get_next_selector_increment_value: word;
-    function get_segment_base_address(d: word): longint;
-    function set_segment_base_address(d: word;s: dword): boolean;
-    function set_segment_limit(d: word;s: dword): boolean;
-    function set_descriptor_access_right(d: word;w: word): boolean;
-    function create_code_segment_alias_descriptor(seg: word): word;
-    function get_linear_addr(phys_addr: dword;size: longint): dword;
+    function allocate_ldt_descriptors(count : word) : word;
+    function free_ldt_descriptor(d : word) : boolean;
+    function segment_to_descriptor(seg : word) : word;
+    function get_next_selector_increment_value : word;
+    function get_segment_base_address(d : word) : longint;
+    function set_segment_base_address(d : word;s : dword) : boolean;
+    function set_segment_limit(d : word;s : dword): boolean;
+    function set_descriptor_access_right(d : word;w : word) : boolean;
+    function create_code_segment_alias_descriptor(seg : word) : word;
+    function get_linear_addr(phys_addr : dword;size : longint) : dword;
     function free_linear_addr_mapping(linear_addr: dword): boolean;
-    function get_segment_limit(d: word): dword;
-    function get_descriptor_access_right(d: word): longint;
+    function get_segment_limit(d : word) : dword;
+    function get_descriptor_access_right(d : word) : longint;
     function get_page_size:longint;
     function map_device_in_memory_block(handle,offset,pagecount,device:dword):boolean;
     function get_page_attributes(handle, offset, pagecount: dword; buf: pointer): boolean;
     function set_page_attributes(handle, offset, pagecount: dword; buf: pointer): boolean;
-    function realintr(intnr: word;var regs: trealregs): boolean;
+    function realintr(intnr : word;var regs : trealregs) : boolean;
     function get_dpmi_version(var version: tdpmiversioninfo): boolean;
 
     { is needed for functions which need a real mode buffer }
-    function global_dos_alloc(bytes: longint): longint;
-    function global_dos_free(selector: word): boolean;
+    function global_dos_alloc(bytes : longint) : longint;
+    function global_dos_free(selector : word) : boolean;
 
     var
        { selector for the DOS memory (only usable if in DPMI mode) }
-       dosmemselector: word;
+       dosmemselector : word;
        { result of dpmi call }
-       int31error: word;
+       int31error : word;
 
     { this procedure copies data where the source and destination }
     { are specified by 48 bit pointers                            }
     { Note: the procedure checks only for overlapping if          }
     { source selector=destination selector                        }
-    procedure seg_move(sseg: word;source: longint;dseg: word;dest: longint;count: longint);
+    procedure seg_move(sseg : word;source : longint;dseg : word;dest : longint;count : longint);
 
     { fills a memory area specified by a 48 bit pointer with c }
-    procedure seg_fillchar(seg: word;ofs: longint;count: longint;c: char);
-    procedure seg_fillword(seg: word;ofs: longint;count: longint;w: word);
+    procedure seg_fillchar(seg : word;ofs : longint;count : longint;c : char);
+    procedure seg_fillword(seg : word;ofs : longint;count : longint;w : word);
 
     {************************************}
     { this works with all PM interfaces: }
     {************************************}
 
-    function get_meminfo(var meminfo: tmeminfo): boolean;
-    function get_pm_interrupt(vector: byte;var intaddr: tseginfo): boolean;
-    function set_pm_interrupt(vector: byte;const intaddr: tseginfo): boolean;
-    function get_rm_interrupt(vector: byte;var intaddr: tseginfo): boolean;
-    function set_rm_interrupt(vector: byte;const intaddr: tseginfo): boolean;
-    function get_exception_handler(e: byte;var intaddr: tseginfo): boolean;
-    function set_exception_handler(e: byte;const intaddr: tseginfo): boolean;
-    function get_pm_exception_handler(e: byte;var intaddr: tseginfo): boolean;
-    function set_pm_exception_handler(e: byte;const intaddr: tseginfo): boolean;
-    function free_rm_callback(var intaddr: tseginfo): boolean;
-    function get_rm_callback(pm_func: pointer;const reg: trealregs;var rmcb: tseginfo): boolean;
-    function get_cs: word;
-    function get_ds: word;
-    function get_ss: word;
+    function get_meminfo(var meminfo : tmeminfo) : boolean;
+    function get_pm_interrupt(vector : byte;var intaddr : tseginfo) : boolean;
+    function set_pm_interrupt(vector : byte;const intaddr : tseginfo) : boolean;
+    function get_rm_interrupt(vector : byte;var intaddr : tseginfo) : boolean;
+    function set_rm_interrupt(vector : byte;const intaddr : tseginfo) : boolean;
+    function get_exception_handler(e : byte;var intaddr : tseginfo) : boolean;
+    function set_exception_handler(e : byte;const intaddr : tseginfo) : boolean;
+    function get_pm_exception_handler(e : byte;var intaddr : tseginfo) : boolean;
+    function set_pm_exception_handler(e : byte;const intaddr : tseginfo) : boolean;
+    function free_rm_callback(var intaddr : tseginfo) : boolean;
+    function get_rm_callback(pm_func : pointer;const reg : trealregs;var rmcb : tseginfo) : boolean;
+    function get_cs : word;
+    function get_ds : word;
+    function get_ss : word;
 
     { locking functions }
     function allocate_memory_block(size:longint):longint;
-    function free_memory_block(blockhandle: longint): boolean;
-    function request_linear_region(linearaddr, size: longint;
-                                   var blockhandle: longint): boolean;
-    function lock_linear_region(linearaddr, size: longint): boolean;
-    function lock_data(var data;size: longint): boolean;
-    function lock_code(functionaddr: pointer;size: longint): boolean;
-    function unlock_linear_region(linearaddr, size: longint): boolean;
-    function unlock_data(var data;size: longint): boolean;
-    function unlock_code(functionaddr: pointer;size: longint): boolean;
+    function free_memory_block(blockhandle : longint) : boolean;
+    function request_linear_region(linearaddr, size : longint;
+                                   var blockhandle : longint) : boolean;
+    function lock_linear_region(linearaddr, size : longint) : boolean;
+    function lock_data(var data;size : longint) : boolean;
+    function lock_code(functionaddr : pointer;size : longint) : boolean;
+    function unlock_linear_region(linearaddr, size : longint) : boolean;
+    function unlock_data(var data;size : longint) : boolean;
+    function unlock_code(functionaddr : pointer;size : longint) : boolean;
 
     { disables and enables interrupts }
     procedure disable;
     procedure enable;
 
-    function inportb(port: word): byte;
-    function inportw(port: word): word;
-    function inportl(port: word): longint;
+    function inportb(port : word) : byte;
+    function inportw(port : word) : word;
+    function inportl(port : word) : longint;
 
-    procedure outportb(port: word;data: byte);
-    procedure outportw(port: word;data: word);
-    procedure outportl(port: word;data: longint);
-    function get_run_mode: word;
+    procedure outportb(port : word;data : byte);
+    procedure outportw(port : word;data : word);
+    procedure outportl(port : word;data : longint);
+    function get_run_mode : word;
 
-    function transfer_buffer: longint;
-    function tb_segment: longint;
-    function tb_offset: longint;
-    function tb_size: longint;
-    procedure copytodos(var addr; len: longint);
-    procedure copyfromdos(var addr; len: longint);
+    function transfer_buffer : longint;
+    function tb_segment : longint;
+    function tb_offset : longint;
+    function tb_size : longint;
+    procedure copytodos(var addr; len : longint);
+    procedure copyfromdos(var addr; len : longint);
 
-    procedure dpmi_dosmemput(seg: word;ofs: word;var data;count: longint);
-    procedure dpmi_dosmemget(seg: word;ofs: word;var data;count: longint);
-    procedure dpmi_dosmemmove(sseg,sofs,dseg,dofs: word;count: longint);
-    procedure dpmi_dosmemfillchar(seg,ofs: word;count: longint;c: char);
-    procedure dpmi_dosmemfillword(seg,ofs: word;count: longint;w: word);
+    procedure dpmi_dosmemput(seg : word;ofs : word;var data;count : longint);
+    procedure dpmi_dosmemget(seg : word;ofs : word;var data;count : longint);
+    procedure dpmi_dosmemmove(sseg,sofs,dseg,dofs : word;count : longint);
+    procedure dpmi_dosmemfillchar(seg,ofs : word;count : longint;c : char);
+    procedure dpmi_dosmemfillword(seg,ofs : word;count : longint;w : word);
 
 
 
@@ -187,11 +187,11 @@ interface
        { this procedures are assigned to the procedure which are needed }
        { for the current mode to access DOS memory                      }
        { It's strongly recommended to use this procedures!              }
-       dosmemput: procedure(seg: word;ofs: word;var data;count: longint)=@dpmi_dosmemput;
-       dosmemget: procedure(seg: word;ofs: word;var data;count: longint)=@dpmi_dosmemget;
-       dosmemmove: procedure(sseg,sofs,dseg,dofs: word;count: longint)=@dpmi_dosmemmove;
-       dosmemfillchar: procedure(seg,ofs: word;count: longint;c: char)=@dpmi_dosmemfillchar;
-       dosmemfillword: procedure(seg,ofs: word;count: longint;w: word)=@dpmi_dosmemfillword;
+       dosmemput      : procedure(seg : word;ofs : word;var data;count : longint)=@dpmi_dosmemput;
+       dosmemget      : procedure(seg : word;ofs : word;var data;count : longint)=@dpmi_dosmemget;
+       dosmemmove     : procedure(sseg,sofs,dseg,dofs : word;count : longint)=@dpmi_dosmemmove;
+       dosmemfillchar : procedure(seg,ofs : word;count : longint;c : char)=@dpmi_dosmemfillchar;
+       dosmemfillword : procedure(seg,ofs : word;count : longint;w : word)=@dpmi_dosmemfillword;
 
   implementation
 
@@ -199,38 +199,38 @@ interface
 
 
     { the following procedures copy from and to DOS memory using DPMI }
-    procedure dpmi_dosmemput(seg: word;ofs: word;var data;count: longint);
+    procedure dpmi_dosmemput(seg : word;ofs : word;var data;count : longint);
 
       begin
          seg_move(get_ds,longint(@data),dosmemselector,seg*16+ofs,count);
       end;
 
-    procedure dpmi_dosmemget(seg: word;ofs: word;var data;count: longint);
+    procedure dpmi_dosmemget(seg : word;ofs : word;var data;count : longint);
 
       begin
          seg_move(dosmemselector,seg*16+ofs,get_ds,longint(@data),count);
       end;
 
-    procedure dpmi_dosmemmove(sseg,sofs,dseg,dofs: word;count: longint);
+    procedure dpmi_dosmemmove(sseg,sofs,dseg,dofs : word;count : longint);
 
       begin
          seg_move(dosmemselector,sseg*16+sofs,dosmemselector,dseg*16+dofs,count);
       end;
 
-    procedure dpmi_dosmemfillchar(seg,ofs: word;count: longint;c: char);
+    procedure dpmi_dosmemfillchar(seg,ofs : word;count : longint;c : char);
 
       begin
          seg_fillchar(dosmemselector,seg*16+ofs,count,c);
       end;
 
-    procedure dpmi_dosmemfillword(seg,ofs: word;count: longint;w: word);
+    procedure dpmi_dosmemfillword(seg,ofs : word;count : longint;w : word);
 
       begin
          seg_fillword(dosmemselector,seg*16+ofs,count,w);
       end;
 
 
-    procedure test_int31(flag: longint); stdcall; { stack-args! }
+    procedure test_int31(flag : longint); stdcall; { stack-args! }
       begin
          asm
             pushl %ebx
@@ -248,7 +248,7 @@ interface
          end;
       end;
 
-    function global_dos_alloc(bytes: longint): longint;
+    function global_dos_alloc(bytes : longint) : longint;
 
       begin
          asm
@@ -271,7 +271,7 @@ interface
          end;
       end;
 
-    function  global_dos_free(selector: word): boolean;
+    function  global_dos_free(selector : word) : boolean;
 
       begin
          asm
@@ -283,7 +283,7 @@ interface
          end;
       end;
 
-    function realintr(intnr: word;var regs: trealregs): boolean;
+    function realintr(intnr : word;var regs : trealregs) : boolean;
 
       begin
          regs.realsp:=0;
@@ -309,7 +309,7 @@ interface
          end;
       end;
 
-    procedure seg_fillchar(seg: word;ofs: longint;count: longint;c: char);
+    procedure seg_fillchar(seg : word;ofs : longint;count : longint;c : char);
 
       begin
          asm
@@ -341,7 +341,7 @@ interface
          end;
       end;
 
-    procedure seg_fillword(seg: word;ofs: longint;count: longint;w: word);
+    procedure seg_fillword(seg : word;ofs : longint;count : longint;w : word);
 
       begin
          asm
@@ -371,7 +371,7 @@ interface
          end;
       end;
 
-    procedure seg_move(sseg: word;source: longint;dseg: word;dest: longint;count: longint);
+    procedure seg_move(sseg : word;source : longint;dseg : word;dest : longint;count : longint);
 
       begin
          if count=0 then
@@ -447,7 +447,7 @@ interface
            end ['ECX','EAX'];
       end;
 
-    procedure outportb(port: word;data: byte);
+    procedure outportb(port : word;data : byte);
 
       begin
          asm
@@ -457,7 +457,7 @@ interface
          end ['EAX','EDX'];
       end;
 
-    procedure outportw(port: word;data: word);
+    procedure outportw(port : word;data : word);
 
       begin
          asm
@@ -467,7 +467,7 @@ interface
          end ['EAX','EDX'];
       end;
 
-    procedure outportl(port: word;data: longint);
+    procedure outportl(port : word;data : longint);
 
       begin
          asm
@@ -477,7 +477,7 @@ interface
          end ['EAX','EDX'];
       end;
 
-    function inportb(port: word): byte;
+    function inportb(port : word) : byte;
 
       begin
          asm
@@ -487,7 +487,7 @@ interface
          end ['EAX','EDX'];
       end;
 
-    function inportw(port: word): word;
+    function inportw(port : word) : word;
 
       begin
          asm
@@ -497,7 +497,7 @@ interface
          end ['EAX','EDX'];
       end;
 
-    function inportl(port: word): longint;
+    function inportl(port : word) : longint;
 
       begin
          asm
@@ -509,25 +509,25 @@ interface
 
 
 
-    function get_cs: word;assembler;
+    function get_cs : word;assembler;
       asm
             movw %cs,%ax
       end;
 
 
-    function get_ss: word;assembler;
+    function get_ss : word;assembler;
       asm
             movw %ss,%ax
       end;
 
 
-    function get_ds: word;assembler;
+    function get_ds : word;assembler;
       asm
             movw %ds,%ax
       end;
 
 
-    function set_pm_interrupt(vector: byte;const intaddr: tseginfo): boolean;
+    function set_pm_interrupt(vector : byte;const intaddr : tseginfo) : boolean;
 
       begin
          asm
@@ -545,7 +545,7 @@ interface
          end;
       end;
 
-    function set_rm_interrupt(vector: byte;const intaddr: tseginfo): boolean;
+    function set_rm_interrupt(vector : byte;const intaddr : tseginfo) : boolean;
 
       begin
          asm
@@ -563,7 +563,7 @@ interface
          end;
       end;
 
-    function set_pm_exception_handler(e: byte;const intaddr: tseginfo): boolean;
+    function set_pm_exception_handler(e : byte;const intaddr : tseginfo) : boolean;
 
       begin
          asm
@@ -581,7 +581,7 @@ interface
          end;
       end;
 
-    function set_exception_handler(e: byte;const intaddr: tseginfo): boolean;
+    function set_exception_handler(e : byte;const intaddr : tseginfo) : boolean;
 
       begin
          asm
@@ -599,7 +599,7 @@ interface
          end;
       end;
 
-    function get_pm_exception_handler(e: byte;var intaddr: tseginfo): boolean;
+    function get_pm_exception_handler(e : byte;var intaddr : tseginfo) : boolean;
 
       begin
          asm
@@ -617,7 +617,7 @@ interface
          end;
       end;
 
-    function get_exception_handler(e: byte;var intaddr: tseginfo): boolean;
+    function get_exception_handler(e : byte;var intaddr : tseginfo) : boolean;
 
       begin
          asm
@@ -635,7 +635,7 @@ interface
          end;
       end;
 
-    function get_pm_interrupt(vector: byte;var intaddr: tseginfo): boolean;
+    function get_pm_interrupt(vector : byte;var intaddr : tseginfo) : boolean;
 
       begin
          asm
@@ -653,7 +653,7 @@ interface
          end;
       end;
 
-    function get_rm_interrupt(vector: byte;var intaddr: tseginfo): boolean;
+    function get_rm_interrupt(vector : byte;var intaddr : tseginfo) : boolean;
 
       begin
          asm
@@ -672,7 +672,7 @@ interface
          end;
       end;
 
-    function free_rm_callback(var intaddr: tseginfo): boolean;
+    function free_rm_callback(var intaddr : tseginfo) : boolean;
       begin
          asm
             movl intaddr,%eax
@@ -691,9 +691,9 @@ interface
     at hardware exceptions }
 
     var
-       ___v2prt0_ds_alias: word; external name '___v2prt0_ds_alias';
+       ___v2prt0_ds_alias : word; external name '___v2prt0_ds_alias';
 
-    function get_rm_callback(pm_func: pointer;const reg: trealregs;var rmcb: tseginfo): boolean;
+    function get_rm_callback(pm_func : pointer;const reg : trealregs;var rmcb : tseginfo) : boolean;
       begin
          asm
             pushl %esi
@@ -722,7 +722,7 @@ interface
          end;
       end;
 
-    function allocate_ldt_descriptors(count: word): word;
+    function allocate_ldt_descriptors(count : word) : word;
 
       begin
          asm
@@ -733,7 +733,7 @@ interface
          end;
       end;
 
-    function free_ldt_descriptor(d: word): boolean;
+    function free_ldt_descriptor(d : word) : boolean;
 
       begin
          asm
@@ -748,7 +748,7 @@ interface
          end;
       end;
 
-    function segment_to_descriptor(seg: word): word;
+    function segment_to_descriptor(seg : word) : word;
 
       begin
          asm
@@ -761,7 +761,7 @@ interface
          end;
       end;
 
-    function get_next_selector_increment_value: word;
+    function get_next_selector_increment_value : word;
 
       begin
          asm
@@ -771,7 +771,7 @@ interface
          end;
       end;
 
-    function get_segment_base_address(d: word): longint;
+    function get_segment_base_address(d : word) : longint;
 
       begin
          asm
@@ -801,10 +801,10 @@ interface
         end;
       end;
 
-    function request_linear_region(linearaddr, size: longint;
-                                   var blockhandle: longint): boolean;
+    function request_linear_region(linearaddr, size : longint;
+                                   var blockhandle : longint) : boolean;
       var
-         pageofs: longint;
+         pageofs : longint;
 
       begin
          pageofs:=linearaddr and $3ff;
@@ -857,7 +857,7 @@ interface
         end;
      end;
 
-    function free_memory_block(blockhandle: longint): boolean;
+    function free_memory_block(blockhandle : longint) : boolean;
       begin
          asm
             pushl %edi
@@ -875,7 +875,7 @@ interface
          end;
       end;
 
-    function lock_linear_region(linearaddr, size: longint): boolean;
+    function lock_linear_region(linearaddr, size : longint) : boolean;
 
       begin
           asm
@@ -899,10 +899,10 @@ interface
           end;
       end;
 
-    function lock_data(var data;size: longint): boolean;
+    function lock_data(var data;size : longint) : boolean;
 
       var
-         linearaddr: longint;
+         linearaddr : longint;
 
       begin
          if get_run_mode<>rm_dpmi then
@@ -911,10 +911,10 @@ interface
          lock_data:=lock_linear_region(linearaddr,size);
       end;
 
-    function lock_code(functionaddr: pointer;size: longint): boolean;
+    function lock_code(functionaddr : pointer;size : longint) : boolean;
 
       var
-         linearaddr: longint;
+         linearaddr : longint;
 
       begin
          if get_run_mode<>rm_dpmi then
@@ -923,7 +923,7 @@ interface
          lock_code:=lock_linear_region(linearaddr,size);
       end;
 
-    function unlock_linear_region(linearaddr,size: longint): boolean;
+    function unlock_linear_region(linearaddr,size : longint) : boolean;
 
       begin
          asm
@@ -947,10 +947,10 @@ interface
          end;
       end;
 
-    function unlock_data(var data;size: longint): boolean;
+    function unlock_data(var data;size : longint) : boolean;
 
       var
-         linearaddr: longint;
+         linearaddr : longint;
       begin
          if get_run_mode<>rm_dpmi then
            exit;
@@ -958,10 +958,10 @@ interface
          unlock_data:=unlock_linear_region(linearaddr,size);
       end;
 
-    function unlock_code(functionaddr: pointer;size: longint): boolean;
+    function unlock_code(functionaddr : pointer;size : longint) : boolean;
 
       var
-         linearaddr: longint;
+         linearaddr : longint;
       begin
          if get_run_mode<>rm_dpmi then
            exit;
@@ -969,7 +969,7 @@ interface
          unlock_code:=unlock_linear_region(linearaddr,size);
       end;
 
-    function set_segment_base_address(d: word;s: dword): boolean;
+    function set_segment_base_address(d : word;s : dword) : boolean;
 
       begin
          asm
@@ -987,7 +987,7 @@ interface
          end;
       end;
 
-    function set_descriptor_access_right(d: word;w: word): boolean;
+    function set_descriptor_access_right(d : word;w : word) : boolean;
 
       begin
          asm
@@ -1003,7 +1003,7 @@ interface
          end;
       end;
 
-    function set_segment_limit(d: word;s: dword): boolean;
+    function set_segment_limit(d : word;s : dword) : boolean;
 
       begin
          asm
@@ -1021,7 +1021,7 @@ interface
          end;
       end;
 
-    function get_descriptor_access_right(d: word): longint;
+    function get_descriptor_access_right(d : word) : longint;
 
       begin
          asm
@@ -1033,7 +1033,7 @@ interface
             movl %eax,__RESULT
          end;
       end;
-    function get_segment_limit(d: word): dword;
+    function get_segment_limit(d : word) : dword;
 
       begin
          asm
@@ -1046,7 +1046,7 @@ interface
          end;
       end;
 
-    function create_code_segment_alias_descriptor(seg: word): word;
+    function create_code_segment_alias_descriptor(seg : word) : word;
 
       begin
          asm
@@ -1061,7 +1061,7 @@ interface
          end;
       end;
 
-    function get_meminfo(var meminfo: tmeminfo): boolean;
+    function get_meminfo(var meminfo : tmeminfo) : boolean;
 
       begin
          asm
@@ -1076,7 +1076,7 @@ interface
          end;
       end;
 
-    function get_linear_addr(phys_addr: dword;size: longint): dword;
+    function get_linear_addr(phys_addr : dword;size : longint) : dword;
 
       begin
          asm
@@ -1135,9 +1135,9 @@ interface
 
 
     var
-      _run_mode: word;external name '_run_mode';
+      _run_mode : word;external name '_run_mode';
 
-    function get_run_mode: word;
+    function get_run_mode : word;
 
       begin
          get_run_mode:=_run_mode;
@@ -1250,31 +1250,31 @@ interface
                               Transfer Buffer
 *****************************************************************************}
 
-    function transfer_buffer: longint;
+    function transfer_buffer : longint;
       begin
          transfer_buffer := go32_info_block.linear_address_of_transfer_buffer;
       end;
 
 
-    function tb_segment: longint;
+    function tb_segment : longint;
       begin
         tb_segment:=go32_info_block.linear_address_of_transfer_buffer shr 4;
       end;
 
 
-    function tb_offset: longint;
+    function tb_offset : longint;
       begin
         tb_offset:=go32_info_block.linear_address_of_transfer_buffer and $f;
       end;
 
 
-    function tb_size: longint;
+    function tb_size : longint;
       begin
          tb_size := go32_info_block.size_of_transfer_buffer;
       end;
 
 
-    procedure copytodos(var addr; len: longint);
+    procedure copytodos(var addr; len : longint);
        begin
           if len>tb_size then
             runerror(217);
@@ -1282,7 +1282,7 @@ interface
        end;
 
 
-    procedure copyfromdos(var addr; len: longint);
+    procedure copyfromdos(var addr; len : longint);
        begin
           if len>tb_size then
             runerror(217);
@@ -1291,7 +1291,7 @@ interface
 
 
     var
-      _core_selector: word;external name '_core_selector';
+      _core_selector : word;external name '_core_selector';
 
 begin
    int31error:=0;

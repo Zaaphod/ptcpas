@@ -1,6 +1,6 @@
 {
     This file is part of the PTCPas framebuffer library
-    Copyright (C) 2001-2013 Nikolay Nikolov (nickysn@users.sourceforge.net)
+    Copyright (C) 2001-2013, 2016, 2017 Nikolay Nikolov (nickysn@users.sourceforge.net)
     Original C++ version by Christian Nentwich (c.nentwich@cs.ucl.ac.uk)
 
     This library is free software; you can redistribute it and/or
@@ -27,7 +27,7 @@
 
     You should have received a copy of the GNU Lesser General Public
     License along with this library; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 }
 
 constructor TX11WindowDisplay.Create(ADisplay: PDisplay; AScreen: Integer; const AFlags: TX11Flags);
@@ -79,6 +79,14 @@ begin
   inherited Destroy;
 end;
 
+{$warning remove, when fix added to xlib}
+function XGetIMValues(para1:PXIM; dotdotdot:array of const):Pchar;cdecl;external libX11;
+function XGetICValues(para1:PXIC; dotdotdot:array of const):Pchar;cdecl;external libX11;
+
+{function fpsetlocale(category: cint; locale: Pchar): PChar;cdecl;external 'c' name 'setlocale';
+const
+  LC_ALL = 6;}
+
 procedure TX11WindowDisplay.Open(ATitle: AnsiString; AWidth, AHeight: Integer; AFormat: IPTCFormat; const AOpenGLAttributes: IPTCOpenGLAttributes);
 var
   xgcv: TXGCValues;
@@ -98,6 +106,116 @@ var
 {$IFDEF ENABLE_X11_EXTENSION_XINPUT2}
   XInput2EventMask: TXIEventMask;
 {$ENDIF ENABLE_X11_EXTENSION_XINPUT2}
+  selected_im_style: TXIMStyle = 0;
+  im_event_mask: clong = 0;
+
+  function IMStyleToStr(style: TXIMStyle): string;
+  begin
+    Result := '';
+    if (style and XIMPreeditArea) <> 0 then
+      Result := Result + ' XIMPreeditArea';
+    if (style and XIMPreeditCallbacks) <> 0 then
+      Result := Result + ' XIMPreeditCallbacks';
+    if (style and XIMPreeditPosition) <> 0 then
+      Result := Result + ' XIMPreeditPosition';
+    if (style and XIMPreeditNothing) <> 0 then
+      Result := Result + ' XIMPreeditNothing';
+    if (style and XIMPreeditNone) <> 0 then
+      Result := Result + ' XIMPreeditNone';
+    if (style and XIMStatusArea) <> 0 then
+      Result := Result + ' XIMStatusArea';
+    if (style and XIMStatusCallbacks) <> 0 then
+      Result := Result + ' XIMStatusCallbacks';
+    if (style and XIMStatusNothing) <> 0 then
+      Result := Result + ' XIMStatusNothing';
+    if (style and XIMStatusNone) <> 0 then
+      Result := Result + ' XIMStatusNone';
+    if Length(Result) > 0 then
+      Delete(Result, 1, 1);
+    Result := IntToStr(style) + ' (' + Result + ')';
+  end;
+
+  procedure TryCreateIM;
+  const
+    PreferredStyle = XIMPreeditNothing or XIMStatusNothing;
+{    PreferredStyle = XIMPreeditNone or XIMStatusNone;}
+  var
+    im_supported_styles: PXIMStyles;
+    locale_modifiers: PChar;
+    I: Integer;
+  begin
+{    LOG('setting locale');
+    if fpsetlocale(LC_ALL, '') = nil then
+      LOG('set locale failed');}
+
+    { Check if X11 supports the current locale }
+    LOG('checking X11 support for the current locale');
+    if XSupportsLocale = 0 then
+    begin
+      LOG('locale not supported');
+      exit;
+    end;
+    LOG('locale supported');
+
+    LOG('setting locale modifiers');
+    locale_modifiers := XSetLocaleModifiers('@im=none');
+    if locale_modifiers = nil then
+    begin
+      LOG('XSetLocaleModifiers failed');
+    end
+    else
+    begin
+      LOG('XSetLocaleModifiers success; returned', locale_modifiers);
+    end;
+
+    { Open IM }
+    LOG('opening input method');
+    FXIM := XOpenIM(FDisplay, nil, '', '');
+    LOG('input method (ptr)', HexStr(FXIM));
+
+    { Select IM input style }
+    if Assigned(FXIM) then
+    begin
+      LOG('querying the supported input styles');
+      XGetIMValues(FXIM, [XNQueryInputStyle, @im_supported_styles, nil]);
+
+      if Assigned(im_supported_styles) then
+      begin
+        LOG('number of styles', im_supported_styles^.count_styles);
+        for I := 0 to im_supported_styles^.count_styles - 1 do
+        begin
+          LOG('style', IMStyleToStr(im_supported_styles^.supported_styles[I]));
+          if (im_supported_styles^.supported_styles[I] and PreferredStyle) = PreferredStyle then
+            selected_im_style := im_supported_styles^.supported_styles[I];
+        end;
+        XFree(im_supported_styles);
+        LOG('selected style', IMStyleToStr(selected_im_style));
+      end;
+    end;
+  end;
+
+  procedure TryCreateIC;
+  begin
+    if Assigned(FXIM) and (selected_im_style <> 0) then
+    begin
+      LOG('creating input context');
+      FXIC := XCreateIC(FXIM, [XNInputStyle, selected_im_style,
+                               XNClientWindow, FWindow,
+                               XNFocusWindow, FWindow, nil]);
+      LOG('input context (ptr)', HexStr(FXIC));
+
+      if Assigned(FXIC) then
+      begin
+        LOG('setting input context focus');
+        XSetICFocus(FXIC);
+
+        LOG('getting the IM event mask');
+        XGetICValues(FXIC, [XNFilterEvents, @im_event_mask, nil]);
+        LOG('IM event mask', im_event_mask);
+      end;
+    end;
+  end;
+
 begin
   FHeight := AHeight;
   FWidth := AWidth;
@@ -117,6 +235,10 @@ begin
   BlackColor.red := 0;
   BlackColor.green := 0;
   BlackColor.blue := 0;
+
+  { Try to open an input method }
+  if PTC_X11_TRY_XIM in FFlags then
+    TryCreateIM;
 
   { Create the mode switcher object }
   if (FModeSwitcher = Nil) and FFullScreen then
@@ -241,12 +363,17 @@ begin
     if e._type = MapNotify then
       Break;
   until False;
+
+  { Try to create an input context for the input method }
+  if PTC_X11_TRY_XIM in FFlags then
+    TryCreateIC;
+
   { Get keyboard input and sync }
   XSelectInput(FDisplay, FWindow, KeyPressMask or KeyReleaseMask or
                                   StructureNotifyMask or FocusChangeMask or
                                   ButtonPressMask or ButtonReleaseMask or
                                   PointerMotionMask or ExposureMask or
-                                  EnterWindowMask or LeaveWindowMask);
+                                  EnterWindowMask or LeaveWindowMask or im_event_mask);
   XSync(FDisplay, False);
 
 {$IFDEF ENABLE_X11_EXTENSION_XINPUT2}
@@ -324,6 +451,20 @@ begin
 {$IFDEF ENABLE_X11_EXTENSION_GLX}
   FreeAndNil(FGLXFBConfig);
 {$ENDIF ENABLE_X11_EXTENSION_GLX}
+
+  if Assigned(FXIC) then
+  begin
+    LOG('destroying input context');
+    XDestroyIC(FXIC);
+    FXIC := nil;
+  end;
+
+  if Assigned(FXIM) then
+  begin
+    LOG('closing input method');
+    XCloseIM(FXIM);
+    FXIM := nil;
+  end;
 
   {pthreads?!}
   if FCMap <> 0 then
@@ -796,15 +937,25 @@ var
   end;
 {$ENDIF ENABLE_X11_EXTENSION_XINPUT2}
 
-{$IFDEF ENABLE_X11_EXTENSION_XINPUT2}
 var
+{$IFDEF ENABLE_X11_EXTENSION_XINPUT2}
   XInput2Event: PXIDeviceEvent;
 {$ENDIF ENABLE_X11_EXTENSION_XINPUT2}
+  eaten_by_im: Boolean = False;
 begin
   NewFocusSpecified := False;
   while UsefulEventsPending do
   begin
     XNextEvent(FDisplay, @e);
+    { maybe send the event to the Input Method for processing. Only non-key
+      events are sent here (key events are sent in HandleKeyEvent instead) }
+    if Assigned(FXIM) and Assigned(FXIC) and
+      (e._type <> KeyPress) and (e._type <> KeyRelease) then
+    begin
+      eaten_by_im := XFilterEvent(@e, FWindow);
+      if eaten_by_im then
+        exit;
+    end;
     case e._type of
       FocusIn: begin
         NewFocus := True;

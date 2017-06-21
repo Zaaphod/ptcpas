@@ -1,6 +1,6 @@
 {
     This file is part of the PTCPas framebuffer library
-    Copyright (C) 2001-2013 Nikolay Nikolov (nickysn@users.sourceforge.net)
+    Copyright (C) 2001-2013, 2016, 2017 Nikolay Nikolov (nickysn@users.sourceforge.net)
     Original C++ version by Christian Nentwich (c.nentwich@cs.ucl.ac.uk)
 
     This library is free software; you can redistribute it and/or
@@ -27,7 +27,7 @@
 
     You should have received a copy of the GNU Lesser General Public
     License along with this library; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 }
 
 type
@@ -40,6 +40,7 @@ type
                    PTC_X11_TRY_XRANDR,
                    PTC_X11_TRY_XSHM,
                    PTC_X11_TRY_XINPUT2,
+                   PTC_X11_TRY_XIM,
                    PTC_X11_DITHER,
                    PTC_X11_FULLSCREEN_CURSOR_VISIBLE,
                    PTC_X11_WINDOWED_CURSOR_INVISIBLE,
@@ -75,6 +76,9 @@ type
 
     FFunctionKeys: PInteger;
     FNormalKeys: PInteger;
+
+    FXIM: PXIM;
+    FXIC: PXIC;
 
     function GetInterceptClose: Boolean;
     procedure SetInterceptClose(AInterceptClose: Boolean);

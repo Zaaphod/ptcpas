@@ -4,7 +4,7 @@
 
 [package]
 name=ptc
-version=0.99.14.1
+version=0.99.15
 
 [target]
 units=ptc ptcwrapper ptcgraph ptccrt ptcmouse

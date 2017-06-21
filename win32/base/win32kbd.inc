@@ -1,6 +1,6 @@
 {
     Free Pascal port of the OpenPTC C++ library.
-    Copyright (C) 2001-2003, 2006, 2007, 2009-2012  Nikolay Nikolov (nickysn@users.sourceforge.net)
+    Copyright (C) 2001-2003, 2006, 2007, 2009-2012, 2017  Nikolay Nikolov (nickysn@users.sourceforge.net)
     Original C++ version by Glenn Fiedler (ptc@gaffer.org)
 
     This library is free software; you can redistribute it and/or
@@ -27,7 +27,7 @@
 
     You should have received a copy of the GNU Lesser General Public
     License along with this library; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 }
 
 constructor TWin32Keyboard.Create(AWindow: HWND; AThread: DWord; AMultithreaded: Boolean; AEventQueue: TEventQueue);
@@ -66,9 +66,15 @@ begin
 end;
 
 function TWin32Keyboard.WndProc(hWnd: HWND; message: DWord; wParam: WPARAM; lParam: LPARAM): LRESULT;
+const
+  {$warning move this to the windows unit! }
+  MAPVK_VK_TO_CHAR = 2;
+  MAPVK_VK_TO_VSC = 0;
+  MAPVK_VSC_TO_VK = 1;
+  MAPVK_VSC_TO_VK_EX = 3;
 var
   i: Integer;
-  scancode: Integer;
+  scancode: UINT;
   KeyStateArray: array [0..255] of Byte;
   AsciiBuf: Word;
   press: Boolean;
@@ -76,8 +82,10 @@ var
   TranslatedCharacters, TranslatedWideCharacters: Integer;
   WideStr: WideString;
   KeyCode: Integer;
-  ExtendedKey: Boolean;
+  ScanCodeB: Byte;
+  ExtendedKey, DeadKey: Boolean;
   ModifierKeys: TPTCModifierKeys;
+  tmpUINT: UINT;
 begin
   Result := 0;
   { check enabled flag }
@@ -88,11 +96,16 @@ begin
   if (message = WM_KEYDOWN) or (message = WM_KEYUP) or (message = WM_SYSKEYDOWN) or (message = WM_SYSKEYUP) then
   begin
     press := (message = WM_KEYDOWN) or (message = WM_SYSKEYDOWN);
+    ScanCodeB := Byte(lParam shr 16);
     ExtendedKey := (lParam and (1 shl 24)) <> 0;
 
     ModifierKeys := [];
 
     { update modifiers }
+    { dead key? }
+    DeadKey := (MapVirtualKey(wParam, MAPVK_VK_TO_CHAR) and $80000000) <> 0;
+    if DeadKey then
+      Include(ModifierKeys, pmkDeadKey);
     { alt }
     if (GetKeyState(VK_MENU) and $8000) <> 0 then
       Include(ModifierKeys, pmkAlt);
@@ -142,20 +155,32 @@ begin
     if GetKeyboardState(@KeyStateArray) then
     begin
       scancode := (lParam shr 16) and $FF;
-      {todo: ToUnicode (Windows NT)}
-      TranslatedCharacters := ToAscii(wParam, scancode, @KeyStateArray, @AsciiBuf, 0);
-      if (TranslatedCharacters = 1) or (TranslatedCharacters = 2) then
+      if not press then
+        scancode := scancode or $8000;
+      if IsWindowUnicode(hWnd) then
       begin
-        TranslatedWideCharacters := MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, @AsciiBuf, TranslatedCharacters, nil, 0);
-        if TranslatedWideCharacters <> 0 then
+        SetLength(WideStr, 16);
+        TranslatedWideCharacters := ToUnicode(wParam, scancode, @KeyStateArray, @WideStr[1], Length(WideStr), 0);
+        if TranslatedWideCharacters <> -1 then
+          SetLength(WideStr, TranslatedWideCharacters)
+        else
+          WideStr := '';
+      end
+      else
+      begin
+        TranslatedCharacters := ToAscii(wParam, scancode, @KeyStateArray, @AsciiBuf, 0);
+        if TranslatedCharacters > 0 then
         begin
+          TranslatedWideCharacters := MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, @AsciiBuf, TranslatedCharacters, nil, 0);
           SetLength(WideStr, TranslatedWideCharacters);
-          MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, @AsciiBuf, TranslatedCharacters, @WideStr[1], TranslatedWideCharacters);
-
-          if Length(WideStr) = 1 then
-            uni := Ord(WideStr[1]);
-        end;
+          if TranslatedWideCharacters <> 0 then
+            MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, @AsciiBuf, TranslatedCharacters, @WideStr[1], TranslatedWideCharacters);
+        end
+        else
+          WideStr := '';
       end;
+      if Length(WideStr) = 1 then
+        uni := Ord(WideStr[1]);
     end;
 
     KeyCode := wParam;
@@ -165,6 +190,24 @@ begin
       if ExtendedKey then
         Include(ModifierKeys, pmkNumPadKey);
     end;
+    if wParam = VK_SHIFT then
+    begin
+      tmpUINT := MapVirtualKey(ScanCodeB, MAPVK_VSC_TO_VK_EX);
+      if tmpUINT <> 0 then
+      begin
+        { Windows NT 4.0/2000+ }
+        if tmpUINT = VK_RSHIFT then
+          Include(ModifierKeys, pmkRightKey);
+      end
+      else
+      begin
+        { Windows 98 }
+        if ScanCodeB = 54 then
+          Include(ModifierKeys, pmkRightKey);
+      end;
+    end;
+    if ExtendedKey and (wParam in [VK_MENU,VK_CONTROL]) then
+      Include(ModifierKeys, pmkRightKey);
     if not ExtendedKey and
       (wParam in [VK_LEFT,VK_RIGHT,VK_UP,VK_DOWN,VK_INSERT,VK_DELETE,
                   VK_HOME,VK_END,VK_PRIOR,VK_NEXT]) then
@@ -180,6 +223,18 @@ begin
       KeyCode := PTCKEY_COMMA;
     if wParam = VK_OEM_PERIOD then
       KeyCode := PTCKEY_PERIOD;
+    if wParam = VK_OEM_PLUS then
+      KeyCode := PTCKEY_EQUALS;
+    if wParam = VK_OEM_4 then
+      KeyCode := PTCKEY_OPENBRACKET;
+    if wParam = VK_OEM_6 then
+      KeyCode := PTCKEY_CLOSEBRACKET;
+    if wParam = VK_OEM_5 then
+      KeyCode := PTCKEY_BACKSLASH;
+    if wParam = VK_OEM_1 then
+      KeyCode := PTCKEY_SEMICOLON;
+    if wParam = VK_OEM_2 then
+      KeyCode := PTCKEY_SLASH;
 
     { handle key repeat count }
     for i := 1 to lParam and $FFFF do
