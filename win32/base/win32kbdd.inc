@@ -42,11 +42,6 @@ type
     { flag data }
     FEnabled: Boolean;
 
-    { modifiers }
-    FAlt: Boolean;
-    FShift: Boolean;
-    FControl: Boolean;
-
     { window procedure }
     function WndProc(hWnd: HWND; message: DWord; wParam: WPARAM; lParam: LPARAM): LRESULT; override;
   public

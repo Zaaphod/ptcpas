@@ -38,11 +38,6 @@ begin
   FMonitor := TWin32Monitor.Create;
   FEvent := TWin32Event.Create;
 
-  { setup defaults }
-  FAlt := False;
-  FShift := False;
-  FControl := False;
-
   { setup data }
   FEventQueue := AEventQueue;
   FMultithreaded := AMultithreaded;
@@ -81,6 +76,8 @@ var
   TranslatedCharacters, TranslatedWideCharacters: Integer;
   WideStr: WideString;
   KeyCode: Integer;
+  ExtendedKey: Boolean;
+  ModifierKeys: TPTCModifierKeys;
 begin
   Result := 0;
   { check enabled flag }
@@ -91,14 +88,50 @@ begin
   if (message = WM_KEYDOWN) or (message = WM_KEYUP) or (message = WM_SYSKEYDOWN) or (message = WM_SYSKEYUP) then
   begin
     press := (message = WM_KEYDOWN) or (message = WM_SYSKEYDOWN);
+    ExtendedKey := (lParam and (1 shl 24)) <> 0;
+
+    ModifierKeys := [];
 
     { update modifiers }
     { alt }
-    FAlt := (GetKeyState(VK_MENU) and $8000) <> 0;
+    if (GetKeyState(VK_MENU) and $8000) <> 0 then
+      Include(ModifierKeys, pmkAlt);
     { shift }
-    FShift := (GetKeyState(VK_SHIFT) and $8000) <> 0;
+    if (GetKeyState(VK_SHIFT) and $8000) <> 0 then
+      Include(ModifierKeys, pmkShift);
     { control }
-    FControl := (GetKeyState(VK_CONTROL) and $8000) <> 0;
+    if (GetKeyState(VK_CONTROL) and $8000) <> 0 then
+      Include(ModifierKeys, pmkControl);
+    { left/right alt }
+    if (GetKeyState(VK_LMENU) and $8000) <> 0 then
+      Include(ModifierKeys, pmkLeftAlt);
+    if (GetKeyState(VK_RMENU) and $8000) <> 0 then
+      Include(ModifierKeys, pmkRightAlt);
+    { left/right shift }
+    if (GetKeyState(VK_LSHIFT) and $8000) <> 0 then
+      Include(ModifierKeys, pmkLeftShift);
+    if (GetKeyState(VK_RSHIFT) and $8000) <> 0 then
+      Include(ModifierKeys, pmkRightShift);
+    { left/right control }
+    if (GetKeyState(VK_LCONTROL) and $8000) <> 0 then
+      Include(ModifierKeys, pmkLeftControl);
+    if (GetKeyState(VK_RCONTROL) and $8000) <> 0 then
+      Include(ModifierKeys, pmkRightControl);
+    { num lock }
+    if (GetKeyState(VK_NUMLOCK) and $8000) <> 0 then
+      Include(ModifierKeys, pmkNumLockPressed);
+    if (GetKeyState(VK_NUMLOCK) and 1) <> 0 then
+      Include(ModifierKeys, pmkNumLockActive);
+    { caps lock }
+    if (GetKeyState(VK_CAPITAL) and $8000) <> 0 then
+      Include(ModifierKeys, pmkCapsLockPressed);
+    if (GetKeyState(VK_CAPITAL) and 1) <> 0 then
+      Include(ModifierKeys, pmkCapsLockActive);
+    { scroll lock }
+    if (GetKeyState(VK_SCROLL) and $8000) <> 0 then
+      Include(ModifierKeys, pmkScrollLockPressed);
+    if (GetKeyState(VK_SCROLL) and 1) <> 0 then
+      Include(ModifierKeys, pmkScrollLockActive);
 
     { enter monitor if multithreaded }
     if FMultithreaded then
@@ -127,7 +160,18 @@ begin
 
     KeyCode := wParam;
     if wParam = VK_RETURN then
+    begin
       KeyCode := PTCKEY_ENTER;
+      if ExtendedKey then
+        Include(ModifierKeys, pmkNumPadKey);
+    end;
+    if not ExtendedKey and
+      (wParam in [VK_LEFT,VK_RIGHT,VK_UP,VK_DOWN,VK_INSERT,VK_DELETE,
+                  VK_HOME,VK_END,VK_PRIOR,VK_NEXT]) then
+      Include(ModifierKeys, pmkNumPadKey);
+    if wParam in [VK_CLEAR,VK_NUMPAD0..VK_NUMPAD9,VK_DECIMAL,VK_DIVIDE,
+                  VK_MULTIPLY,VK_SUBTRACT,VK_ADD,VK_NUMLOCK] then
+      Include(ModifierKeys, pmkNumPadKey);
     if wParam = VK_INSERT then
       KeyCode := PTCKEY_INSERT;
     if wParam = VK_DELETE then
@@ -140,7 +184,7 @@ begin
     { handle key repeat count }
     for i := 1 to lParam and $FFFF do
       { create and insert key object }
-      FEventQueue.AddEvent(TPTCKeyEvent.Create(KeyCode, uni, FAlt, FShift, FControl, press));
+      FEventQueue.AddEvent(TPTCKeyEvent.Create(KeyCode, uni, ModifierKeys, press));
 
     { check multithreaded flag }
     if FMultithreaded then
@@ -152,18 +196,4 @@ begin
       FMonitor.Leave;
     end;
   end;
-(*  else
-    if message = WM_KEYUP then
-      { update modifiers }
-      if wParam = VK_MENU then
-        { alt up }
-        m_alt := False
-      else
-        if wParam = VK_SHIFT then
-          { shift up }
-          m_shift := False
-        else
-          if wParam = VK_CONTROL then
-            { control up }
-            m_control := False;*)
 end;
