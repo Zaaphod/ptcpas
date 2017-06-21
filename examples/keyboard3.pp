@@ -11,10 +11,23 @@ uses
   ptc;
 
 procedure DumpKey(AKey: IPTCKeyEvent);
+var
+  mk: TPTCModifierKey;
+  first: Boolean;
 begin
-  Writeln('Code=', AKey.Code:3, ', Unicode=$', HexStr(AKey.Unicode, 4),
+  Write('Code=', AKey.Code:3, ', Unicode=$', HexStr(AKey.Unicode, 4),
     ', Press=', AKey.Press:5, ', Shift=', AKey.Shift:5, ', Alt=', AKey.Alt:5,
-    ', Control=', AKey.Control:5);
+    ', Control=', AKey.Control:5, ', ModifierKeys=[');
+  first := True;
+  for mk in TPTCModifierKey do
+    if mk in AKey.ModifierKeys then
+    begin
+      if not first then
+        Write(',');
+      first := False;
+      Write(mk);
+    end;
+  Writeln(']');
 end;
 
 var
