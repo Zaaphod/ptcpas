@@ -1362,6 +1362,72 @@ begin
   BlueValue := VGAPalette[ColorNum, 2] shl 2;
 end;
 
+Procedure ptc_PutImageproc_16bpp(X,Y: smallint; var Bitmap; BitBlt: Word); {$ifndef fpc}far;{$endif fpc}
+type
+  pt = array[0..{$ifdef cpu16}16382{$else}$fffffff{$endif}] of word;
+  ptw = array[0..2] of longint;
+var
+  pixels:Pword;
+  k: longint;
+  i, j, y1, x1, deltaX, deltaX1, deltaY: smallint;
+Begin
+  inc(x,startXViewPort);
+  inc(y,startYViewPort);
+  { width/height are 1-based, coordinates are zero based }
+  x1 := ptw(Bitmap)[0]+x-1; { get width and adjust end coordinate accordingly }
+  y1 := ptw(Bitmap)[1]+y-1; { get height and adjust end coordinate accordingly }
+  deltaX := 0;
+  deltaX1 := 0;
+  k := 3 * sizeOf(Longint) div sizeOf(Word); { Three reserved longs at start of bitmap }
+ { check which part of the image is in the viewport }
+  if clipPixels then
+    begin
+      if y < startYViewPort then
+        begin
+          deltaY := startYViewPort - y;
+          inc(k,(x1-x+1)*deltaY);
+          y := startYViewPort;
+         end;
+      if y1 > startYViewPort+viewHeight then
+        y1 := startYViewPort+viewHeight;
+      if x < startXViewPort then
+        begin
+          deltaX := startXViewPort-x;
+          x := startXViewPort;
+        end;
+      if x1 > startXViewPort + viewWidth then
+        begin
+          deltaX1 := x1 - (startXViewPort + viewWidth);
+          x1 := startXViewPort + viewWidth;
+        end;
+    end;
+  pixels := ptc_surface_lock;
+  for j:=Y to Y1 do
+   Begin
+     inc(k,deltaX);
+     for i:=X to X1 do
+       begin
+         case BitBlt of
+           XORPut:
+                 pixels[i+j*PTCWidth] := pixels[i+j*PTCWidth] xor pt(bitmap)[k];
+           OrPut:
+                 pixels[i+j*PTCWidth] := pixels[i+j*PTCWidth] or pt(bitmap)[k];
+           AndPut:
+                 pixels[i+j*PTCWidth] := pixels[i+j*PTCWidth] and pt(bitmap)[k];
+           NotPut:
+                 pixels[i+j*PTCWidth] := pt(bitmap)[k] xor $FFFF;
+         else
+             pixels[i+j*PTCWidth] := pt(bitmap)[k];
+         end;
+         inc(k);
+      end;
+      inc(k,deltaX1);
+    end;
+  ptc_surface_unlock;
+  ptc_update;
+end;
+
+
 {************************************************************************}
 {*                       General routines                               *}
 {************************************************************************}
@@ -2191,6 +2257,7 @@ end;
        InitMode       := @ptc_Init320x200x32k;
        DirectPutPixel := @ptc_DirectPixelProc_16bpp;
        PutPixel       := @ptc_PutPixelProc_16bpp;
+       PutImage       := @ptc_PutImageProc_16bpp;
        GetPixel       := @ptc_GetPixelProc_16bpp;
        SetRGBPalette  := @ptc_SetRGBPaletteProc;
        GetRGBPalette  := @ptc_GetRGBPaletteProc;
@@ -2219,6 +2286,7 @@ end;
        InitMode       := @ptc_Init640x480x32k;
        DirectPutPixel := @ptc_DirectPixelProc_16bpp;
        PutPixel       := @ptc_PutPixelProc_16bpp;
+       PutImage       := @ptc_PutImageProc_16bpp;
        GetPixel       := @ptc_GetPixelProc_16bpp;
        SetRGBPalette  := @ptc_SetRGBPaletteProc;
        GetRGBPalette  := @ptc_GetRGBPaletteProc;
@@ -2247,6 +2315,7 @@ end;
        InitMode       := @ptc_Init320x200x64k;
        DirectPutPixel := @ptc_DirectPixelProc_16bpp;
        PutPixel       := @ptc_PutPixelProc_16bpp;
+       PutImage       := @ptc_PutImageProc_16bpp;
        GetPixel       := @ptc_GetPixelProc_16bpp;
        SetRGBPalette  := @ptc_SetRGBPaletteProc;
        GetRGBPalette  := @ptc_GetRGBPaletteProc;
@@ -2275,6 +2344,7 @@ end;
        InitMode       := @ptc_Init640x480x64k;
        DirectPutPixel := @ptc_DirectPixelProc_16bpp;
        PutPixel       := @ptc_PutPixelProc_16bpp;
+       PutImage       := @ptc_PutImageProc_16bpp;
        GetPixel       := @ptc_GetPixelProc_16bpp;
        SetRGBPalette  := @ptc_SetRGBPaletteProc;
        GetRGBPalette  := @ptc_GetRGBPaletteProc;
@@ -2366,6 +2436,7 @@ end;
          InitMode       := @ptc_Init800x600x32k;
          DirectPutPixel := @ptc_DirectPixelProc_16bpp;
          PutPixel       := @ptc_PutPixelProc_16bpp;
+         PutImage       := @ptc_PutImageProc_16bpp;
          GetPixel       := @ptc_GetPixelProc_16bpp;
          SetRGBPalette  := @ptc_SetRGBPaletteProc;
          GetRGBPalette  := @ptc_GetRGBPaletteProc;
@@ -2394,6 +2465,7 @@ end;
          InitMode       := @ptc_Init800x600x64k;
          DirectPutPixel := @ptc_DirectPixelProc_16bpp;
          PutPixel       := @ptc_PutPixelProc_16bpp;
+         PutImage       := @ptc_PutImageProc_16bpp;
          GetPixel       := @ptc_GetPixelProc_16bpp;
          SetRGBPalette  := @ptc_SetRGBPaletteProc;
          GetRGBPalette  := @ptc_GetRGBPaletteProc;
@@ -2486,6 +2558,7 @@ end;
          InitMode       := @ptc_Init1024x768x32k;
          DirectPutPixel := @ptc_DirectPixelProc_16bpp;
          PutPixel       := @ptc_PutPixelProc_16bpp;
+         PutImage       := @ptc_PutImageProc_16bpp;
          GetPixel       := @ptc_GetPixelProc_16bpp;
          SetRGBPalette  := @ptc_SetRGBPaletteProc;
          GetRGBPalette  := @ptc_GetRGBPaletteProc;
@@ -2514,6 +2587,7 @@ end;
          InitMode       := @ptc_Init1024x768x64k;
          DirectPutPixel := @ptc_DirectPixelProc_16bpp;
          PutPixel       := @ptc_PutPixelProc_16bpp;
+         PutImage       := @ptc_PutImageProc_16bpp;
          GetPixel       := @ptc_GetPixelProc_16bpp;
          SetRGBPalette  := @ptc_SetRGBPaletteProc;
          GetRGBPalette  := @ptc_GetRGBPaletteProc;
@@ -2606,6 +2680,7 @@ end;
          InitMode       := @ptc_Init1280x1024x32k;
          DirectPutPixel := @ptc_DirectPixelProc_16bpp;
          PutPixel       := @ptc_PutPixelProc_16bpp;
+         PutImage       := @ptc_PutImageProc_16bpp;
          GetPixel       := @ptc_GetPixelProc_16bpp;
          SetRGBPalette  := @ptc_SetRGBPaletteProc;
          GetRGBPalette  := @ptc_GetRGBPaletteProc;
@@ -2634,6 +2709,7 @@ end;
          InitMode       := @ptc_Init1280x1024x64k;
          DirectPutPixel := @ptc_DirectPixelProc_16bpp;
          PutPixel       := @ptc_PutPixelProc_16bpp;
+         PutImage       := @ptc_PutImageProc_16bpp;
          GetPixel       := @ptc_GetPixelProc_16bpp;
          SetRGBPalette  := @ptc_SetRGBPaletteProc;
          GetRGBPalette  := @ptc_GetRGBPaletteProc;
@@ -2737,6 +2813,7 @@ end;
              InitMode       := @ptc_InitNonStandard32k;
              DirectPutPixel := @ptc_DirectPixelProc_16bpp;
              PutPixel       := @ptc_PutPixelProc_16bpp;
+             PutImage       := @ptc_PutImageProc_16bpp;
              GetPixel       := @ptc_GetPixelProc_16bpp;
              SetRGBPalette  := @ptc_SetRGBPaletteProc;
              GetRGBPalette  := @ptc_GetRGBPaletteProc;
@@ -2768,6 +2845,7 @@ end;
              InitMode       := @ptc_InitNonStandard64k;
              DirectPutPixel := @ptc_DirectPixelProc_16bpp;
              PutPixel       := @ptc_PutPixelProc_16bpp;
+             PutImage       := @ptc_PutImageProc_16bpp;
              GetPixel       := @ptc_GetPixelProc_16bpp;
              SetRGBPalette  := @ptc_SetRGBPaletteProc;
              GetRGBPalette  := @ptc_GetRGBPaletteProc;
