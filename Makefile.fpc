@@ -1,0 +1,42 @@
+#
+#   Makefile.fpc for PTCPas
+#
+
+[package]
+name=ptc
+version=0.99.14.1
+
+[target]
+units=ptc ptcwrapper ptcgraph ptccrt ptcmouse
+exampledirs=demos examples test
+
+[compiler]
+unitdir=hermes ptcwrapper ptcgraph x11
+unitdir_go32v2=dos/base dos/cga dos/vga dos/textfx2 dos/timeunit dos/vesa
+unitdir_win32=win32/directx
+unitdir_win64=win32/directx
+unitdir_wince=wince/gapi
+includedir=ptcgraph/inc
+sourcedir=ptcwrapper ptcgraph
+#targetdir=.
+
+[rules]
+# GNU Make 3.82 for Windows (which comes with FPC 3.0.0) needs these rules for
+# the units, whose sources are not in the main directory. GNU Make 3.80 (which
+# comes with FPC 2.6.4 and earlier) did work fine, so it looks like a bug in the
+# Windows version of GNU Make. Anyhow, we now add these for a workaround.
+ptcwrapper$(PPUEXT): ptcwrapper/ptcwrapper.pp
+	$(COMPILER) $<
+	$(EXECPPAS)
+
+ptcgraph$(PPUEXT): ptcgraph/ptcgraph.pp
+	$(COMPILER) $<
+	$(EXECPPAS)
+
+ptccrt$(PPUEXT): ptcgraph/ptccrt.pp
+	$(COMPILER) $<
+	$(EXECPPAS)
+
+ptcmouse$(PPUEXT): ptcgraph/ptcmouse.pp
+	$(COMPILER) $<
+	$(EXECPPAS)

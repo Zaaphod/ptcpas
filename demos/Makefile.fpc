@@ -1,0 +1,13 @@
+#
+#   Makefile.fpc for PTC demos
+#
+
+[package]
+name=ptc-demos
+version=0.99.14.1
+
+[target]
+programs=fire flower land lights mojo texwarp tunnel tunnel3d
+
+[compiler]
+unitdir=../$(UNITTARGETDIRPREFIX)

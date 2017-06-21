@@ -1,0 +1,6349 @@
+<?xml version="1.0" encoding="ISO8859-1"?>
+<fpdoc-descriptions>
+<package name="ptc">
+
+<!--
+  ====================================================================
+    ptc
+  ====================================================================
+-->
+
+<module name="ptc">
+<short></short>
+<descr>
+</descr>
+
+<!-- constant Visibility: default -->
+<element name="PTCPAS_VERSION">
+<short>A string constant, representing the PTCPas version in use.</short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- pointer type Visibility: default -->
+<element name="PUint8">
+<short>Pointer to <link id="Uint8" /> type.</short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- pointer type Visibility: default -->
+<element name="PUint16">
+<short>Pointer to <link id="Uint16" /> type.</short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- pointer type Visibility: default -->
+<element name="PUint32">
+<short>Pointer to <link id="Uint32" /> type.</short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- pointer type Visibility: default -->
+<element name="PUint64">
+<short>Pointer to <link id="Uint64" /> type.</short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- alias type Visibility: default -->
+<element name="Uint8">
+<short>An unsigned 8-bit value.</short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- alias type Visibility: default -->
+<element name="Uint16">
+<short>An unsigned 16-bit value.</short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- alias type Visibility: default -->
+<element name="Uint32">
+<short>An unsigned 32-bit value.</short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- alias type Visibility: default -->
+<element name="Uint64">
+<short>An unsigned 64-bit value.</short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- pointer type Visibility: default -->
+<element name="PSint8">
+<short>Pointer to <link id="Sint8" /> type.</short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- pointer type Visibility: default -->
+<element name="PSint16">
+<short>Pointer to <link id="Sint16" /> type.</short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- pointer type Visibility: default -->
+<element name="PSint32">
+<short>Pointer to <link id="Sint32" /> type.</short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- pointer type Visibility: default -->
+<element name="PSint64">
+<short>Pointer to <link id="Sint64" /> type.</short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- alias type Visibility: default -->
+<element name="Sint8">
+<short>A signed 8-bit value.</short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- alias type Visibility: default -->
+<element name="Sint16">
+<short>A signed 16-bit value.</short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- alias type Visibility: default -->
+<element name="Sint32">
+<short>A signed 32-bit value.</short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- alias type Visibility: default -->
+<element name="Sint64">
+<short>A signed 64-bit value.</short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- object Visibility: default -->
+<element name="IPTCArea">
+<short>A rectangular area.</short>
+<descr>
+<p>A rectangular area.</p>
+<p>The area class represents a rectangle of pixels.
+It is typically used to select certain areas of pixels for operations such as copying, and clearing.
+The most important thing to understand about area objects is that zero areas represent zero areas.
+This means that an area object TPTCAreaFactory.CreateNew(0,0,0,0) covers zero pixels, instead of one pixel.
+An area TPTCAreaFactory.CreateNew(0,0,1,1) covers a single pixel, even though the points (0,0) and (1,1) span over a 2x2 block of pixels.
+Another way to think about it is that the top-left coordinate is inclusive and the bottom-right coordinate is exclusive.</p>
+<p>See <link id="IPTCSurface.Load" />, <link id="IPTCSurface.Save" />, <link id="IPTCSurface.Copy" />, and <link id="IPTCSurface.Clear" /> for examples of the use of areas.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- variable Visibility: private -->
+<element name="IPTCArea.FLeft">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- variable Visibility: private -->
+<element name="IPTCArea.FTop">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- variable Visibility: private -->
+<element name="IPTCArea.FRight">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- variable Visibility: private -->
+<element name="IPTCArea.FBottom">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- function Visibility: default -->
+<element name="IPTCArea.GetLeft">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCArea.GetLeft.Result">
+<short></short>
+</element>
+
+<!-- function Visibility: default -->
+<element name="IPTCArea.GetTop">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCArea.GetTop.Result">
+<short></short>
+</element>
+
+<!-- function Visibility: default -->
+<element name="IPTCArea.GetRight">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCArea.GetRight.Result">
+<short></short>
+</element>
+
+<!-- function Visibility: default -->
+<element name="IPTCArea.GetBottom">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCArea.GetBottom.Result">
+<short></short>
+</element>
+
+<!-- constructor Visibility: public -->
+<element name="TPTCAreaFactory.CreateNew">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- object Visibility: default -->
+<element name="TPTCAreaFactory">
+<short>Creates an IPTCArea instance.</short>
+<descr>
+<p>Creates an IPTCArea instance.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCAreaFactory.CreateNew.ALeft">
+<short>The left coordinate of the area.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCAreaFactory.CreateNew.ATop">
+<short>The top coordinate of the area.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCAreaFactory.CreateNew.ARight">
+<short>The right coordinate of the area.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCAreaFactory.CreateNew.ABottom">
+<short>The bottom coordinate of the area.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCAreaFactory.CreateNew.AArea">
+<short></short>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="TPTCAreaFactory.CreateNew.Result">
+<short></short>
+</element>
+
+<!-- function Visibility: public -->
+<element name="IPTCArea.Width">
+<short>Gets the width of the area. </short>
+<descr>
+<p>Gets the width of the area (<var>Right</var> - <var>Left</var>).</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCArea.Width.Result">
+<short>The area width.</short>
+</element>
+
+<!-- function Visibility: public -->
+<element name="IPTCArea.Height">
+<short>Gets the height of the area.</short>
+<descr>
+<p>Gets the height of the area (<var>Bottom</var> - <var>Top</var>).</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCArea.Height.Result">
+<short>The area height.</short>
+</element>
+
+<!-- procedure Visibility: public -->
+<element name="IPTCArea.Assign">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCArea.Assign.AArea">
+<short></short>
+</element>
+
+<!-- function Visibility: public -->
+<element name="IPTCArea.Equals">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCArea.Equals.Result">
+<short></short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCArea.Equals.AArea">
+<short></short>
+</element>
+
+<!-- property Visibility: public -->
+<element name="IPTCArea.Left">
+<short>Gets the left coordinate of the area.</short>
+<descr>
+<p>Gets the left coordinate of the area.</p>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- property Visibility: public -->
+<element name="IPTCArea.Top">
+<short>Gets the top coordinate of the area.</short>
+<descr>
+<p>Gets the top coordinate of the area.</p>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- property Visibility: public -->
+<element name="IPTCArea.Right">
+<short>Gets the right coordinate of the area.</short>
+<descr>
+<p>Gets the right coordinate of the area.</p>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- property Visibility: public -->
+<element name="IPTCArea.Bottom">
+<short>Gets the bottom coordinate of the area.</short>
+<descr>
+<p>Gets the bottom coordinate of the area.</p>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- function Visibility: private -->
+<element name="IPTCArea.GetWidth">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCArea.GetWidth.Result">
+<short></short>
+</element>
+
+<!-- function Visibility: private -->
+<element name="IPTCArea.GetHeight">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCArea.GetHeight.Result">
+<short></short>
+</element>
+
+<!-- interface Visibility: default -->
+<element name="IPTCCloseEvent">
+<short>Describes a window close event.</short>
+<descr>
+<p>Describes a window close event. It is generated when the user closes the console window via the [X] button. This event is disabled by default,
+as the default behaviour is to simply quit the application on window close. It can be enabled by passing the 'intercept window close' console
+option. In that case, your program should handle the event and show a 'are you sure you want to quit' (or similar) message to the user. Note that
+some platforms (e.g. DOS) never generate this event, because they don't have a GUI, so your application should also have other means for the user
+to quit.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- class Visibility: default -->
+<element name="TPTCCloseEventFactory">
+<short>Creates an IPTCCloseEvent instance.</short>
+<descr>
+<p>Creates an IPTCCloseEvent instance.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- class function Visibility: public -->
+<element name="TPTCCloseEventFactory.CreateNew">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: public -->
+<element name="TPTCCloseEventFactory.CreateNew.Result">
+<short></short>
+</element>
+
+<!-- object Visibility: default -->
+<element name="IPTCColor">
+<short>Describes a pixel color.</short>
+<descr>
+<p>Describes a pixel color.</p>
+<p>The color class can describe one of two types of color: direct color, or indexed color.
+Indexed color is an index value into a palette and direct color is a set of red, green, blue and alpha values.
+Color objects are typically used with surface and console routines <link id="IPTCSurface.Clear" /> and <link id="IPTCConsole.Clear" />.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- variable Visibility: private -->
+<element name="IPTCColor.FIndex">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- variable Visibility: private -->
+<element name="IPTCColor.FRed">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- variable Visibility: private -->
+<element name="IPTCColor.FGreen">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- variable Visibility: private -->
+<element name="IPTCColor.FBlue">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- variable Visibility: private -->
+<element name="IPTCColor.FAlpha">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- variable Visibility: private -->
+<element name="IPTCColor.FDirect">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- variable Visibility: private -->
+<element name="IPTCColor.FIndexed">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- function Visibility: default -->
+<element name="IPTCColor.GetIndex">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCColor.GetIndex.Result">
+<short></short>
+</element>
+
+<!-- function Visibility: default -->
+<element name="IPTCColor.GetR">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCColor.GetR.Result">
+<short></short>
+</element>
+
+<!-- function Visibility: default -->
+<element name="IPTCColor.GetG">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCColor.GetG.Result">
+<short></short>
+</element>
+
+<!-- function Visibility: default -->
+<element name="IPTCColor.GetB">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCColor.GetB.Result">
+<short></short>
+</element>
+
+<!-- function Visibility: default -->
+<element name="IPTCColor.GetA">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCColor.GetA.Result">
+<short></short>
+</element>
+
+<!-- function Visibility: default -->
+<element name="IPTCColor.GetDirect">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCColor.GetDirect.Result">
+<short></short>
+</element>
+
+<!-- function Visibility: default -->
+<element name="IPTCColor.GetIndexed">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCColor.GetIndexed.Result">
+<short></short>
+</element>
+
+<!-- object Visibility: default -->
+<element name="TPTCColorFactory">
+<short>Creates an IPTCColor instance.</short>
+<descr>
+<p>Creates an IPTCColor instance.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- constructor Visibility: public -->
+<element name="TPTCColorFactory.CreateNew">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCColorFactory.CreateNew.AIndex">
+<short>The color index.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCColorFactory.CreateNew.ARed">
+<short>The red color component.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCColorFactory.CreateNew.AGreen">
+<short>The green color component.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCColorFactory.CreateNew.ABlue">
+<short>The blue color component.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCColorFactory.CreateNew.AAlpha">
+<short>The alpha color component (defaults to one).</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCColorFactory.CreateNew.AColor">
+<short></short>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="TPTCColorFactory.CreateNew.Result">
+<short></short>
+</element>
+
+<!-- procedure Visibility: public -->
+<element name="IPTCColor.Assign">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCColor.Assign.AColor">
+<short></short>
+</element>
+
+<!-- function Visibility: public -->
+<element name="IPTCColor.Equals">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCColor.Equals.Result">
+<short></short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCColor.Equals.AColor">
+<short></short>
+</element>
+
+<!-- property Visibility: public -->
+<element name="IPTCColor.Index">
+<short>Gets the palette index value of the color.</short>
+<descr>
+<p>Gets the palette index value of the color.</p>
+<p>The palette index is only valid if the color is indexed.
+A color object is an indexed color if it was created by the TPTCColorFactory.CreateNew(AIndex: Integer) constructor.
+If the color object is not indexed color then the index value is always zero.</p>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- property Visibility: public -->
+<element name="IPTCColor.R">
+<short>Gets the red color component of the color object.</short>
+<descr>
+<p>Gets the red color component of the color object.</p>
+<p>The red color component is only valid if the color object is direct color.
+A color object is direct color if it was created by the TPTCColorFactory.CreateNew(AR, AG, AB, AA: Single) constructor.
+If the color object is not direct color then the red component is always zero.</p>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- property Visibility: public -->
+<element name="IPTCColor.G">
+<short>Gets the green color component of the color object.</short>
+<descr>
+<p>Gets the green color component of the color object.</p>
+<p>The green color component is only valid if the color object is direct color.
+A color object is direct color if it was created by the TPTCColorFactory.CreateNew(AR, AG, AB, AA: Single) constructor.
+If the color object is not direct color then the green component is always zero.</p>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- property Visibility: public -->
+<element name="IPTCColor.B">
+<short>Gets the blue color component of the color object.</short>
+<descr>
+<p>Gets the blue color component of the color object.</p>
+<p>The blue color component is only valid if the color object is direct color.
+A color object is direct color if it was created by the TPTCColorFactory.CreateNew(AR, AG, AB, AA: Single) constructor.
+If the color object is not direct color then the blue component is always zero.</p>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- property Visibility: public -->
+<element name="IPTCColor.A">
+<short>Gets the alpha color component of the color object.</short>
+<descr>
+<p>Gets the alpha color component of the color object.</p>
+<p>The alpha color component is only valid if the color object is direct color.
+A color object is direct color if it was created by the TPTCColorFactory.CreateNew(AR, AG, AB, AA: Single) constructor.
+If the color object is not direct color then the alpha component is always zero.</p>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- property Visibility: public -->
+<element name="IPTCColor.Direct">
+<short>Checks if the color is direct color.</short>
+<descr>
+<p>Checks if the color is direct color.
+A color object is direct color if it was created by the TPTCColorFactory.CreateNew(AR, AG, AB, AA: Single) constructor.</p>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- property Visibility: public -->
+<element name="IPTCColor.Indexed">
+<short>Checks if the color is indexed color.</short>
+<descr>
+<p>Checks if the color is indexed color.
+A color object is an indexed color if it was created by the TPTCColorFactory.CreateNew(AIndex: Integer) constructor.</p>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- enumeration type Visibility: default -->
+<element name="TPTCEventType">
+<short>An enum, which describes an event type.</short>
+<descr>
+<p>An enum, which describes an event type.</p>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- enumeration value Visibility: default -->
+<element name="TPTCEventType.PTCCloseEvent">
+<short>A window close event.</short>
+</element>
+
+<!-- enumeration value Visibility: default -->
+<element name="TPTCEventType.PTCKeyEvent">
+<short>A keyboard event.</short>
+</element>
+
+<!-- enumeration value Visibility: default -->
+<element name="TPTCEventType.PTCMouseEvent">
+<short>A mouse event.</short>
+</element>
+
+<!-- enumeration value Visibility: default -->
+<element name="TPTCEventType.PTCResizeEvent">
+<short>A window resize event.</short>
+</element>
+
+<!-- set type Visibility: default -->
+<element name="TPTCEventMask">
+<short>A set of event types.</short>
+<descr>
+<p>A set of event types.</p>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- object Visibility: default -->
+<element name="IPTCEvent">
+<short>Describes an event.</short>
+<descr>
+<p>Describes an event.</p>
+<p>This is the base ancestor class from which all the other events are derived.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function Visibility: protected -->
+<element name="IPTCEvent.GetType">
+<short>Gets the event type.</short>
+<descr>
+<p>Gets the event type.</p>
+<p>This virtual abstract method is overriden in all the actual event classes, derived from this one and returns an appropriate constant from the <link id="TPTCEventType" /> enum. It is the getter method of the <link id="IPTCEvent.EventType" /> read-only property. </p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCEvent.GetType.Result">
+<short>The event type.</short>
+</element>
+
+<!-- property Visibility: public -->
+<element name="IPTCEvent.EventType">
+<short>Gets the event type.</short>
+<descr>
+<p>Gets the event type.</p>
+<p>This read-only property calls the <link id="IPTCEvent.GetType" /> virtual abstract method to obtain the result.</p>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- function Visibility: default -->
+<element name="IPTCEvent.GetEventType">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCEvent.GetEventType.Result">
+<short></short>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCAnyEvent">
+<short>An event mask, which describes any event.</short>
+<descr>
+<p>An event mask, which describes any event. It is a set, containing all the possible event types.</p>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- object Visibility: default -->
+<element name="IPTCFormat">
+<short>Describes a pixel format.</short>
+<descr>
+<p>Describes a pixel format.</p>
+<p>The format class describes one of two kinds of pixel formats: indexed color and direct color.
+Indexed color pixel formats describe of pixel values that index into a palette (See <link id="IPTCPalette" />).
+Direct color pixel formats describe pixels that have red, green, blue and alpha information packed into each pixel.
+Format objects are typically used when creating surface classes with <link id="TPTCSurfaceFactory.CreateNew" />, and when opening consoles with <link id="IPTCConsole.Open" />.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- variable Visibility: private -->
+<element name="IPTCFormat.FFormat">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- object Visibility: default -->
+<element name="TPTCFormatFactory">
+<short>Creates an IPTCFormat instance.</short>
+<descr>
+<p>Creates an IPTCFormat instance.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- constructor Visibility: public -->
+<element name="TPTCFormatFactory.CreateNew">
+<short>Creates a pixel format object.</short>
+<descr>
+<p>The default constructor sets <var>ABits</var>, <var>AR</var>, <var>AG</var>, <var>AB</var>, <var>AA</var> to zero.
+When only <var>ABits</var> is specified, the constructor creates an indexed pixel format where each pixel entry represents an index into a palette.
+Currently the only indexed format supported is 8-bit indexed color, ie. 256 color.
+When all <var>AR</var>, <var>AG</var>, <var>AB</var> (and optionally <var>AA</var>) are specified, the constructor creates a direct pixel format with the red, green, blue and alpha masks <var>AR</var>, <var>AG</var>, <var>AB</var> and <var>AA</var>.
+For each of the mask values set bits (1) represent bits allocated to the color component, and clear bits (0) represent unused bits.
+Here are some common direct color pixel formats:</p>
+<code>
+{ 32-bit RGB888 }
+format := TPTCFormatFactory.CreateNew(32, $00FF0000, $0000FF00, $000000FF);
+
+{ 24-bit RGB888 }
+format := TPTCFormatFactory.CreateNew(24, $FF0000, $00FF00, $0000FF);
+
+{ 16-bit RGB565 }
+format := TPTCFormatFactory.CreateNew(16, $F800, $07E0, $001F);
+
+{ 15-bit RGB555 }
+format := TPTCFormatFactory.CreateNew(16, $7C00, $03E0, $001F);
+
+{ 8-bit RGB332 }
+format := TPTCFormatFactory.CreateNew(8, $E0, $1C, $03);
+
+{ 32-bit ARGB8888 }
+format := TPTCFormatFactory.CreateNew(32, $00FF0000, $0000FF00, $000000FF, $FF000000);
+
+{ 16-bit ARGB1555}
+format := TPTCFormatFactory.CreateNew(16, $7C00, $03E0, $001F, $8000);
+</code>
+<p>An error exception is raised if the <var>ABits</var> parameter is not 8, 16, 24 or 32.</p>
+</descr>
+<errors>
+<p><link id="TPTCError" /> - a TPTCError exception is raised on failure.</p>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCFormatFactory.CreateNew.ABits">
+<short>The number of bits per pixel.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCFormatFactory.CreateNew.ARedMask">
+<short>The red color component.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCFormatFactory.CreateNew.AGreenMask">
+<short>The green color component.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCFormatFactory.CreateNew.ABlueMask">
+<short>The blue color component.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCFormatFactory.CreateNew.AAlphaMask">
+<short>The alpha color component (defaults to zero).</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCFormatFactory.CreateNew.format">
+<short></short>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="TPTCFormatFactory.CreateNew.Result">
+<short></short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCFormatFactory.CreateNew.AFormat">
+<short></short>
+</element>
+
+<!-- procedure Visibility: public -->
+<element name="IPTCFormat.Assign">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCFormat.Assign.format">
+<short></short>
+</element>
+
+<!-- function Visibility: public -->
+<element name="IPTCFormat.Equals">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCFormat.Equals.Result">
+<short></short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCFormat.Equals.format">
+<short></short>
+</element>
+
+<!-- property Visibility: public -->
+<element name="IPTCFormat.R">
+<short>Gets the red component mask of the format object.</short>
+<descr>
+<p>Gets the red component mask of the format object.</p>
+<p>The red color mask is only valid if the format object is direct color.
+A format object is direct color if it was created by the TPTCFormatFactory.CreateNew(ABits: Integer; AR, AG, AB, AA: <link id="Uint32" />) constructor.
+If the format object is not direct color then the red mask is always zero.</p>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- property Visibility: public -->
+<element name="IPTCFormat.G">
+<short>Gets the green component mask of the format object.</short>
+<descr>
+<p>Gets the green component mask of the format object.</p>
+<p>The green color mask is only valid if the format object is direct color.
+A format object is direct color if it was created by the TPTCFormatFactory.CreateNew(ABits: Integer; AR, AG, AB, AA: <link id="Uint32" />) constructor.
+If the format object is not direct color then the green mask is always zero.</p>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- property Visibility: public -->
+<element name="IPTCFormat.B">
+<short>Gets the blue component mask of the format object.</short>
+<descr>
+<p>Gets the blue component mask of the format object.</p>
+<p>The blue color mask is only valid if the format object is direct color.
+A format object is direct color if it was created by the TPTCFormatFactory.CreateNew(ABits: Integer; AR, AG, AB, AA: <link id="Uint32" />) constructor.
+If the format object is not direct color then the blue mask is always zero.</p>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- property Visibility: public -->
+<element name="IPTCFormat.A">
+<short>Gets the alpha component mask of the format object.</short>
+<descr>
+<p>Gets the alpha component mask of the format object.</p>
+<p>The alpha color mask is only valid if the format object is direct color.
+A format object is direct color if it was created by the TPTCFormatFactory.CreateNew(ABits: Integer; AR, AG, AB, AA: <link id="Uint32" />) constructor.
+If the format object is not direct color then the alpha mask is always zero.</p>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- property Visibility: public -->
+<element name="IPTCFormat.Bits">
+<short>Gets the bits per pixel of the format object.</short>
+<descr>
+<p>Gets the bits per pixel of the format object.</p>
+<p>Bits per pixel is either 8, 16, 24 or 32 in direct color, or 8 in indexed color.</p>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- property Visibility: public -->
+<element name="IPTCFormat.Indexed">
+<short>Checks if the format is indexed color.</short>
+<descr>
+<p>Checks if the format is indexed color.</p>
+<p>A format object is indexed color if it was created by the TPTCFormatFactory.CreateNew(ABits: Integer) constructor.</p>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- function Visibility: public -->
+<element name="IPTCFormat.Direct">
+<short>Checks if the format is direct color.</short>
+<descr>
+<p>Checks if the format is direct color.</p>
+<p>A format object is direct color if it was created by the TPTCFormatFactory.CreateNew(ABits: Integer; AR, AG, AB, AA: <link id="Uint32" />) constructor.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCFormat.Direct.Result">
+<short><var>true</var> if the format is direct color, <var>false</var> otherwise.</short>
+</element>
+
+<!-- function Visibility: public -->
+<element name="IPTCFormat.Bytes">
+<short>Gets the bytes per pixel of the format object.</short>
+<descr>
+<p>Gets the bytes per pixel of the format object.</p>
+<p>Bytes per pixel is either 1, 2, 3 or 4 in direct color, or 1 in indexed color.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCFormat.Bytes.Result">
+<short>The number of bytes per pixel.</short>
+</element>
+
+<!-- function Visibility: private -->
+<element name="IPTCFormat.GetDirect">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCFormat.GetDirect.Result">
+<short></short>
+</element>
+
+<!-- function Visibility: private -->
+<element name="IPTCFormat.GetBytes">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCFormat.GetBytes.Result">
+<short></short>
+</element>
+
+<!-- function Visibility: default -->
+<element name="IPTCFormat.GetHermesFormat">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCFormat.GetHermesFormat.Result">
+<short></short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCFormat.Equals.AFormat">
+<short></short>
+</element>
+
+<!-- function Visibility: default -->
+<element name="IPTCFormat.GetR">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCFormat.GetR.Result">
+<short></short>
+</element>
+
+<!-- function Visibility: default -->
+<element name="IPTCFormat.GetG">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCFormat.GetG.Result">
+<short></short>
+</element>
+
+<!-- function Visibility: default -->
+<element name="IPTCFormat.GetB">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCFormat.GetB.Result">
+<short></short>
+</element>
+
+<!-- function Visibility: default -->
+<element name="IPTCFormat.GetA">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCFormat.GetA.Result">
+<short></short>
+</element>
+
+<!-- function Visibility: default -->
+<element name="IPTCFormat.GetBits">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCFormat.GetBits.Result">
+<short></short>
+</element>
+
+<!-- function Visibility: default -->
+<element name="IPTCFormat.GetIndexed">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCFormat.GetIndexed.Result">
+<short></short>
+</element>
+
+<!-- object Visibility: default -->
+<element name="IPTCKeyEvent">
+<short>Describes a key press or release.</short>
+<descr>
+<p>Describes a key press or release.</p>
+<p>The key object represents a single key press or release event.
+Each key press consists of a key code that identifies the key pressed/released, a flag indicating whether the event was a key press or a key release, and three modifier flags: alt, shift and control that indicate whether or not the alt, shift or control keys were held while the key was pressed/released.
+Key objects are stored in a fifo queue internally inside the console class when a key is pressed and can be read using the <link id="IPTCConsole.KeyPressed" />, <link id="IPTCConsole.ReadKey" /> and <link id="IPTCConsole.ReadKey" /> methods.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- variable Visibility: private -->
+<element name="IPTCKeyEvent.FCode">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- variable Visibility: private -->
+<element name="IPTCKeyEvent.FUnicode">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- variable Visibility: private -->
+<element name="IPTCKeyEvent.FAlt">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- variable Visibility: private -->
+<element name="IPTCKeyEvent.FShift">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- variable Visibility: private -->
+<element name="IPTCKeyEvent.FControl">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- variable Visibility: private -->
+<element name="IPTCKeyEvent.FPress">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- function Visibility: private -->
+<element name="IPTCKeyEvent.GetRelease">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCKeyEvent.GetRelease.Result">
+<short></short>
+</element>
+
+<!-- function Visibility: default -->
+<element name="IPTCKeyEvent.GetCode">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCKeyEvent.GetCode.Result">
+<short></short>
+</element>
+
+<!-- function Visibility: default -->
+<element name="IPTCKeyEvent.GetUnicode">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCKeyEvent.GetUnicode.Result">
+<short></short>
+</element>
+
+<!-- function Visibility: default -->
+<element name="IPTCKeyEvent.GetAlt">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCKeyEvent.GetAlt.Result">
+<short></short>
+</element>
+
+<!-- function Visibility: default -->
+<element name="IPTCKeyEvent.GetShift">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCKeyEvent.GetShift.Result">
+<short></short>
+</element>
+
+<!-- function Visibility: default -->
+<element name="IPTCKeyEvent.GetControl">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCKeyEvent.GetControl.Result">
+<short></short>
+</element>
+
+<!-- function Visibility: default -->
+<element name="IPTCKeyEvent.GetPress">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCKeyEvent.GetPress.Result">
+<short></short>
+</element>
+
+<!-- object Visibility: default -->
+<element name="TPTCKeyEventFactory">
+<short>Creates an IPTCKeyEvent instance.</short>
+<descr>
+<p>Creates an IPTCKeyEvent instance.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- constructor Visibility: public -->
+<element name="TPTCKeyEventFactory.CreateNew">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCKeyEventFactory.CreateNew.ACode">
+<short>The key code.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCKeyEventFactory.CreateNew.AUnicode">
+<short>The unicode number of the character, represented by the key.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCKeyEventFactory.CreateNew.APress">
+<short><var>true</var> if this is a key press event, <var>false</var> if it is a key release event.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCKeyEventFactory.CreateNew.AAlt">
+<short>The alt key modifier.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCKeyEventFactory.CreateNew.AShift">
+<short>The shift key modifier.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCKeyEventFactory.CreateNew.AControl">
+<short>The control key modifier.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCKeyEventFactory.CreateNew.AKey">
+<short></short>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="TPTCKeyEventFactory.CreateNew.Result">
+<short></short>
+</element>
+
+<!-- procedure Visibility: public -->
+<element name="IPTCKeyEvent.Assign">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCKeyEvent.Assign.AKey">
+<short></short>
+</element>
+
+<!-- function Visibility: public -->
+<element name="IPTCKeyEvent.Equals">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCKeyEvent.Equals.Result">
+<short></short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCKeyEvent.Equals.AKey">
+<short></short>
+</element>
+
+<!-- property Visibility: public -->
+<element name="IPTCKeyEvent.Code">
+<short>Gets the key code.</short>
+<descr>
+<p>Gets the key code.</p>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- property Visibility: public -->
+<element name="IPTCKeyEvent.Unicode">
+<short>Gets the unicode number of the character, represented by the key.</short>
+<descr>
+<p>Gets the unicode number of the character, represented by the key.</p>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- property Visibility: public -->
+<element name="IPTCKeyEvent.Alt">
+<short>Gets the alt key modifier.</short>
+<descr>
+<p>Gets the alt key modifier.</p>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- property Visibility: public -->
+<element name="IPTCKeyEvent.Shift">
+<short>Gets the shift key modifier.</short>
+<descr>
+<p>Gets the shift key modifier.</p>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- property Visibility: public -->
+<element name="IPTCKeyEvent.Control">
+<short>Gets the control key modifier.</short>
+<descr>
+<p>Gets the control key modifier.</p>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- property Visibility: public -->
+<element name="IPTCKeyEvent.Press">
+<short>Checks if the key event is a key press.</short>
+<descr>
+<p>Checks if the key event is a key press.</p>
+</descr>
+<seealso>
+<p><link id="IPTCKeyEvent.Release" /></p>
+</seealso>
+</element>
+
+<!-- property Visibility: public -->
+<element name="IPTCKeyEvent.Release">
+<short>Checks if the key event is a key release.</short>
+<descr>
+<p>Checks if the key event is a key release.</p>
+</descr>
+<seealso>
+<p><link id="IPTCKeyEvent.Press" /></p>
+</seealso>
+</element>
+
+<!-- function Visibility: protected -->
+<element name="IPTCKeyEvent.GetType">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCKeyEvent.GetType.Result">
+<short></short>
+</element>
+
+<!-- interface Visibility: default -->
+<element name="IPTCResizeEvent">
+<short>Describes a window resize event.</short>
+<descr>
+<p>Decribes a window resize event. This is only sent to the application if the console is a resizable window. Note that not all platforms support resizable windows. On some platforms, resizable windows are disabled by default, but they can be enabled by passing the console option
+'resizable window'. When handling the event, applications should call the <link id="IPTCConsole.InternalResize" /> method with the new window size, which will update the internal dimensions of the console. OpenGL applications should call additionally:</p>
+<code>
+  glViewport(0, 0, ResizeEvent.Width, ResizeEvent.Height)
+</code>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function Visibility: default -->
+<element name="IPTCResizeEvent.GetWidth">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCResizeEvent.GetWidth.Result">
+<short></short>
+</element>
+
+<!-- function Visibility: default -->
+<element name="IPTCResizeEvent.GetHeight">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCResizeEvent.GetHeight.Result">
+<short></short>
+</element>
+
+<!-- property Visibility: default -->
+<element name="IPTCResizeEvent.Width">
+<short>The new window width.</short>
+<descr>
+<p>The new window width.</p>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- property Visibility: default -->
+<element name="IPTCResizeEvent.Height">
+<short>The new window height.</short>
+<descr>
+<p>The new window height.</p>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- class Visibility: default -->
+<element name="TPTCResizeEventFactory">
+<short>Creates an IPTCResizeEvent instance.</short>
+<descr>
+<p>Creates an IPTCResizeEvent instance.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- class function Visibility: public -->
+<element name="TPTCResizeEventFactory.CreateNew">
+<short>Creates an IPTCResizeEvent instance.</short>
+<descr>
+<p>Creates an IPTCResizeEvent instance.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: public -->
+<element name="TPTCResizeEventFactory.CreateNew.Result">
+<short></short>
+</element>
+
+<!-- argument Visibility: public -->
+<element name="TPTCResizeEventFactory.CreateNew.AWidth">
+<short></short>
+</element>
+
+<!-- argument Visibility: public -->
+<element name="TPTCResizeEventFactory.CreateNew.AHeight">
+<short></short>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_UNDEFINED">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_CANCEL">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_BACKSPACE">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_TAB">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_ENTER">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_CLEAR">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_SHIFT">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_CONTROL">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_ALT">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_PAUSE">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_CAPSLOCK">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_KANA">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_FINAL">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_KANJI">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_ESCAPE">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_CONVERT">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_NONCONVERT">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_ACCEPT">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_MODECHANGE">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_SPACE">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_PAGEUP">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_PAGEDOWN">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_END">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_HOME">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_LEFT">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_UP">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_RIGHT">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_DOWN">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_COMMA">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_PERIOD">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_SLASH">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_ZERO">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_ONE">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_TWO">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_THREE">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_FOUR">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_FIVE">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_SIX">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_SEVEN">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_EIGHT">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_NINE">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_SEMICOLON">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_EQUALS">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_A">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_B">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_C">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_D">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_E">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_F">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_G">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_H">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_I">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_J">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_K">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_L">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_M">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_N">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_O">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_P">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_Q">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_R">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_S">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_T">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_U">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_V">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_W">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_X">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_Y">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_Z">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_OPENBRACKET">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_BACKSLASH">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_CLOSEBRACKET">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_NUMPAD0">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_NUMPAD1">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_NUMPAD2">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_NUMPAD3">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_NUMPAD4">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_NUMPAD5">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_NUMPAD6">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_NUMPAD7">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_NUMPAD8">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_NUMPAD9">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_MULTIPLY">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_ADD">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_SEPARATOR">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_SUBTRACT">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_DECIMAL">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_DIVIDE">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_F1">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_F2">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_F3">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_F4">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_F5">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_F6">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_F7">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_F8">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_F9">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_F10">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_F11">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_F12">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_DELETE">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_NUMLOCK">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_SCROLLLOCK">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_PRINTSCREEN">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_INSERT">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_HELP">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_META">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_BACKQUOTE">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_QUOTE">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constant Visibility: default -->
+<element name="PTCKEY_MINUS">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- array type Visibility: default -->
+<element name="TPTCModeList">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- object Visibility: default -->
+<element name="IPTCMode">
+<short>Describes a display mode.</short>
+<descr>
+<p>Describes a display mode.</p>
+<p>The mode class describes a display mode with a specific width, height and pixel format.
+Mode objects are typically used with <link id="IPTCConsole.Modes" /> and <link id="IPTCConsole.Open" />.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- variable Visibility: private -->
+<element name="IPTCMode.FValid">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- variable Visibility: private -->
+<element name="IPTCMode.FWidth">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- variable Visibility: private -->
+<element name="IPTCMode.FHeight">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- variable Visibility: private -->
+<element name="IPTCMode.FFormat">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- function Visibility: default -->
+<element name="IPTCMode.GetValid">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCMode.GetValid.Result">
+<short></short>
+</element>
+
+<!-- function Visibility: default -->
+<element name="IPTCMode.GetWidth">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCMode.GetWidth.Result">
+<short></short>
+</element>
+
+<!-- function Visibility: default -->
+<element name="IPTCMode.GetHeight">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCMode.GetHeight.Result">
+<short></short>
+</element>
+
+<!-- function Visibility: default -->
+<element name="IPTCMode.GetFormat">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCMode.GetFormat.Result">
+<short></short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCMode.Equals.AMode">
+<short></short>
+</element>
+
+<!-- object Visibility: default -->
+<element name="TPTCModeFactory">
+<short>Creates an IPTCMode instance.</short>
+<descr>
+<p>Creates an IPTCMode instance.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- constructor Visibility: public -->
+<element name="TPTCModeFactory.CreateNew">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCModeFactory.CreateNew.AWidth">
+<short>The mode width.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCModeFactory.CreateNew.AHeight">
+<short>The mode height.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCModeFactory.CreateNew.AFormat">
+<short>The mode format.</short>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="TPTCModeFactory.CreateNew.Result">
+<short></short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCModeFactory.CreateNew.AMode">
+<short></short>
+</element>
+
+<!-- procedure Visibility: public -->
+<element name="IPTCMode.Assign">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCMode.Assign.Mode">
+<short></short>
+</element>
+
+<!-- function Visibility: public -->
+<element name="IPTCMode.Equals">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCMode.Equals.Result">
+<short></short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCMode.Equals.mode">
+<short></short>
+</element>
+
+<!-- property Visibility: public -->
+<element name="IPTCMode.Valid">
+<short>Tests whether the mode is valid.</short>
+<descr>
+<p>Tests whether the mode is valid.
+A display mode is invalid when it was created by the default constructor.
+Typically this function is used to check for the invalid display mode that terminates the console mode list.
+See <link id="IPTCConsole.modes" /> for more information.</p>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- property Visibility: public -->
+<element name="IPTCMode.Width">
+<short>Gets the width of the display mode in pixels.</short>
+<descr>
+<p>Gets the width of the display mode in pixels.</p>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- property Visibility: public -->
+<element name="IPTCMode.Height">
+<short>Gets the height of the display mode in pixels.</short>
+<descr>
+<p>Gets the height of the display mode in pixels.</p>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- property Visibility: public -->
+<element name="IPTCMode.Format">
+<short>Gets the pixel format of the display mode.</short>
+<descr>
+<p>Gets the pixel format of the display mode.</p>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- enumeration type Visibility: default -->
+<element name="TPTCMouseButton">
+<short>An enum, representing a mouse button.</short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- enumeration value Visibility: default -->
+<element name="TPTCMouseButton.PTCMouseButton1">
+<short>Mouse button number 1. Usually the left mouse button.</short>
+</element>
+
+<!-- enumeration value Visibility: default -->
+<element name="TPTCMouseButton.PTCMouseButton2">
+<short>Mouse button number 2. Usually the right mouse button.</short>
+</element>
+
+<!-- enumeration value Visibility: default -->
+<element name="TPTCMouseButton.PTCMouseButton3">
+<short>Mouse button number 3. Usually the middle mouse button.</short>
+</element>
+
+<!-- enumeration value Visibility: default -->
+<element name="TPTCMouseButton.PTCMouseButton4">
+<short>Mouse button number 4.</short>
+</element>
+
+<!-- enumeration value Visibility: default -->
+<element name="TPTCMouseButton.PTCMouseButton5">
+<short>Mouse button number 5.</short>
+</element>
+
+<!-- set type Visibility: default -->
+<element name="TPTCMouseButtonState">
+<short>A set, representing the mouse button state.</short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- object Visibility: default -->
+<element name="IPTCMouseEvent">
+<short>Describes a mouse event.</short>
+<descr>
+<p>Describes a mouse event.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- variable Visibility: private -->
+<element name="IPTCMouseEvent.FX">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- variable Visibility: private -->
+<element name="IPTCMouseEvent.FY">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- variable Visibility: private -->
+<element name="IPTCMouseEvent.FDeltaX">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- variable Visibility: private -->
+<element name="IPTCMouseEvent.FDeltaY">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- variable Visibility: private -->
+<element name="IPTCMouseEvent.FButtonState">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- function Visibility: protected -->
+<element name="IPTCMouseEvent.GetType">
+<short>Returns <link id="TPTCEventType.PTCMouseEvent" />.</short>
+<descr>
+<p>Returns <link id="TPTCEventType.PTCMouseEvent" />.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCMouseEvent.GetType.Result">
+<short></short>
+</element>
+
+<!-- function Visibility: default -->
+<element name="IPTCMouseEvent.GetX">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCMouseEvent.GetX.Result">
+<short></short>
+</element>
+
+<!-- function Visibility: default -->
+<element name="IPTCMouseEvent.GetY">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCMouseEvent.GetY.Result">
+<short></short>
+</element>
+
+<!-- function Visibility: default -->
+<element name="IPTCMouseEvent.GetDeltaX">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCMouseEvent.GetDeltaX.Result">
+<short></short>
+</element>
+
+<!-- function Visibility: default -->
+<element name="IPTCMouseEvent.GetDeltaY">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCMouseEvent.GetDeltaY.Result">
+<short></short>
+</element>
+
+<!-- function Visibility: default -->
+<element name="IPTCMouseEvent.GetButtonState">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCMouseEvent.GetButtonState.Result">
+<short></short>
+</element>
+
+<!-- object Visibility: default -->
+<element name="TPTCMouseEventFactory">
+<short>Creates an IPTCMouseEvent instance.</short>
+<descr>
+<p>Creates an IPTCMouseEvent instance.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- constructor Visibility: public -->
+<element name="TPTCMouseEventFactory.CreateNew">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCMouseEventFactory.CreateNew.AX">
+<short></short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCMouseEventFactory.CreateNew.AY">
+<short></short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCMouseEventFactory.CreateNew.ADeltaX">
+<short></short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCMouseEventFactory.CreateNew.ADeltaY">
+<short></short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCMouseEventFactory.CreateNew.AButtonState">
+<short></short>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="TPTCMouseEventFactory.CreateNew.Result">
+<short></short>
+</element>
+
+<!-- property Visibility: public -->
+<element name="IPTCMouseEvent.X">
+<short>The X coordinate of the mouse cursor.</short>
+<descr>
+<p>The X coordinate of the mouse cursor at the moment the mouse event occurred.</p>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- property Visibility: public -->
+<element name="IPTCMouseEvent.Y">
+<short>The Y coordinate of the mouse cursor.</short>
+<descr>
+<p>The Y coordinate of the mouse cursor at the moment the mouse event occurred.</p>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- property Visibility: public -->
+<element name="IPTCMouseEvent.DeltaX">
+<short>The difference between the current and the previous X coordinate of the mouse cursor.</short>
+<descr>
+<p>The difference between the current and the previous X coordinate of the mouse cursor.</p>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- property Visibility: public -->
+<element name="IPTCMouseEvent.DeltaY">
+<short>The difference between the current and the previous Y coordinate of the mouse cursor.</short>
+<descr>
+<p>The difference between the current and the previous Y coordinate of the mouse cursor.</p>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- property Visibility: public -->
+<element name="IPTCMouseEvent.ButtonState">
+<short>The current button state.</short>
+<descr>
+<p>The current button state.</p>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- object Visibility: default -->
+<element name="IPTCMouseButtonEvent">
+<short>Describes a mouse button press or release event.</short>
+<descr>
+<p>Describes a mouse button press or release event.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- variable Visibility: private -->
+<element name="IPTCMouseButtonEvent.FPress">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- variable Visibility: private -->
+<element name="IPTCMouseButtonEvent.FButton">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- function Visibility: private -->
+<element name="IPTCMouseButtonEvent.GetRelease">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCMouseButtonEvent.GetRelease.Result">
+<short></short>
+</element>
+
+<!-- object Visibility: default -->
+<element name="TPTCMouseButtonEventFactory">
+<short>Creates an IPTCMouseButtonEvent instance.</short>
+<descr>
+<p>Creates an IPTCMouseButtonEvent instance.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- constructor Visibility: public -->
+<element name="TPTCMouseButtonEventFactory.CreateNew">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCMouseButtonEventFactory.CreateNew.AX">
+<short></short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCMouseButtonEventFactory.CreateNew.AY">
+<short></short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCMouseButtonEventFactory.CreateNew.ADeltaX">
+<short></short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCMouseButtonEventFactory.CreateNew.ADeltaY">
+<short></short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCMouseButtonEventFactory.CreateNew.AButtonState">
+<short></short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCMouseButtonEventFactory.CreateNew.APress">
+<short></short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCMouseButtonEventFactory.CreateNew.AButton">
+<short></short>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="TPTCMouseButtonEventFactory.CreateNew.Result">
+<short></short>
+</element>
+
+<!-- property Visibility: public -->
+<element name="IPTCMouseButtonEvent.Press">
+<short>Checks if the mouse button event is a button press event.</short>
+<descr>
+<p>Checks if the mouse button event is a button press event.</p>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- property Visibility: public -->
+<element name="IPTCMouseButtonEvent.Release">
+<short>Checks if the mouse button event is a button release event.</short>
+<descr>
+<p>Checks if the mouse button event is a button release event.</p>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- property Visibility: public -->
+<element name="IPTCMouseButtonEvent.Button">
+<short>The mouse button, which was pressed or released.</short>
+<descr>
+<p>The mouse button, which was pressed or released.</p>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- function Visibility: default -->
+<element name="IPTCMouseButtonEvent.GetPress">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCMouseButtonEvent.GetPress.Result">
+<short></short>
+</element>
+
+<!-- function Visibility: default -->
+<element name="IPTCMouseButtonEvent.GetButton">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCMouseButtonEvent.GetButton.Result">
+<short></short>
+</element>
+
+<!-- object Visibility: default -->
+<element name="IPTCPalette">
+<short>A palette of color entries.</short>
+<descr>
+<p>A palette of color entries.</p>
+<p>The palette class represents a 256 color palette for 8-bit indexed color formats.
+Internally each palette object maintains an array of 256 32-bit integer color values packed in ARGB8888 format.
+Palette objects are typically used to set the surface palette with <link id="IPTCSurface.Palette" />.
+They are also used, although less frequently, to load and save surface pixels with <link id="IPTCSurface.Load" /> and <link id="IPTCSurface.Save" />.
+And, even less frequently, they are used with the low level pixel copying and conversion routine <link id="TPTCCopy.Palette" />.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- variable Visibility: private -->
+<element name="IPTCPalette.FLocked">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- variable Visibility: private -->
+<element name="IPTCPalette.FHandle">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- object Visibility: default -->
+<element name="TPTCPaletteFactory">
+<short>Creates an IPTCPalette instance.</short>
+<descr>
+<p>Creates an IPTCPalette instance.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- constructor Visibility: public -->
+<element name="TPTCPaletteFactory.CreateNew">
+<short>Creates a palette object.</short>
+<descr>
+<p>Creates a palette object.</p>
+<p>When called without arguments, all palette color entries are set to black.
+When <var>AData</var> is specified, the palette color entries are set to the values in <var>AData</var>. The <var>AData</var> array is an array of r, g, b, a color values packed into a 32-bit integer in the format ARGB8888.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCPaletteFactory.CreateNew.AData">
+<short>The palette data.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCPaletteFactory.CreateNew.APalette">
+<short>The palette object to copy from.</short>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="TPTCPaletteFactory.CreateNew.Result">
+<short></short>
+</element>
+
+<!-- procedure Visibility: public -->
+<element name="IPTCPalette.Assign">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCPalette.Assign.APalette">
+<short>The palette object to copy from.</short>
+</element>
+
+<!-- function Visibility: public -->
+<element name="IPTCPalette.Equals">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCPalette.Equals.Result">
+<short></short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCPalette.Equals.APalette">
+<short></short>
+</element>
+
+<!-- function Visibility: public -->
+<element name="IPTCPalette.Lock">
+<short>Gets a pointer to the palette data array.</short>
+<descr>
+<p>Gets a pointer to the palette data array. The data array is an array of r, g, b, a color values packed into a 32-bit integer in the format ARGB8888.
+Each successful palette lock must be accompanied by an unlock (See <link id="IPTCPalette.Unlock" />).
+Only one lock is allowed on a palette object at any one time.</p>
+</descr>
+<errors>
+<p><link id="TPTCError" /> - a TPTCError exception is raised on failure.</p>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCPalette.Lock.Result">
+<short>A pointer to the palette data.</short>
+</element>
+
+<!-- procedure Visibility: public -->
+<element name="IPTCPalette.Unlock">
+<short>Unlocks the palette color data after a call to Lock.</short>
+<descr>
+<p>Unlocks the palette color data after a call to <link id="IPTCPalette.Lock" />.
+If unlock is called and the palette is not locked a <link id="TPTCError" /> exception will be raised.</p>
+</descr>
+<errors>
+<p><link id="TPTCError" /> - a TPTCError exception is raised on failure.</p>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- procedure Visibility: public -->
+<element name="IPTCPalette.Load">
+<short>Loads the color values to the palette from the color array, specified as argument.</short>
+<descr>
+<p>Loads the color values from <var>AData</var> to the palette.
+The <var>AData</var> array is an array of r, g, b, a color values packed into a 32-bit integer in the format ARGB8888.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCPalette.Load.AData">
+<short>The palette data.</short>
+</element>
+
+<!-- procedure Visibility: public -->
+<element name="IPTCPalette.Save">
+<short>Saves the palette color values to the color array, specified as argument.</short>
+<descr>
+<p>Saves the palette color values to the color array <var>AData</var>.
+The <var>AData</var> array is an array of r, g, b, a color values packed into a 32-bit integer in the format ARGB8888.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCPalette.Save.AData">
+<short>The palette data.</short>
+</element>
+
+<!-- function Visibility: public -->
+<element name="IPTCPalette.Data">
+<short>Gets a read-only pointer to the palette data array.</short>
+<descr>
+<p>Gets a read-only pointer to the palette data array.
+The data array is an array of r, g, b, a color values packed into a 32-bit integer in the format ARGB8888.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCPalette.Data.Result">
+<short>A pointer to the palette data.</short>
+</element>
+
+<!-- function Visibility: default -->
+<element name="IPTCPalette.GetHermesPaletteHandle">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCPalette.GetHermesPaletteHandle.Result">
+<short></short>
+</element>
+
+<!-- object Visibility: default -->
+<element name="TPTCClear">
+<short>Routines for clearing pixels.</short>
+<descr>
+<p>Routines for clearing pixels.</p>
+<p>This class is an interface to low level pixel clearing routines.
+Before using the clear class take a look at the high level <link id="IPTCSurface.Clear" /> and <link id="IPTCConsole.Clear" /> functions.
+Typically the only time the clear class is required is when you are managing your own pixel buffers.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- variable Visibility: private -->
+<element name="TPTCClear.FHandle">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- variable Visibility: private -->
+<element name="TPTCClear.FFormat">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constructor Visibility: public -->
+<element name="TPTCClear.Create">
+<short>Default constructor.</short>
+<descr>
+<p>Default constructor.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- destructor Visibility: public -->
+<element name="TPTCClear.Destroy">
+<short>Destructor.</short>
+<descr>
+<p>Destructor.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- procedure Visibility: public -->
+<element name="TPTCClear.Request">
+<short>Request a clear routine for the specified pixel format.</short>
+<descr>
+<p>Request a clear routine for the specified pixel format.</p>
+</descr>
+<errors>
+<p><link id="TPTCError" /> - a TPTCError exception is raised on failure.</p>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCClear.Request.AFormat">
+<short>The pixel format.</short>
+</element>
+
+<!-- procedure Visibility: public -->
+<element name="TPTCClear.Clear">
+<short>Clears an area of pixels to a specified color.</short>
+<descr>
+<p>Clear an area of the pixel array <var>pixels</var> to the specified color <var>color</var>.</p>
+<p><b>Warning:</b> You must first call <link id="TPTCClear.Request" /> to initialize the pixel format.</p>
+</descr>
+<errors>
+<p><link id="TPTCError" /> - a TPTCError exception is raised on failure.</p>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCClear.Clear.APixels">
+<short>The pixel array.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCClear.Clear.AX">
+<short>The x coordinate of the top-left corner of the clear area.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCClear.Clear.AY">
+<short>The y coordinate of the top-left corner of the clear area.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCClear.Clear.AWidth">
+<short>The width of the clear area in pixels.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCClear.Clear.AHeight">
+<short>The height of the clear area in pixels.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCClear.Clear.APitch">
+<short>The pitch of the pixel array in bytes.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCClear.Clear.AColor">
+<short>The clear color.</short>
+</element>
+
+<!-- object Visibility: default -->
+<element name="TPTCCopy">
+<short>Routines for copying and converting pixel data.</short>
+<descr>
+<p>Routines for copying and converting pixel data.</p>
+<p>This class is an interface to low level pixel copying and conversion routines.
+Before using the copy class take a look at the high level <link id="IPTCSurface.Copy" />, <link id="IPTCSurface.Load" /> and <link id="IPTCSurface.Save" /> functions.
+Typically the only time the copy class is required is when you are managing your own pixel buffers.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- procedure Visibility: private -->
+<element name="TPTCCopy.Update">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- variable Visibility: private -->
+<element name="TPTCCopy.FHandle">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- variable Visibility: private -->
+<element name="TPTCCopy.FFlags">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constructor Visibility: public -->
+<element name="TPTCCopy.Create">
+<short>Default constructor.</short>
+<descr>
+<p>Default constructor.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- destructor Visibility: public -->
+<element name="TPTCCopy.Destroy">
+<short>Destructor.</short>
+<descr>
+<p>Destructor.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- procedure Visibility: public -->
+<element name="TPTCCopy.Request">
+<short>Request a copy routine for the specified pixel formats.</short>
+<descr>
+<p>Request a copy routine for the specified pixel formats <var>source</var> and <var>destination</var>.</p>
+</descr>
+<errors>
+<p><link id="TPTCError" /> - a TPTCError exception is raised on failure.</p>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCCopy.Request.ASource">
+<short>The source pixel format.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCCopy.Request.ADestination">
+<short>The destination pixel format.</short>
+</element>
+
+<!-- procedure Visibility: public -->
+<element name="TPTCCopy.Palette">
+<short>Set the <var>source</var> and <var>destination</var> palettes for indexed color conversion.</short>
+<descr>
+<p>Set the <var>source</var> and <var>destination</var> palettes for indexed color conversion.</p>
+<p>If neither pixel arrays are indexed color then pass blank palettes:</p>
+<code>
+var
+  blank_palette: IPTCPalette;
+  ...
+  { set blank copy palettes }
+  blank_palette := TPTCPaletteFactory.CreateNew;
+  copy.Palette(blank_palette, blank_palette);
+</code>
+</descr>
+<errors>
+<p><link id="TPTCError" /> - a TPTCError exception is raised on failure.</p>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCCopy.Palette.ASource">
+<short>The source palette.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCCopy.Palette.ADestination">
+<short>The destination palette.</short>
+</element>
+
+<!-- procedure Visibility: public -->
+<element name="TPTCCopy.Copy">
+<short>Copy an area of the source pixel array to an area of the destination pixel array.</short>
+<descr>
+<p>Copy an area of the source pixel array <var>ASourcePixels</var> to an area of the destination pixel array <var>ADestinationPixels</var>.
+<var>ASourceWidth</var>, <var>ASourceHeight</var>, <var>ADestinationWidth</var> and <var>ADestinationHeight</var> must all be positive integers.
+<var>ASourcePitch</var> and <var>ADestinationPitch</var> may be any value, even negative.</p>
+<p><b>Warning:</b> You must first call <link id="TPTCCopy.Request" /> to initialize the pixel formats and <link id="TPTCCopy.Palette" /> to initialize palettes.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCCopy.Copy.ASourcePixels">
+<short>the source pixel array.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCCopy.Copy.ASourceX">
+<short>the x coordinate of the top-left corner of the source area.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCCopy.Copy.ASourceY">
+<short>the y coordinate of the top-left corner of the source area.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCCopy.Copy.ASourceWidth">
+<short>the width of the source area in pixels.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCCopy.Copy.ASourceHeight">
+<short>the height of the source area in pixels.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCCopy.Copy.ASourcePitch">
+<short>the pitch of the source pixel array in bytes.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCCopy.Copy.ADestinationPixels">
+<short>the destination pixel array.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCCopy.Copy.ADestinationX">
+<short>the x coordinate of the top-left corner of the destination area.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCCopy.Copy.ADestinationY">
+<short>the y coordinate of the top-left corner of the destination area.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCCopy.Copy.ADestinationWidth">
+<short>the width of the destination area in pixels.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCCopy.Copy.ADestinationHeight">
+<short>the height of the destination area in pixels.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCCopy.Copy.ADestinationPitch">
+<short>the pitch of the destination pixel array in bytes.</short>
+</element>
+
+<!-- function Visibility: public -->
+<element name="TPTCCopy.Option">
+<short>Passes an implementation specific option string to the copy object.</short>
+<descr>
+<p>Passes an implementation specific option string to the copy object.</p>
+</descr>
+<errors>
+<p><link id="TPTCError" /> - a TPTCError exception is raised on failure.</p>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="TPTCCopy.Option.Result">
+<short><var>true</var> if the option string is recognized, <var>false</var> otherwise.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCCopy.Option.AOption">
+<short></short>
+</element>
+
+<!-- object Visibility: default -->
+<element name="TPTCClipper">
+<short>Routines for clipping areas.</short>
+<descr>
+<p>Routines for clipping areas.</p>
+<p>This class provides low level area clipping routines.
+Before using the clipper class take a look at the high level <link id="IPTCSurface.Clip" /> method.
+Typically the only time the clipper class is required is when you are managing your own pixel buffers and performing clipping manually.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function Visibility: public -->
+<element name="TPTCClipper.Clip">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="TPTCClipper.Clip.Result">
+<short>The clipped area.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCClipper.Clip.AArea">
+<short>The area to clip.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCClipper.Clip.AClip">
+<short>The clip area.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCClipper.Clip.ASource">
+<short>The source area to clip.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCClipper.Clip.AClipSource">
+<short>The source clip area.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCClipper.Clip.AClippedSource">
+<short>The output clipped source area.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCClipper.Clip.ADestination">
+<short>The destination area to clip.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCClipper.Clip.AClipDestination">
+<short>The destination clip area.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCClipper.Clip.AClippedDestination">
+<short>The output clipped destination area.</short>
+</element>
+
+<!-- object Visibility: default -->
+<element name="IPTCSurface">
+<short>Surface interface.</short>
+<descr>
+<p>Surface interface.</p>
+<p>This class provides the interface for manipulating an array of pixels.
+The objects created by the <link id="TPTCSurfaceFactory.CreateNew" /> and <link id="TPTCConsoleFactory.CreateNew" /> factory methods are concrete implementations of this interface.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- procedure Visibility: public -->
+<element name="IPTCSurface.Copy">
+<short>Copies the contents of this surface to another surface.</short>
+<descr>
+<p>If no areas are specified, copies the entire contents of this surface to the other surface specified in the <var>ASurface</var> parameter.
+If areas are specified, copies an area of this surface to an area of the other surface specified in the <var>ASurface</var> parameter. The source and destination areas are clipped to the clip areas of both surfaces.</p>
+</descr>
+<errors>
+<p><link id="TPTCError" /> - a TPTCError exception is raised on failure.</p>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCSurface.Copy.ASurface">
+<short>The destination surface.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCSurface.Copy.ASource">
+<short>The source area.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCSurface.Copy.ADestination">
+<short>The destination area.</short>
+</element>
+
+<!-- function Visibility: public -->
+<element name="IPTCSurface.Lock">
+<short>Locks the surface and returns a pointer to the locked surface pixel memory.</short>
+<descr>
+<p>Locks the surface and returns a pointer to the locked surface pixel memory.
+Every successful lock must be followed by a call to <link id="IPTCSurface.Unlock" />. Call unlock once you are finished with the surface memory.
+Only one lock per surface object is permitted at any one time.
+If the surface is already locked a <link id="TPTCError" /> exception will be raised.</p>
+</descr>
+<errors>
+<p><link id="TPTCError" /> - a TPTCError exception is raised on failure.</p>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCSurface.Lock.Result">
+<short>A pointer to the surface pixel memory.</short>
+</element>
+
+<!-- procedure Visibility: public -->
+<element name="IPTCSurface.Unlock">
+<short>Unlocks the surface memory after it was locked by a call to <link id="IPTCSurface.Lock" />.</short>
+<descr>
+<p>Unlocks the surface memory after it was locked by a call to <link id="IPTCSurface.Lock" />.
+The pointer to the pixel memory retrieved during lock becomes invalid upon return from this function. If you need to access pixel memory again, you must lock the surface again with <link id="IPTCSurface.Lock" />.
+If the surface was not locked then a <link id="TPTCError" /> exception will be raised.</p>
+</descr>
+<errors>
+<p><link id="TPTCError" /> - a TPTCError exception is raised on failure.</p>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- procedure Visibility: public -->
+<element name="IPTCSurface.Load">
+<short>Loads pixels from a pixel array to the surface.</short>
+<descr>
+<p>Loads an area of pixels from the pixel array <var>APixels</var> to the surface (or to an area of the surface).
+The source and destination areas (if specified) are clipped to the surface clip area and the dimensions of the pixel data.</p>
+</descr>
+<errors>
+<p><link id="TPTCError" /> - a TPTCError exception is raised on failure.</p>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCSurface.Load.APixels">
+<short>The pixel data to be loaded.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCSurface.Load.AWidth">
+<short>The width of the pixel data in pixels.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCSurface.Load.AHeight">
+<short>The height of the pixel data in pixels.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCSurface.Load.APitch">
+<short>The pitch of the pixel data in bytes.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCSurface.Load.AFormat">
+<short>The format of the pixel data.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCSurface.Load.APalette">
+<short>The palette of the pixel data (ignored in direct color).</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCSurface.Load.ASource">
+<short>The source area of pixels to be loaded.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCSurface.Load.ADestination">
+<short>The destination area where pixels will be loaded on the surface.</short>
+</element>
+
+<!-- procedure Visibility: public -->
+<element name="IPTCSurface.Save">
+<short>Saves the surface pixels to a pixel array.</short>
+<descr>
+<p>Saves an area of the surface pixels to (or to an area of) the pixel data array <var>APixels</var>.
+The source and destination areas (if specified) are clipped to the surface clip area and the dimensions of the pixel data.</p>
+</descr>
+<errors>
+<p><link id="TPTCError" /> - a TPTCError exception is raised on failure.</p>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCSurface.Save.APixels">
+<short>The destination pixel data.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCSurface.Save.AWidth">
+<short>The width of the pixel data in pixels.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCSurface.Save.AHeight">
+<short>The height of the pixel data in pixels.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCSurface.Save.APitch">
+<short>The pitch of the pixel data in bytes.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCSurface.Save.AFormat">
+<short>The format of the pixel data.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCSurface.Save.APalette">
+<short>The palette of the pixel data (ignored in direct color).</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCSurface.Save.ASource">
+<short>The source area of pixels to be saved.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCSurface.Save.ADestination">
+<short>The destination area where pixels will be saved to the pixel data array.</short>
+</element>
+
+<!-- procedure Visibility: public -->
+<element name="IPTCSurface.Clear">
+<short>Clears the contents of a surface to black (or to a specified color).</short>
+<descr>
+<p>Clears the entire contents of (or an area of it, specified by the <var>AArea</var> parameter) the surface to the color specified in the <var>AColor</var> parameter.
+If the <var>AColor</var> parameter is not specified, the surface is cleared to black in direct color and index zero in indexed color.
+If the surface pixels are direct color format then the <var>AColor</var> parameter must specify a direct color r, g, b, a value.
+Conversely if the surface pixels are indexed color then the <var>AColor</var> parameter must specify a color index value.
+The clear area is clipped to the surface clip area.</p>
+</descr>
+<errors>
+<p><link id="TPTCError" /> - a TPTCError exception is raised on failure.</p>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCSurface.Clear.AColor">
+<short>The clear color.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCSurface.Clear.AArea">
+<short>The clear area.</short>
+</element>
+
+<!-- procedure Visibility: public -->
+<element name="IPTCSurface.Palette">
+<short>Sets or gets the surface palette.</short>
+<descr>
+<p>The procedure sets the surface palette to the palette specified in the <var>APalette</var> parameter. Setting the surface palette in direct color will not cause an exception to be raised even though it has no effect.</p>
+<p>The function gets the surface palette object.</p>
+</descr>
+<errors>
+<p><link id="TPTCError" /> - a TPTCError exception is raised on failure.</p>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCSurface.Palette.APalette">
+<short>The palette data.</short>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCSurface.Palette.Result">
+<short>The surface palette object.</short>
+</element>
+
+<!-- procedure Visibility: public -->
+<element name="IPTCSurface.Clip">
+<short>Sets or gets the surface clip area.</short>
+<descr>
+<p>The procedure sets the surface clip area to the area specified by the <var>AArea</var> parameter. Before the clip area is set it is clipped against the surface area (0, 0, Width, Height). This ensures that the clip area is always contained within the boundaries of the surface.</p>
+<p>The function gets the clip area of the surface. The surface clip area is used during clipping areas to the surface. The clip area is initially set to (0, 0, Width, Height).</p>
+</descr>
+<errors>
+<p><link id="TPTCError" /> - a TPTCError exception is raised on failure.</p>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCSurface.Clip.AArea">
+<short>The clip area.</short>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCSurface.Clip.Result">
+<short>The surface palette object.</short>
+</element>
+
+<!-- function Visibility: public -->
+<element name="IPTCSurface.Width">
+<short>Gets the width of the surface in pixels.</short>
+<descr>
+<p>Gets the width of the surface in pixels.</p>
+</descr>
+<errors>
+<p><link id="TPTCError" /> - a TPTCError exception is raised on failure.</p>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCSurface.Width.Result">
+<short>The width of the surface.</short>
+</element>
+
+<!-- function Visibility: public -->
+<element name="IPTCSurface.Height">
+<short>Gets the height of the surface in pixels.</short>
+<descr>
+<p>Gets the height of the surface in pixels.</p>
+</descr>
+<errors>
+<p><link id="TPTCError" /> - a TPTCError exception is raised on failure.</p>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCSurface.Height.Result">
+<short>The height of the surface.</short>
+</element>
+
+<!-- function Visibility: public -->
+<element name="IPTCSurface.Pitch">
+<short>Gets the pitch of the surface in bytes.</short>
+<descr>
+<p>Gets the pitch of the surface in bytes.
+The pitch is the number of bytes between the start of each horizonal line of pixel memory.
+The pitch may be any value - <i>even negative!</i>
+Do not make any assumptions about the layout of IPTCSurface pixel memory, <b>always check the pitch!</b></p>
+</descr>
+<errors>
+<p><link id="TPTCError" /> - a TPTCError exception is raised on failure.</p>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCSurface.Pitch.Result">
+<short>The pitch of the surface.</short>
+</element>
+
+<!-- function Visibility: public -->
+<element name="IPTCSurface.Area">
+<short>Gets the area of the surface.</short>
+<descr>
+<p>Gets the area of the surface.</p>
+<p>The surface area is calculated as (0, 0, surface.Width, surface.Height).</p>
+</descr>
+<errors>
+<p><link id="TPTCError" /> - a TPTCError exception is raised on failure.</p>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCSurface.Area.Result">
+<short>The area of the surface.</short>
+</element>
+
+<!-- function Visibility: public -->
+<element name="IPTCSurface.Format">
+<short>Gets the pixel format of the surface.</short>
+<descr>
+<p>Gets the pixel format of the surface.</p>
+</descr>
+<errors>
+<p><link id="TPTCError" /> - a TPTCError exception is raised on failure.</p>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCSurface.Format.Result">
+<short>The pixel format of the surface.</short>
+</element>
+
+<!-- function Visibility: public -->
+<element name="IPTCSurface.Option">
+<short>Passes an implementation specific option string to the surface.</short>
+<descr>
+<p>Passes an implementation specific option string to the surface.</p>
+</descr>
+<errors>
+<p><link id="TPTCError" /> - a TPTCError exception is raised on failure.</p>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCSurface.Option.Result">
+<short><var>true</var> if the option string is recognized, <var>false</var> otherwise.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCSurface.Option.AOption">
+<short></short>
+</element>
+
+<!-- function Visibility: private -->
+<element name="IPTCSurface.GetWidth">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCSurface.GetWidth.Result">
+<short></short>
+</element>
+
+<!-- function Visibility: private -->
+<element name="IPTCSurface.GetHeight">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCSurface.GetHeight.Result">
+<short></short>
+</element>
+
+<!-- function Visibility: private -->
+<element name="IPTCSurface.GetPitch">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCSurface.GetPitch.Result">
+<short></short>
+</element>
+
+<!-- function Visibility: private -->
+<element name="IPTCSurface.GetArea">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCSurface.GetArea.Result">
+<short></short>
+</element>
+
+<!-- function Visibility: private -->
+<element name="IPTCSurface.GetFormat">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCSurface.GetFormat.Result">
+<short></short>
+</element>
+
+<!-- object Visibility: default -->
+<element name="TPTCSurfaceFactory">
+<short>Creates a linear array of pixels.</short>
+<descr>
+<p>A linear array of pixels.</p>
+<p>The surface class represents a linear array of pixels in system memory.
+The surface class manages information about the array of pixels, such as its width, height, pitch, pixel format and palette.
+It provides routines for loading pixels to the surface, saving surface pixels to another buffer, copying surface pixels to other surfaces and clearing surface pixels to a specified color.
+The surface class also manages a clipping rectangle through which all area parameters are first passed to ensure that no load, save, copy or clear operation can write outside of surface memory.
+Surface pitch is always equal to width * format.bytes.
+This means that surface memory is always linear - the first pixel of line y+1 is immediately after the last pixel of line y in memory for all lines y in the surface.
+Be warned, although the objects, created by TPTCSurfaceFactory guarantee linear memory, <i>IPTCSurface generally does not!</i></p>
+<p>The documentation of this class only provides an overview for most members, for details see <link id="IPTCSurface" />.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- constructor Visibility: public -->
+<element name="TPTCSurfaceFactory.CreateNew">
+<short>Creates a surface with given dimensions and a pixel format.</short>
+<descr>
+<p>Creates a surface with dimensions of <var>AWidth</var> by <var>AHeight</var> pixels and a pixel format of <var>AFormat</var>.</p>
+</descr>
+<errors>
+<p><link id="TPTCError" /> - a TPTCError exception is raised on failure.</p>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCSurfaceFactory.CreateNew.AWidth">
+<short>The width of the surface.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCSurfaceFactory.CreateNew.AHeight">
+<short>The height of the surface.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCSurfaceFactory.CreateNew.AFormat">
+<short>The pixel format of the surface.</short>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="TPTCSurfaceFactory.CreateNew.Result">
+<short></short>
+</element>
+
+<!-- object Visibility: default -->
+<element name="IPTCConsole">
+<short>Console interface.</short>
+<descr>
+<p>Console interface.</p>
+<p>This class provides the interface for accessing the display frame buffer and basic keyboard and mouse routines.
+It extends the surface interface so that the display frame buffer memory may be accessed as a surface.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- variable Visibility: protected -->
+<element name="IPTCConsole.FReleaseEnabled">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constructor Visibility: public -->
+<element name="IPTCConsole.Create">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- procedure Visibility: default -->
+<element name="IPTCConsole.InternalResize">
+<short>Changes the internal dimensions of the console, after a window resize event</short>
+<descr>
+<p>This method updates the console's internal <link id="IPTCSurface.Width" /> and <link id="IPTCSurface.Height" /> properties, as well as the
+console's <link id="IPTCSurface.Pitch" />. Applications should call this method when handling the <link id="IPTCResizeEvent" /> event.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCConsole.InternalResize.AWidth">
+<short></short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCConsole.InternalResize.AHeight">
+<short></short>
+</element>
+
+<!-- function Visibility: public -->
+<element name="IPTCConsole.NextEvent">
+<short>Returns the next event from the event queue and removes it from the queue.</short>
+<descr>
+<p>Returns the first event from the event queue, that matches the specified event mask and removes it from the queue.
+The event is returned in the <var>AEvent</var> parameter. Please note that this is both an input and output parameter. On entry, the function frees the event, passed by the <var>AEvent</var> parameter and then makes it point to the event returned by the function. This event must be freed by the application, otherwise a memory leak will occur.
+To peek for an event, without removing it from the queue, the <link id="IPTCConsole.PeekEvent" /> function should be used instead.
+If no event that matches the specified mask is currently present on the event queue, the function returns NIL if the <var>AWait</var> parameter is FALSE or blocks and waits for such an event to arrive if the <var>AWait</var> parameter is TRUE.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCConsole.NextEvent.Result">
+<short>Whether the function has returned an event.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCConsole.NextEvent.AEvent">
+<short>The event returned by the function.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCConsole.NextEvent.AWait">
+<short>Whether the function should wait for an event if necessary.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCConsole.NextEvent.AEventMask">
+<short>The event mask.</short>
+</element>
+
+<!-- function Visibility: public -->
+<element name="IPTCConsole.PeekEvent">
+<short>Returns the next event from the event queue, without removing it from the queue.</short>
+<descr>
+<p>Returns the first event from the event queue, that matches the specified event mask. It doesn't remove the event from the queue.
+The returned value points to the internal event queue of the console and must NOT be freed by the application. To remove an event from the queue, <link id="IPTCConsole.NextEvent" /> should be used instead.
+If no event that matches the specified mask is currently present on the event queue, the function returns NIL if the <var>AWait</var> parameter is FALSE or blocks and waits for such an event to arrive if the <var>AWait</var> parameter is TRUE.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCConsole.PeekEvent.Result">
+<short></short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCConsole.PeekEvent.AWait">
+<short>Whether the function should wait for an event if necessary.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCConsole.PeekEvent.AEventMask">
+<short>The event mask.</short>
+</element>
+
+<!-- procedure Visibility: public -->
+<element name="IPTCConsole.Configure">
+<short>Configures the console by reading option strings from a text file.</short>
+<descr>
+<p>Configures the console by reading option strings from the text file <var>AFile</var>.
+If the configuration file does not exist or cannot be read, this function will fail silently. No exception will be raised in this case.</p>
+<p>todo: example configuration file plus explanation.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+<link id="IPTCSurface.Option" />
+</seealso>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCConsole.Configure.AFileName">
+<short>The configuration text file.</short>
+</element>
+
+<!-- function Visibility: public -->
+<element name="IPTCConsole.Modes">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCConsole.Modes.Result">
+<short></short>
+</element>
+
+<!-- procedure Visibility: public -->
+<element name="IPTCConsole.Open">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCConsole.Open.ATitle">
+<short></short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCConsole.Open.APages">
+<short></short>
+</element>
+
+<!-- procedure Visibility: public -->
+<element name="IPTCConsole.Open">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCConsole.Open.ATitle">
+<short></short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCConsole.Open.AFormat">
+<short></short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCConsole.Open.APages">
+<short></short>
+</element>
+
+<!-- procedure Visibility: public -->
+<element name="IPTCConsole.Open">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCConsole.Open.ATitle">
+<short></short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCConsole.Open.AWidth">
+<short></short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCConsole.Open.AHeight">
+<short></short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCConsole.Open.AFormat">
+<short></short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCConsole.Open.APages">
+<short></short>
+</element>
+
+<!-- procedure Visibility: public -->
+<element name="IPTCConsole.Open">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCConsole.Open.ATitle">
+<short></short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCConsole.Open.AMode">
+<short></short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCConsole.Open.APages">
+<short></short>
+</element>
+
+<!-- procedure Visibility: public -->
+<element name="IPTCConsole.Open">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCConsole.Open.ATitle">
+<short></short>
+</element>
+
+<!-- procedure Visibility: public -->
+<element name="IPTCConsole.Open">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCConsole.Open.ATitle">
+<short></short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCConsole.Open.AFormat">
+<short></short>
+</element>
+
+<!-- procedure Visibility: public -->
+<element name="IPTCConsole.Open">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCConsole.Open.ATitle">
+<short></short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCConsole.Open.AWidth">
+<short></short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCConsole.Open.AHeight">
+<short></short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCConsole.Open.AFormat">
+<short></short>
+</element>
+
+<!-- procedure Visibility: public -->
+<element name="IPTCConsole.Open">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCConsole.Open.ATitle">
+<short></short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCConsole.Open.AMode">
+<short></short>
+</element>
+
+<!-- procedure Visibility: public -->
+<element name="IPTCConsole.Close">
+<short>Closes the console.</short>
+<descr>
+<p>Closes the console.</p>
+<p>If the console is not open then this function will return immediately without reporting an error.
+If the console is still locked then this function will raise a <link id="TPTCError" /> exception.</p>
+</descr>
+<errors>
+<p><link id="TPTCError" /> - a TPTCError exception is raised on failure.</p>
+</errors>
+<seealso>
+<link id="IPTCConsole.Open" />
+</seealso>
+</element>
+
+<!-- procedure Visibility: public -->
+<element name="IPTCConsole.Flush">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- procedure Visibility: public -->
+<element name="IPTCConsole.Finish">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- procedure Visibility: public -->
+<element name="IPTCConsole.Update">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- procedure Visibility: public -->
+<element name="IPTCConsole.Update">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCConsole.Update.AArea">
+<short></short>
+</element>
+
+<!-- function Visibility: public -->
+<element name="IPTCConsole.KeyPressed">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCConsole.KeyPressed.Result">
+<short></short>
+</element>
+
+<!-- function Visibility: public -->
+<element name="IPTCConsole.PeekKey">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCConsole.PeekKey.Result">
+<short></short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCConsole.PeekKey.AKey">
+<short></short>
+</element>
+
+<!-- procedure Visibility: public -->
+<element name="IPTCConsole.ReadKey">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCConsole.ReadKey.AKey">
+<short></short>
+</element>
+
+<!-- procedure Visibility: public -->
+<element name="IPTCConsole.ReadKey">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function Visibility: public -->
+<element name="IPTCConsole.Pages">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCConsole.Pages.Result">
+<short></short>
+</element>
+
+<!-- function Visibility: public -->
+<element name="IPTCConsole.Name">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCConsole.Name.Result">
+<short></short>
+</element>
+
+<!-- function Visibility: public -->
+<element name="IPTCConsole.Title">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCConsole.Title.Result">
+<short></short>
+</element>
+
+<!-- function Visibility: public -->
+<element name="IPTCConsole.Information">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCConsole.Information.Result">
+<short></short>
+</element>
+
+<!-- property Visibility: public -->
+<element name="IPTCConsole.KeyReleaseEnabled">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- procedure Visibility: default -->
+<element name="IPTCConsole.SetKeyReleaseEnabled">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCConsole.SetKeyReleaseEnabled.AValue">
+<short></short>
+</element>
+
+<!-- function Visibility: default -->
+<element name="IPTCConsole.GetKeyReleaseEnabled">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCConsole.GetKeyReleaseEnabled.Result">
+<short></short>
+</element>
+
+<!-- function Visibility: private -->
+<element name="IPTCConsole.GetPages">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCConsole.GetPages.Result">
+<short></short>
+</element>
+
+<!-- function Visibility: private -->
+<element name="IPTCConsole.GetName">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCConsole.GetName.Result">
+<short></short>
+</element>
+
+<!-- function Visibility: private -->
+<element name="IPTCConsole.GetTitle">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCConsole.GetTitle.Result">
+<short></short>
+</element>
+
+<!-- function Visibility: private -->
+<element name="IPTCConsole.GetInformation">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCConsole.GetInformation.Result">
+<short></short>
+</element>
+
+<!-- function Visibility: default -->
+<element name="IPTCConsole.GetOpenGL_Enabled">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCConsole.GetOpenGL_Enabled.Result">
+<short></short>
+</element>
+
+<!-- procedure Visibility: default -->
+<element name="IPTCConsole.SetOpenGL_Enabled">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCConsole.SetOpenGL_Enabled.AValue">
+<short></short>
+</element>
+
+<!-- function Visibility: default -->
+<element name="IPTCConsole.GetOpenGL_Attributes">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCConsole.GetOpenGL_Attributes.Result">
+<short></short>
+</element>
+
+<!-- property Visibility: default -->
+<element name="IPTCConsole.OpenGL_Enabled">
+<short>Enable or disable OpenGL.</short>
+<descr>
+<p>Set this to <var>true</var> prior to the call to <link id="IPTCConsole.Open" /> if you want to use OpenGL. You must also set any necessary OpenGL framebuffer attributes via the <link id="IPTCConsole.OpenGL_Attributes" /> property, prior to the call to Open.</p>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- property Visibility: default -->
+<element name="IPTCConsole.OpenGL_Attributes">
+<short>OpenGL attributes.</short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- procedure Visibility: default -->
+<element name="IPTCConsole.OpenGL_SwapBuffers">
+<short>Swap buffers in OpenGL double buffering mode.</short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- procedure Visibility: default -->
+<element name="IPTCConsole.OpenGL_SetSwapInterval">
+<short>Sets the OpenGL swap interval.</short>
+<descr>
+<p>Sets the OpenGL swap interval. The swap interval is the number of v-blanks that must occur before the front and back framebuffers are swapped.
+A swap interval of 1 means the GPU should synchronize the swap with the next v-blank. A value of 0 means that swaps must occur as soon as requested, without waiting for v-blank. Note that video drivers may choose to override this value to 1 or 0 and thus ignore the application settings, depending on the user settings in the video card driver control panel.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+  <link id="IPTCConsole.OpenGL_GetSwapInterval" />
+</seealso>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCConsole.OpenGL_SetSwapInterval.AInterval">
+<short></short>
+</element>
+
+<!-- function Visibility: default -->
+<element name="IPTCConsole.OpenGL_GetSwapInterval">
+<short>Gets the OpenGL swap interval.</short>
+<descr>
+<p>Gets the OpenGL swap interval. The swap interval is the number of v-blanks that must occur before the front and back framebuffers are swapped.
+A swap interval of 1 means the GPU should synchronize the swap with the next v-blank. A value of 0 means that swaps must occur as soon as requested, without waiting for v-blank. Note that video drivers may choose to override this value to 1 or 0 and thus ignore the application settings, depending on the user settings in the video card driver control panel.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+  <link id="IPTCConsole.OpenGL_SetSwapInterval" />
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCConsole.OpenGL_GetSwapInterval.Result">
+<short></short>
+</element>
+
+<!-- object Visibility: default -->
+<element name="TPTCConsoleFactory">
+<short>Creates the display frame buffer.</short>
+<descr>
+<p>The display frame buffer.</p>
+<p>The console represents the display frame buffer and provides routines to open and close display modes, access the frame buffer like a surface, and some basic keyboard input routines.
+The PTC Console can be thought of as the graphical equivalent of a POSIX text console.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- constructor Visibility: public -->
+<element name="TPTCConsoleFactory.CreateNew">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="TPTCConsoleFactory.CreateNew.Result">
+<short></short>
+</element>
+
+<!-- object Visibility: default -->
+<element name="TPTCError">
+<short>An error message.</short>
+<descr>
+<p>An error message.</p>
+<p>The error class represents an error message.
+It provides a uniform interface for error reporting and handling via the Object Pascal exception mechanism.
+Error exceptions may be caught and recovered from:</p>
+<code>
+try
+  { open the console at 640x480 resolution }
+  console.Open('Error example', 640, 480);
+except
+  on error: TPTCError do
+  begin
+    { fallback to default resolution }
+    console.Open('Error example');
+  end;
+end;
+</code>
+<p>Or allowed to fall through to the main try/except block and get reported to the user:</p>
+<code>
+try
+  { open the console at 640x480 resolution }
+  console.Open('Error example', 640, 480);
+except
+  on error: TPTCError do
+  begin
+    { report error }
+    error.Report;
+  end;
+end;
+</code>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- procedure Visibility: private -->
+<element name="TPTCError.Defaults">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- variable Visibility: private -->
+<element name="TPTCError.FMessage">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- constructor Visibility: public -->
+<element name="TPTCError.Create">
+<short>Creates an error object with a specified error message.</short>
+<descr>
+<p>Creates an error object.</p>
+<p>When called without arguments, the error message of the created object is initialized to ''.
+When <var>AMessage</var> is specified, an error object is created with an error message of <var>AMessage</var>.
+Here is an example of typical use:</p>
+<code>
+{ do something ... }
+failure := DoSomething;
+
+{ check failure }
+if failure then
+begin
+  { error message }
+  raise TPTCError.Create('do something failed');
+end;
+</code>
+
+<p>When both <var>AMessage</var> and <var>AError</var> are specified as arguments, the error object is created with the text message and the error object message compounded.
+
+The <var>AMessage</var> parameter is the first line of the error message, a newline is inserted in the string, and the error object message is added to the end.
+
+Here is an example of typical use:</p>
+<code>
+try
+  { do something low level... }
+  failure := DoSomethingLowLevel;
+
+  { check failure }
+  if failure then
+  begin
+    { error message }
+    raise TPTCError.Create('low level failure');
+  end;
+except
+  on error: TPTCError do
+  begin
+    { error message }
+    raise TPTCError.Create('high level failure', error);
+  end;
+end;
+</code>
+<p>The error message constructed in the except block has a compound message of 'high level failure'+newline+'low level failure'.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCError.Create.AMessage">
+<short>The error message.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCError.Create.AError">
+<short>The compounding error.</short>
+</element>
+
+
+<!-- destructor Visibility: public -->
+<element name="TPTCError.Destroy">
+<short>Destructor.</short>
+<descr>
+<p>Destructor.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- procedure Visibility: public -->
+<element name="TPTCError.Assign">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCError.Assign.AError">
+<short></short>
+</element>
+
+<!-- function Visibility: public -->
+<element name="TPTCError.Equals">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCError.Equals.Obj">
+<short></short>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="TPTCError.Equals.Result">
+<short></short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCError.Equals.AError">
+<short></short>
+</element>
+
+<!-- procedure Visibility: public -->
+<element name="TPTCError.Report">
+<short>Reports the error and terminates the program.</short>
+<descr>
+<p>Reports the error and terminates the program with exit code 1.
+The error is reported in the most natural method of the platform.
+For example, UNIX systems would print the error message to stderr, Win32 systems would display a message box, DOS systems would output to stdout etc.
+Typically this function is used in combination with wrapping the main program with a try/except block to ensure that all unhandled error exceptions are caught and reported to the user.</p>
+<code>
+begin
+  try
+    { main program ... }
+  except
+    on error: TPTCError do
+    begin
+      { report error }
+      error.Report;
+    end;
+  end;
+end.
+</code>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function Visibility: public -->
+<element name="TPTCError.Message">
+<short>Gets the error message string.</short>
+<descr>
+<p>Gets the error message string.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="TPTCError.Message.Result">
+<short>The error message.</short>
+</element>
+
+<!-- object Visibility: default -->
+<element name="IPTCTimer">
+<short>A high resolution timer.</short>
+<descr>
+<p>A high resolution timer.</p>
+<p>The timer class represents a high resolution system timer.
+Timer objects may be created and started then queried for the current time value in seconds.
+This is useful for animations because motion can be based upon a high resolution real 't' value instead of being linked to the speed of the machine.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- variable Visibility: private -->
+<element name="IPTCTimer.FOld">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- variable Visibility: private -->
+<element name="IPTCTimer.FTime">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- variable Visibility: private -->
+<element name="IPTCTimer.FStart">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- variable Visibility: private -->
+<element name="IPTCTimer.FCurrent">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- variable Visibility: private -->
+<element name="IPTCTimer.FRunning">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- function Visibility: private -->
+<element name="IPTCTimer.Clock">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCTimer.Clock.Result">
+<short></short>
+</element>
+
+<!-- procedure Visibility: private -->
+<element name="IPTCTimer.internal_init_timer">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- object Visibility: default -->
+<element name="TPTCTimerFactory">
+<short>Creates an IPTCTimer instance.</short>
+<descr>
+<p>Creates an IPTCTimer instance.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- constructor Visibility: public -->
+<element name="TPTCTimerFactory.CreateNew">
+<short>Creates a timer object.</short>
+<descr>
+<p>Creates a timer object.</p>
+<p>When called without arguments, the timer is created in a stopped state and the time value is initially set to zero.
+When <var>ATime</var> is specified, the timer value is initially set to <var>ATime</var>, and the timer is initially stopped.
+When <var>ATimer</var> is specified, the newly created timer object is copied from <var>ATimer</var>.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="TPTCTimerFactory.CreateNew.ATime">
+<short>The initial time value in seconds.</short>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="TPTCTimerFactory.CreateNew.Result">
+<short></short>
+</element>
+
+<!-- procedure Visibility: public -->
+<element name="IPTCTimer.Assign">
+<short>Makes the current timer a copy of the timer, specified as argument.</short>
+<descr>
+<p>Makes the current timer a copy of the timer <var>ATimer</var>.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCTimer.Assign.ATimer">
+<short>The timer to copy from.</short>
+</element>
+
+<!-- function Visibility: public -->
+<element name="IPTCTimer.Equals">
+<short>Compares two timer objects.</short>
+<descr>
+<p>Compares two timer objects.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCTimer.Equals.Result">
+<short><var>true</var> if the timers are equal, <var>false</var> if they are not.</short>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCTimer.Equals.ATimer">
+<short>The timer to compare to.</short>
+</element>
+
+<!-- procedure Visibility: public -->
+<element name="IPTCTimer.SetTime">
+<short>Sets the timer time value.</short>
+<descr>
+<p>Sets the timer time value to <var>ATime</var>.
+The time value may be set whether the timer is running or not.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCTimer.SetTime.ATime">
+<short>The time value in seconds.</short>
+</element>
+
+<!-- procedure Visibility: public -->
+<element name="IPTCTimer.Start">
+<short>Starts the timer.</short>
+<descr>
+<p>Starts the timer.</p>
+<p>When the timer is initially created it is not running.
+Use this function to start the timer when you are ready to begin using it.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- procedure Visibility: public -->
+<element name="IPTCTimer.Stop">
+<short>Stops the timer.</short>
+<descr>
+<p>Stops the timer.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function Visibility: public -->
+<element name="IPTCTimer.Time">
+<short>Gets the current time value of the timer in seconds.</short>
+<descr>
+<p>Gets the current time value of the timer in seconds.
+While the timer is running the time value increases as time passes.
+When the timer is stopped the time value is constant.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+<p><link id="IPTCTimer.Start" /> <link id="IPTCTimer.Stop" /></p>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCTimer.Time.Result">
+<short>The current time value.</short>
+</element>
+
+<!-- function Visibility: public -->
+<element name="IPTCTimer.Delta">
+<short>Gets the amount of time that has passed since the last call to delta in seconds.</short>
+<descr>
+<p>Gets the amount of time that has passed since the last call to delta in seconds.
+While the timer is running the delta value is typically a small value limited to the resolution of the timer.
+When the timer is stopped the delta value is always zero.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+<link id="IPTCTimer.Start" /> <link id="IPTCTimer.Stop" /> <link id="IPTCTimer.Resolution" />
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCTimer.Delta.Result">
+<short>The current delta value.</short>
+</element>
+
+<!-- function Visibility: public -->
+<element name="IPTCTimer.Resolution">
+<short>Gets the limiting resolution of the timer in seconds.</short>
+<descr>
+<p>Gets the limiting resolution of the timer in seconds.
+The timer resolution is the smallest increment of time which the system timer can handle.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCTimer.Resolution.Result">
+<short>The timer resolution.</short>
+</element>
+
+<!-- interface Visibility: default -->
+<element name="IPTCOpenGLAttributes">
+<short>A set of OpenGL attributes.</short>
+<descr>
+<p>A set of OpenGL attributes, used for setting OpenGL video modes.</p>
+<p>This is usually accessed via the <link id="IPTCConsole.OpenGL_Attributes" /> property on the <link id="IPTCConsole" />.</p>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function Visibility: default -->
+<element name="IPTCOpenGLAttributes.GetDoubleBuffer">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCOpenGLAttributes.GetDoubleBuffer.Result">
+<short></short>
+</element>
+
+<!-- procedure Visibility: default -->
+<element name="IPTCOpenGLAttributes.SetDoubleBuffer">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCOpenGLAttributes.SetDoubleBuffer.ADoubleBuffer">
+<short></short>
+</element>
+
+<!-- function Visibility: default -->
+<element name="IPTCOpenGLAttributes.GetDoubleBufferDontCare">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCOpenGLAttributes.GetDoubleBufferDontCare.Result">
+<short></short>
+</element>
+
+<!-- procedure Visibility: default -->
+<element name="IPTCOpenGLAttributes.SetDoubleBufferDontCare">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCOpenGLAttributes.SetDoubleBufferDontCare.ADoubleBufferDontCare">
+<short></short>
+</element>
+
+<!-- function Visibility: default -->
+<element name="IPTCOpenGLAttributes.GetStereo">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCOpenGLAttributes.GetStereo.Result">
+<short></short>
+</element>
+
+<!-- procedure Visibility: default -->
+<element name="IPTCOpenGLAttributes.SetStereo">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCOpenGLAttributes.SetStereo.AStereo">
+<short></short>
+</element>
+
+<!-- function Visibility: default -->
+<element name="IPTCOpenGLAttributes.GetStereoDontCare">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCOpenGLAttributes.GetStereoDontCare.Result">
+<short></short>
+</element>
+
+<!-- procedure Visibility: default -->
+<element name="IPTCOpenGLAttributes.SetStereoDontCare">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCOpenGLAttributes.SetStereoDontCare.AStereoDontCare">
+<short></short>
+</element>
+
+<!-- function Visibility: default -->
+<element name="IPTCOpenGLAttributes.GetBufferSize">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCOpenGLAttributes.GetBufferSize.Result">
+<short></short>
+</element>
+
+<!-- procedure Visibility: default -->
+<element name="IPTCOpenGLAttributes.SetBufferSize">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCOpenGLAttributes.SetBufferSize.ABufferSize">
+<short></short>
+</element>
+
+<!-- function Visibility: default -->
+<element name="IPTCOpenGLAttributes.GetDepthSize">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCOpenGLAttributes.GetDepthSize.Result">
+<short></short>
+</element>
+
+<!-- procedure Visibility: default -->
+<element name="IPTCOpenGLAttributes.SetDepthSize">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCOpenGLAttributes.SetDepthSize.ADepthSize">
+<short></short>
+</element>
+
+<!-- function Visibility: default -->
+<element name="IPTCOpenGLAttributes.GetStencilSize">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- function result Visibility: default -->
+<element name="IPTCOpenGLAttributes.GetStencilSize.Result">
+<short></short>
+</element>
+
+<!-- procedure Visibility: default -->
+<element name="IPTCOpenGLAttributes.SetStencilSize">
+<short></short>
+<descr>
+</descr>
+<errors>
+</errors>
+<seealso>
+</seealso>
+</element>
+
+<!-- argument Visibility: default -->
+<element name="IPTCOpenGLAttributes.SetStencilSize.AStencilSize">
+<short></short>
+</element>
+
+<!-- property Visibility: default -->
+<element name="IPTCOpenGLAttributes.DoubleBuffer">
+<short>Enable or disable OpenGL double buffering.</short>
+<descr>
+<p>Enables or disables OpenGL double buffering. Modern OpenGL applications should have this enabled. The default value is <var>true</var>.</p>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- property Visibility: default -->
+<element name="IPTCOpenGLAttributes.DoubleBufferDontCare">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- property Visibility: default -->
+<element name="IPTCOpenGLAttributes.Stereo">
+<short>Enable or disable stereoscopic OpenGL.</short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- property Visibility: default -->
+<element name="IPTCOpenGLAttributes.StereoDontCare">
+<short></short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- property Visibility: default -->
+<element name="IPTCOpenGLAttributes.BufferSize">
+<short>Size of the framebuffer in bits.</short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- property Visibility: default -->
+<element name="IPTCOpenGLAttributes.DepthSize">
+<short>Size of the depth buffer in bits.</short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+<!-- property Visibility: default -->
+<element name="IPTCOpenGLAttributes.StencilSize">
+<short>Size of the stencil buffer in bits.</short>
+<descr>
+</descr>
+<seealso>
+</seealso>
+</element>
+
+</module> <!-- ptc -->
+</package>
+</fpdoc-descriptions>

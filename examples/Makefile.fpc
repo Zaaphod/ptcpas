@@ -1,0 +1,17 @@
+#
+#   Makefile.fpc for PTC examples
+#
+
+[package]
+name=ptc-examples
+version=0.99.14.1
+
+[target]
+programs=area buffer clear clip con_info console hicolor image keyboard \
+         keyboard2 keyboard3 modes mouse palette pixel random save stretch timer
+programs_win32=ptcgl ptcgl2
+programs_win64=ptcgl ptcgl2
+programs_linux=ptcgl ptcgl2
+
+[compiler]
+unitdir=../$(UNITTARGETDIRPREFIX)
