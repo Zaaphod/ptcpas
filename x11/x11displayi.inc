@@ -464,10 +464,34 @@ begin
     Include(modkeys, pmkShift);
   if (e.state and ControlMask) <> 0 then
     Include(modkeys, pmkControl);
+  if (e.state and LockMask) <> 0 then
+    Include(modkeys, pmkCapsLockActive);
+  if (e.state and Mod2Mask) <> 0 then
+    Include(modkeys, pmkNumLockActive);
   if e._type = KeyPress then
     press := True
   else
     press := False;
+  if (sym_modded = XK_KP_Insert) or
+     (sym_modded = XK_KP_Delete) or
+     (sym_modded = XK_KP_Home) or
+     (sym_modded = XK_KP_End) or
+     (sym_modded = XK_KP_Prior) or
+     (sym_modded = XK_KP_Next) or
+     (sym_modded = XK_KP_Begin) or
+     (sym_modded = XK_KP_Left) or
+     (sym_modded = XK_KP_Right) or
+     (sym_modded = XK_KP_Up) or
+     (sym_modded = XK_KP_Down) or
+     (sym_modded = XK_KP_Divide) or
+     (sym_modded = XK_KP_Multiply) or
+     (sym_modded = XK_KP_Subtract) or
+     (sym_modded = XK_KP_Add) or
+     (sym_modded = XK_KP_Enter) or
+     (sym_modded = XK_KP_Decimal) or
+     ((sym_modded >= XK_KP_0) and (sym_modded <= XK_KP_9)) or
+     (sym_modded = XK_Num_Lock) then
+    Include(modkeys, pmkNumPadKey);
 
   // XK_ISO_Left_Tab is Shift-Tab
   if sym_modded = XK_ISO_Left_Tab then
