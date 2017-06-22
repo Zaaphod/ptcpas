@@ -1370,6 +1370,7 @@ var
   pixels:Pword;
   k: longint;
   i, j, y1, x1, deltaX, deltaX1, deltaY: smallint;
+  JxW, I_JxW: Longword;
 Begin
   inc(x,startXViewPort);
   inc(y,startYViewPort);
@@ -1409,10 +1410,12 @@ Begin
           Begin
             for j:=Y to Y1 do
               Begin
+                JxW:=j*PTCWidth;
                 inc(k,deltaX);
                 for i:=X to X1 do
                   begin
-                    pixels[i+j*PTCWidth] := pixels[i+j*PTCWidth] xor pt(bitmap)[k];
+                    I_JxW:=i+JxW;
+                    pixels[I_JxW] := pixels[I_JxW] xor pt(bitmap)[k];
                     inc(k);
                   end;
                 inc(k,deltaX1);
@@ -1422,10 +1425,12 @@ Begin
           Begin
             for j:=Y to Y1 do
               Begin
+                JxW:=j*PTCWidth;
                 inc(k,deltaX);
                 for i:=X to X1 do
                   begin
-                    pixels[i+j*PTCWidth] := pixels[i+j*PTCWidth] or pt(bitmap)[k];
+                    I_JxW:=i+JxW;
+                    pixels[I_JxW] := pixels[I_JxW] or pt(bitmap)[k];
                     inc(k);
                   end;
                 inc(k,deltaX1);
@@ -1435,10 +1440,12 @@ Begin
           Begin
             for j:=Y to Y1 do
               Begin
+                JxW:=j*PTCWidth;
                 inc(k,deltaX);
                 for i:=X to X1 do
                   begin
-                    pixels[i+j*PTCWidth] := pixels[i+j*PTCWidth] and pt(bitmap)[k];
+                    I_JxW:=i+JxW;
+                    pixels[I_JxW] := pixels[I_JxW] and pt(bitmap)[k];
                     inc(k);
                   end;
                 inc(k,deltaX1);
@@ -1448,10 +1455,11 @@ Begin
           Begin
             for j:=Y to Y1 do
               Begin
+                JxW:=j*PTCWidth;
                 inc(k,deltaX);
                 for i:=X to X1 do
                   begin
-                    pixels[i+j*PTCWidth] := pt(bitmap)[k] xor $FFFF;
+                    pixels[i+JxW] := pt(bitmap)[k] xor $FFFF;
                     inc(k);
                   end;
                 inc(k,deltaX1);
@@ -1461,10 +1469,11 @@ Begin
           Begin
             for j:=Y to Y1 do
               Begin
+                JxW:=j*PTCWidth;
                 inc(k,deltaX);
                 for i:=X to X1 do
                   begin
-                    pixels[i+j*PTCWidth] := pt(bitmap)[k];
+                    pixels[i+JxW] := pt(bitmap)[k];
                     inc(k);
                   end;
                 inc(k,deltaX1);
@@ -1479,10 +1488,12 @@ Begin
           Begin
             for j:=Y to Y1 do
               Begin
+                JxW:=j*PTCWidth;
                 inc(k,deltaX);
                 for i:=X to X1 do
                   begin
-                    pixels[i+j*PTCWidth] := pixels[i+j*PTCWidth] xor (pt(bitmap)[k] and ColorMask);
+                    I_JxW:=i+JxW;
+                    pixels[I_JxW] := pixels[I_JxW] xor (pt(bitmap)[k] and ColorMask);
                     inc(k);
                   end;
                 inc(k,deltaX1);
@@ -1492,10 +1503,12 @@ Begin
           Begin
             for j:=Y to Y1 do
               Begin
+                JxW:=j*PTCWidth;
                 inc(k,deltaX);
                 for i:=X to X1 do
                   begin
-                    pixels[i+j*PTCWidth] := pixels[i+j*PTCWidth] or (pt(bitmap)[k] and ColorMask);
+                    I_JxW:=i+JxW;
+                    pixels[I_JxW] := pixels[I_JxW] or (pt(bitmap)[k] and ColorMask);
                     inc(k);
                   end;
                 inc(k,deltaX1);
@@ -1505,10 +1518,12 @@ Begin
           Begin
             for j:=Y to Y1 do
               Begin
+                JxW:=j*PTCWidth;
                 inc(k,deltaX);
                 for i:=X to X1 do
                   begin
-                    pixels[i+j*PTCWidth] := pixels[i+j*PTCWidth] and (pt(bitmap)[k] and ColorMask);
+                    I_JxW:=i+JxW;
+                    pixels[I_JxW] := pixels[I_JxW] and (pt(bitmap)[k] and ColorMask);
                     inc(k);
                   end;
                 inc(k,deltaX1);
@@ -1518,10 +1533,11 @@ Begin
           Begin
             for j:=Y to Y1 do
               Begin
+                JxW:=j*PTCWidth;
                 inc(k,deltaX);
                 for i:=X to X1 do
                   begin
-                    pixels[i+j*PTCWidth] := (pt(bitmap)[k] and ColorMask) xor ColorMask;
+                    pixels[i+JxW] := (pt(bitmap)[k] and ColorMask) xor ColorMask;
                     inc(k);
                   end;
                 inc(k,deltaX1);
@@ -1531,10 +1547,11 @@ Begin
           Begin
             for j:=Y to Y1 do
               Begin
+                JxW:=j*PTCWidth;
                 inc(k,deltaX);
                 for i:=X to X1 do
                   begin
-                    pixels[i+j*PTCWidth] := pt(bitmap)[k] and ColorMask;
+                    pixels[i+JxW] := pt(bitmap)[k] and ColorMask;
                     inc(k);
                   end;
                 inc(k,deltaX1);
