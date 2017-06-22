@@ -1362,7 +1362,7 @@ begin
   BlueValue := VGAPalette[ColorNum, 2] shl 2;
 end;
 
-Procedure ptc_PutImageproc(X,Y: smallint; var Bitmap; BitBlt: Word; bpp:boolean); {$ifndef fpc}far;{$endif fpc}
+Procedure ptc_PutImageproc(X,Y: smallint; var Bitmap; BitBlt: Word; bpp16:boolean); {$ifndef fpc}far;{$endif fpc}
 type
   pt = array[0..{$ifdef cpu16}16382{$else}$fffffff{$endif}] of word;
   ptw = array[0..2] of longint;
@@ -1370,6 +1370,7 @@ var
   pixels:Pword;
   k: longint;
   i, j, y1, x1, deltaX, deltaX1, deltaY: smallint;
+  pdest,psrc: pword;
 Begin
   inc(x,startXViewPort);
   inc(y,startYViewPort);
@@ -1402,44 +1403,91 @@ Begin
         end;
     end;
   pixels := ptc_surface_lock;
-  for j:=Y to Y1 do
-   Begin
-     inc(k,deltaX);
-     for i:=X to X1 do
-       begin
-         If bpp=False Then
-           Begin
-             case BitBlt of
-               XORPut:
-                     pixels[i+j*PTCWidth] := pixels[i+j*PTCWidth] xor (pt(bitmap)[k] and ColorMask);
-               OrPut:
-                     pixels[i+j*PTCWidth] := pixels[i+j*PTCWidth] or (pt(bitmap)[k] and ColorMask);
-               AndPut:
-                     pixels[i+j*PTCWidth] := pixels[i+j*PTCWidth] and (pt(bitmap)[k] and ColorMask);
-               NotPut:
-                     pixels[i+j*PTCWidth] := (pt(bitmap)[k] and ColorMask) xor ColorMask;
-             else
-                 pixels[i+j*PTCWidth] := pt(bitmap)[k] and ColorMask;
-             end;
-           end
+  If bpp16 Then
+    Begin
+      for j:=Y to Y1 do
+       Begin
+         inc(k,deltaX);
+         psrc:=@pt(bitmap)[k];
+         pdest:=@pixels[X+j*PTCWidth];
+         case BitBlt of
+           XORPut: 
+             for i:=0 to X1-X do
+               begin
+                 pdest^:=pdest^ xor psrc^;
+                 inc(pdest); inc(psrc);
+               end;
+           OrPut:  
+             for i:=0 to X1-X do
+               begin
+                 pdest^:=pdest^ or psrc^;
+                 inc(pdest); inc(psrc);
+               end;
+           AndPut: 
+             for i:=0 to X1-X do
+               begin
+                 pdest^:=pdest^ and psrc^;
+                 inc(pdest); inc(psrc);
+               end;
+           NotPut: 
+             for i:=0 to X1-X do
+               begin
+                 pdest^:=psrc^ xor $FFFF;
+                 inc(pdest); inc(psrc);
+               end;
          Else
-           begin
-             case BitBlt of
-               XORPut:
-                     pixels[i+j*PTCWidth] := pixels[i+j*PTCWidth] xor pt(bitmap)[k];
-               OrPut:
-                     pixels[i+j*PTCWidth] := pixels[i+j*PTCWidth] or pt(bitmap)[k];
-               AndPut:
-                     pixels[i+j*PTCWidth] := pixels[i+j*PTCWidth] and pt(bitmap)[k];
-               NotPut:
-                     pixels[i+j*PTCWidth] := pt(bitmap)[k] xor $FFFF;
-             else
-                 pixels[i+j*PTCWidth] := pt(bitmap)[k];
+           for i:=0 to X1-X do
+             begin
+               pdest^:=psrc^;
+               inc(pdest); inc(psrc);
              end;
-           end;
-         inc(k);
-      end;
-      inc(k,deltaX1);
+         End;
+         inc(k,x1-x+1); // we must make up for as many K updates as the for loop.
+         inc(k,deltaX1);
+        end;
+    End
+  Else
+    Begin
+      for j:=Y to Y1 do
+       Begin
+         inc(k,deltaX);
+         psrc:=@pt(bitmap)[k];
+         pdest:=@pixels[X+j*PTCWidth];
+         case BitBlt of
+           XORPut: 
+             for i:=0 to X1-X do
+               begin
+                 pdest^:=pdest^ xor (psrc^ and ColorMask);
+                 inc(pdest); inc(psrc);
+               end;
+           OrPut:  
+             for i:=0 to X1-X do
+               begin
+                 pdest^:=pdest^ or (psrc^ and ColorMask);
+                 inc(pdest); inc(psrc);
+               end;
+           AndPut: 
+             for i:=0 to X1-X do
+               begin
+                 pdest^:=pdest^ and (psrc^ and ColorMask);
+                 inc(pdest); inc(psrc);
+               end;
+           NotPut: 
+             for i:=0 to X1-X do
+               begin
+                 pdest^:=(psrc^ and ColorMask) xor ColorMask;
+                 inc(pdest); inc(psrc);
+               end;
+         Else
+           for i:=0 to X1-X do
+             begin
+               pdest^:=psrc^ and ColorMask;
+               inc(pdest); inc(psrc);
+             end;
+         End;
+         inc(k,x1-x+1); // we must make up for as many K updates as the for loop.
+         inc(k,deltaX1);
+        end;
     end;
   ptc_surface_unlock;
   ptc_update;
