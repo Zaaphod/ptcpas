@@ -1572,6 +1572,100 @@ Begin
   ptc_PutImageProc(X,Y,Bitmap,Bitblt,True);
 end;
 
+Procedure PTC_GetScanlineProc_8bpp (X1, X2, Y : smallint; Var Data); {$ifndef fpc}far;{$endif fpc}
+  {**********************************************************}
+  { Procedure GetScanLine()                                  }
+  {----------------------------------------------------------}
+  { Returns the full scanline of the video line of the Y     }
+  { coordinate. The values are returned in a WORD array      }
+  { each WORD representing a pixel of the specified scanline }
+  { note: we only need the pixels inside the ViewPort! (JM)  }
+  { note2: extended so you can specify start and end X coord }
+  {   so it is usable for GetImage too (JM)                  }
+  {**********************************************************}
+  Var
+    pixels:Pword;
+    x : smallint;
+  Begin
+     pixels := ptc_surface_lock;
+     For x:=X1 to X2 Do
+       If clipcoords(X,Y) then
+         WordArray(Data)[x-x1]:=pixels[x+y*PTCWidth] and ColorMask;
+     ptc_surface_unlock;       
+  End;
+Procedure PTC_GetScanlineProc_16bpp (X1, X2, Y : smallint; Var Data); {$ifndef fpc}far;{$endif fpc}
+  {**********************************************************}
+  { Procedure GetScanLine()                                  }
+  {----------------------------------------------------------}
+  { Returns the full scanline of the video line of the Y     }
+  { coordinate. The values are returned in a WORD array      }
+  { each WORD representing a pixel of the specified scanline }
+  { note: we only need the pixels inside the ViewPort! (JM)  }
+  { note2: extended so you can specify start and end X coord }
+  {   so it is usable for GetImage too (JM)                  }
+  {**********************************************************}
+  Var
+    pixels:Pword;
+    x : smallint;
+  Begin
+     pixels := ptc_surface_lock;
+     For x:=X1 to X2 Do
+       If clipcoords(X,Y) then
+         WordArray(Data)[x-x1]:=pixels[x+y*PTCWidth];
+     ptc_surface_unlock;       
+  End;
+
+  
+Procedure PTC_GetImageProc_16bpp(X1,Y1,X2,Y2: smallint; Var Bitmap); {$ifndef fpc}far;{$endif fpc}
+type
+  pt = array[0..{$ifdef cpu16}16382{$else}$fffffff{$endif}] of word;
+  ptw = array[0..2] of longint;
+var
+  pixels:Pword;
+  x,y,i,j: smallint;
+  k: longint;
+Begin
+  k:= 3 * Sizeof(longint) div sizeof(word); { Three reserved longs at start of bitmap }
+  i := x2 - x1 + 1;
+  pixels := ptc_surface_lock;
+  for y:=Y1 to Y2 do
+   Begin
+     For x:=X1 to X2 Do
+       If clipcoords(X,Y) then
+           WordArray(pt(Bitmap)[k])[x-x1]:=pixels[x+y*PTCWidth];
+     inc(k,i);
+   end;
+   ptc_surface_unlock;       
+   ptw(Bitmap)[0] := X2-X1+1;   { First longint  is width  }
+   ptw(Bitmap)[1] := Y2-Y1+1;   { Second longint is height }
+   ptw(bitmap)[2] := 0;         { Third longint is reserved}
+end;
+
+Procedure PTC_GetImageProc_8bpp(X1,Y1,X2,Y2: smallint; Var Bitmap); {$ifndef fpc}far;{$endif fpc}
+type
+  pt = array[0..{$ifdef cpu16}16382{$else}$fffffff{$endif}] of word;
+  ptw = array[0..2] of longint;
+var
+  pixels:Pword;
+  x,y,i,j: smallint;
+  k: longint;
+Begin
+  k:= 3 * Sizeof(longint) div sizeof(word); { Three reserved longs at start of bitmap }
+  i := x2 - x1 + 1;
+  pixels := ptc_surface_lock;
+  for y:=Y1 to Y2 do
+   Begin
+     For x:=X1 to X2 Do
+       If clipcoords(X,Y) then
+           WordArray(pt(Bitmap)[k])[x-x1]:=pixels[x+y*PTCWidth] and ColorMask;
+     inc(k,i);
+   end;
+   ptc_surface_unlock;       
+   ptw(Bitmap)[0] := X2-X1+1;   { First longint  is width  }
+   ptw(Bitmap)[1] := Y2-Y1+1;   { Second longint is height }
+   ptw(bitmap)[2] := 0;         { Third longint is reserved}
+end;
+
 
 {************************************************************************}
 {*                       General routines                               *}
@@ -1735,6 +1829,8 @@ end;
        PutPixel       := @ptc_PutPixelProc_8bpp;
        PutImage       := @ptc_PutImageProc_8bpp;
        GetPixel       := @ptc_GetPixelProc_8bpp;
+       GetScanLine    := @ptc_GetScanLineProc_8bpp;
+       GetImage       := @ptc_GetImageProc_8bpp;
        SetRGBPalette  := @ptc_SetRGBPaletteProc;
        GetRGBPalette  := @ptc_GetRGBPaletteProc;
 
@@ -1769,6 +1865,8 @@ end;
        PutPixel       := @ptc_PutPixelProc_8bpp;
        PutImage       := @ptc_PutImageProc_8bpp;
        GetPixel       := @ptc_GetPixelProc_8bpp;
+       GetScanLine    := @ptc_GetScanLineProc_8bpp;
+       GetImage       := @ptc_GetImageProc_8bpp;
        SetRGBPalette  := @ptc_SetRGBPaletteProc;
        GetRGBPalette  := @ptc_GetRGBPaletteProc;
 
@@ -1803,6 +1901,8 @@ end;
        PutPixel       := @ptc_PutPixelProc_8bpp;
        PutImage       := @ptc_PutImageProc_8bpp;
        GetPixel       := @ptc_GetPixelProc_8bpp;
+       GetScanLine    := @ptc_GetScanLineProc_8bpp;
+       GetImage       := @ptc_GetImageProc_8bpp;
        SetRGBPalette  := @ptc_SetRGBPaletteProc;
        GetRGBPalette  := @ptc_GetRGBPaletteProc;
 
@@ -1837,6 +1937,8 @@ end;
        PutPixel       := @ptc_PutPixelProc_8bpp;
        PutImage       := @ptc_PutImageProc_8bpp;
        GetPixel       := @ptc_GetPixelProc_8bpp;
+       GetScanLine    := @ptc_GetScanLineProc_8bpp;
+       GetImage       := @ptc_GetImageProc_8bpp;
        SetRGBPalette  := @ptc_SetRGBPaletteProc;
        GetRGBPalette  := @ptc_GetRGBPaletteProc;
 
@@ -1871,6 +1973,8 @@ end;
        PutPixel       := @ptc_PutPixelProc_8bpp;
        PutImage       := @ptc_PutImageProc_8bpp;
        GetPixel       := @ptc_GetPixelProc_8bpp;
+       GetScanLine    := @ptc_GetScanLineProc_8bpp;
+       GetImage       := @ptc_GetImageProc_8bpp;
        SetRGBPalette  := @ptc_SetRGBPaletteProc;
        GetRGBPalette  := @ptc_GetRGBPaletteProc;
 
@@ -1905,6 +2009,8 @@ end;
        PutPixel       := @ptc_PutPixelProc_8bpp;
        PutImage       := @ptc_PutImageProc_8bpp;
        GetPixel       := @ptc_GetPixelProc_8bpp;
+       GetScanLine    := @ptc_GetScanLineProc_8bpp;
+       GetImage       := @ptc_GetImageProc_8bpp;
        SetRGBPalette  := @ptc_SetRGBPaletteProc;
        GetRGBPalette  := @ptc_GetRGBPaletteProc;
 
@@ -1939,6 +2045,8 @@ end;
        PutPixel       := @ptc_PutPixelProc_8bpp;
        PutImage       := @ptc_PutImageProc_8bpp;
        GetPixel       := @ptc_GetPixelProc_8bpp;
+       GetScanLine    := @ptc_GetScanLineProc_8bpp;
+       GetImage       := @ptc_GetImageProc_8bpp;
        SetRGBPalette  := @ptc_SetRGBPaletteProc;
        GetRGBPalette  := @ptc_GetRGBPaletteProc;
 
@@ -1973,6 +2081,8 @@ end;
        PutPixel       := @ptc_PutPixelProc_8bpp;
        PutImage       := @ptc_PutImageProc_8bpp;
        GetPixel       := @ptc_GetPixelProc_8bpp;
+       GetScanLine    := @ptc_GetScanLineProc_8bpp;
+       GetImage       := @ptc_GetImageProc_8bpp;
        SetRGBPalette  := @ptc_SetRGBPaletteProc;
        GetRGBPalette  := @ptc_GetRGBPaletteProc;
 
@@ -2007,6 +2117,8 @@ end;
        PutPixel       := @ptc_PutPixelProc_8bpp;
        PutImage       := @ptc_PutImageProc_8bpp;
        GetPixel       := @ptc_GetPixelProc_8bpp;
+       GetScanLine    := @ptc_GetScanLineProc_8bpp;
+       GetImage       := @ptc_GetImageProc_8bpp;
        SetRGBPalette  := @ptc_SetRGBPaletteProc;
        GetRGBPalette  := @ptc_GetRGBPaletteProc;
 
@@ -2041,6 +2153,8 @@ end;
        PutPixel       := @ptc_PutPixelProc_8bpp;
        PutImage       := @ptc_PutImageProc_8bpp;
        GetPixel       := @ptc_GetPixelProc_8bpp;
+       GetScanLine    := @ptc_GetScanLineProc_8bpp;
+       GetImage       := @ptc_GetImageProc_8bpp;
        SetRGBPalette  := @ptc_SetRGBPaletteProc;
        GetRGBPalette  := @ptc_GetRGBPaletteProc;
 
@@ -2075,6 +2189,8 @@ end;
        PutPixel       := @ptc_PutPixelProc_8bpp;
        PutImage       := @ptc_PutImageProc_8bpp;
        GetPixel       := @ptc_GetPixelProc_8bpp;
+       GetScanLine    := @ptc_GetScanLineProc_8bpp;
+       GetImage       := @ptc_GetImageProc_8bpp;
        SetRGBPalette  := @ptc_SetRGBPaletteProc;
        GetRGBPalette  := @ptc_GetRGBPaletteProc;
 
@@ -2111,6 +2227,8 @@ end;
          PutPixel       := @ptc_PutPixelProc_8bpp;
          PutImage       := @ptc_PutImageProc_8bpp;
          GetPixel       := @ptc_GetPixelProc_8bpp;
+         GetScanLine    := @ptc_GetScanLineProc_8bpp;
+         GetImage       := @ptc_GetImageProc_8bpp;
          SetRGBPalette  := @ptc_SetRGBPaletteProc;
          GetRGBPalette  := @ptc_GetRGBPaletteProc;
          HLine          := @ptc_HLineProc_8bpp;
@@ -2142,6 +2260,8 @@ end;
        PutPixel       := @ptc_PutPixelProc_8bpp;
        PutImage       := @ptc_PutImageProc_8bpp;
        GetPixel       := @ptc_GetPixelProc_8bpp;
+       GetScanLine    := @ptc_GetScanLineProc_8bpp;
+       GetImage       := @ptc_GetImageProc_8bpp;
        SetRGBPalette  := @ptc_SetRGBPaletteProc;
        GetRGBPalette  := @ptc_GetRGBPaletteProc;
 
@@ -2173,6 +2293,8 @@ end;
        PutPixel       := @ptc_PutPixelProc_8bpp;
        PutImage       := @ptc_PutImageProc_8bpp;
        GetPixel       := @ptc_GetPixelProc_8bpp;
+       GetScanLine    := @ptc_GetScanLineProc_8bpp;
+       GetImage       := @ptc_GetImageProc_8bpp;
        SetRGBPalette  := @ptc_SetRGBPaletteProc;
        GetRGBPalette  := @ptc_GetRGBPaletteProc;
 
@@ -2204,6 +2326,8 @@ end;
        PutPixel       := @ptc_PutPixelProc_8bpp;
        PutImage       := @ptc_PutImageProc_8bpp;
        GetPixel       := @ptc_GetPixelProc_8bpp;
+       GetScanLine    := @ptc_GetScanLineProc_8bpp;
+       GetImage       := @ptc_GetImageProc_8bpp;
        SetRGBPalette  := @ptc_SetRGBPaletteProc;
        GetRGBPalette  := @ptc_GetRGBPaletteProc;
 
@@ -2235,6 +2359,8 @@ end;
        PutPixel       := @ptc_PutPixelProc_8bpp;
        PutImage       := @ptc_PutImageProc_8bpp;
        GetPixel       := @ptc_GetPixelProc_8bpp;
+       GetScanLine    := @ptc_GetScanLineProc_8bpp;
+       GetImage       := @ptc_GetImageProc_8bpp;
        SetRGBPalette  := @ptc_SetRGBPaletteProc;
        GetRGBPalette  := @ptc_GetRGBPaletteProc;
 
@@ -2266,6 +2392,8 @@ end;
        PutPixel       := @ptc_PutPixelProc_8bpp;
        PutImage       := @ptc_PutImageProc_8bpp;
        GetPixel       := @ptc_GetPixelProc_8bpp;
+       GetScanLine    := @ptc_GetScanLineProc_8bpp;
+       GetImage       := @ptc_GetImageProc_8bpp;
        SetRGBPalette  := @ptc_SetRGBPaletteProc;
        GetRGBPalette  := @ptc_GetRGBPaletteProc;
 
@@ -2297,6 +2425,8 @@ end;
        PutPixel       := @ptc_PutPixelProc_8bpp;
        PutImage       := @ptc_PutImageProc_8bpp;
        GetPixel       := @ptc_GetPixelProc_8bpp;
+       GetScanLine    := @ptc_GetScanLineProc_8bpp;
+       GetImage       := @ptc_GetImageProc_8bpp;
        SetRGBPalette  := @ptc_SetRGBPaletteProc;
        GetRGBPalette  := @ptc_GetRGBPaletteProc;
        //SetAllPalette  := @ptc_SetRGBAllPaletteProc;
@@ -2329,6 +2459,8 @@ end;
        PutPixel       := @ptc_PutPixelProc_8bpp;
        PutImage       := @ptc_PutImageProc_8bpp;
        GetPixel       := @ptc_GetPixelProc_8bpp;
+       GetScanLine    := @ptc_GetScanLineProc_8bpp;
+       GetImage       := @ptc_GetImageProc_8bpp;
        SetRGBPalette  := @ptc_SetRGBPaletteProc;
        GetRGBPalette  := @ptc_GetRGBPaletteProc;
        //SetAllPalette  := @ptc_SetRGBAllPaletteProc;
@@ -2361,6 +2493,8 @@ end;
        PutPixel       := @ptc_PutPixelProc_8bpp;
        PutImage       := @ptc_PutImageProc_8bpp;
        GetPixel       := @ptc_GetPixelProc_8bpp;
+       GetScanLine    := @ptc_GetScanLineProc_8bpp;
+       GetImage       := @ptc_GetImageProc_8bpp;
        SetRGBPalette  := @ptc_SetRGBPaletteProc;
        GetRGBPalette  := @ptc_GetRGBPaletteProc;
        //SetAllPalette  := @ptc_SetRGBAllPaletteProc;
@@ -2393,6 +2527,8 @@ end;
        PutPixel       := @ptc_PutPixelProc_8bpp;
        PutImage       := @ptc_PutImageProc_8bpp;
        GetPixel       := @ptc_GetPixelProc_8bpp;
+       GetScanLine    := @ptc_GetScanLineProc_8bpp;
+       GetImage       := @ptc_GetImageProc_8bpp;
        SetRGBPalette  := @ptc_SetRGBPaletteProc;
        GetRGBPalette  := @ptc_GetRGBPaletteProc;
        //SetAllPalette  := @ptc_SetRGBAllPaletteProc;
@@ -2425,6 +2561,8 @@ end;
        PutPixel       := @ptc_PutPixelProc_16bpp;
        PutImage       := @ptc_PutImageProc_16bpp;
        GetPixel       := @ptc_GetPixelProc_16bpp;
+       GetScanLine    := @ptc_GetScanLineProc_16bpp;
+       GetImage       := @ptc_GetImageProc_16bpp;
        SetRGBPalette  := @ptc_SetRGBPaletteProc;
        GetRGBPalette  := @ptc_GetRGBPaletteProc;
        HLine          := @ptc_HLineProc_16bpp;
@@ -2454,6 +2592,8 @@ end;
        PutPixel       := @ptc_PutPixelProc_16bpp;
        PutImage       := @ptc_PutImageProc_16bpp;
        GetPixel       := @ptc_GetPixelProc_16bpp;
+       GetScanLine    := @ptc_GetScanLineProc_16bpp;
+       GetImage       := @ptc_GetImageProc_16bpp;
        SetRGBPalette  := @ptc_SetRGBPaletteProc;
        GetRGBPalette  := @ptc_GetRGBPaletteProc;
        HLine          := @ptc_HLineProc_16bpp;
@@ -2483,6 +2623,8 @@ end;
        PutPixel       := @ptc_PutPixelProc_16bpp;
        PutImage       := @ptc_PutImageProc_16bpp;
        GetPixel       := @ptc_GetPixelProc_16bpp;
+       GetScanLine    := @ptc_GetScanLineProc_16bpp;
+       GetImage       := @ptc_GetImageProc_16bpp;
        SetRGBPalette  := @ptc_SetRGBPaletteProc;
        GetRGBPalette  := @ptc_GetRGBPaletteProc;
        HLine          := @ptc_HLineProc_16bpp;
@@ -2512,6 +2654,8 @@ end;
        PutPixel       := @ptc_PutPixelProc_16bpp;
        PutImage       := @ptc_PutImageProc_16bpp;
        GetPixel       := @ptc_GetPixelProc_16bpp;
+       GetScanLine    := @ptc_GetScanLineProc_16bpp;
+       GetImage       := @ptc_GetImageProc_16bpp;
        SetRGBPalette  := @ptc_SetRGBPaletteProc;
        GetRGBPalette  := @ptc_GetRGBPaletteProc;
        HLine          := @ptc_HLineProc_16bpp;
@@ -2543,6 +2687,8 @@ end;
          PutPixel       := @ptc_PutPixelProc_8bpp;
          PutImage       := @ptc_PutImageProc_8bpp;
          GetPixel       := @ptc_GetPixelProc_8bpp;
+         GetScanLine    := @ptc_GetScanLineProc_8bpp;
+         GetImage       := @ptc_GetImageProc_8bpp;
          SetRGBPalette  := @ptc_SetRGBPaletteProc;
          GetRGBPalette  := @ptc_GetRGBPaletteProc;
 
@@ -2574,6 +2720,8 @@ end;
          PutPixel       := @ptc_PutPixelProc_8bpp;
          PutImage       := @ptc_PutImageProc_8bpp;
          GetPixel       := @ptc_GetPixelProc_8bpp;
+         GetScanLine    := @ptc_GetScanLineProc_8bpp;
+         GetImage       := @ptc_GetImageProc_8bpp;
          SetRGBPalette  := @ptc_SetRGBPaletteProc;
          GetRGBPalette  := @ptc_GetRGBPaletteProc;
          //SetAllPalette  := @ptc_SetRGBAllPaletteProc;
@@ -2606,6 +2754,8 @@ end;
          PutPixel       := @ptc_PutPixelProc_16bpp;
          PutImage       := @ptc_PutImageProc_16bpp;
          GetPixel       := @ptc_GetPixelProc_16bpp;
+         GetScanLine    := @ptc_GetScanLineProc_16bpp;
+         GetImage       := @ptc_GetImageProc_16bpp;
          SetRGBPalette  := @ptc_SetRGBPaletteProc;
          GetRGBPalette  := @ptc_GetRGBPaletteProc;
          HLine          := @ptc_HLineProc_16bpp;
@@ -2635,6 +2785,8 @@ end;
          PutPixel       := @ptc_PutPixelProc_16bpp;
          PutImage       := @ptc_PutImageProc_16bpp;
          GetPixel       := @ptc_GetPixelProc_16bpp;
+         GetScanLine    := @ptc_GetScanLineProc_16bpp;
+         GetImage       := @ptc_GetImageProc_16bpp;
          SetRGBPalette  := @ptc_SetRGBPaletteProc;
          GetRGBPalette  := @ptc_GetRGBPaletteProc;
          HLine          := @ptc_HLineProc_16bpp;
@@ -2667,6 +2819,8 @@ end;
          PutPixel       := @ptc_PutPixelProc_8bpp;
          PutImage       := @ptc_PutImageProc_8bpp;
          GetPixel       := @ptc_GetPixelProc_8bpp;
+         GetScanLine    := @ptc_GetScanLineProc_8bpp;
+         GetImage       := @ptc_GetImageProc_8bpp;
          SetRGBPalette  := @ptc_SetRGBPaletteProc;
          GetRGBPalette  := @ptc_GetRGBPaletteProc;
 
@@ -2698,6 +2852,8 @@ end;
          PutPixel       := @ptc_PutPixelProc_8bpp;
          PutImage       := @ptc_PutImageProc_8bpp;
          GetPixel       := @ptc_GetPixelProc_8bpp;
+         GetScanLine    := @ptc_GetScanLineProc_8bpp;
+         GetImage       := @ptc_GetImageProc_8bpp;
          SetRGBPalette  := @ptc_SetRGBPaletteProc;
          GetRGBPalette  := @ptc_GetRGBPaletteProc;
          //SetAllPalette  := @ptc_SetRGBAllPaletteProc;
@@ -2730,6 +2886,8 @@ end;
          PutPixel       := @ptc_PutPixelProc_16bpp;
          PutImage       := @ptc_PutImageProc_16bpp;
          GetPixel       := @ptc_GetPixelProc_16bpp;
+         GetScanLine    := @ptc_GetScanLineProc_16bpp;
+         GetImage       := @ptc_GetImageProc_16bpp;
          SetRGBPalette  := @ptc_SetRGBPaletteProc;
          GetRGBPalette  := @ptc_GetRGBPaletteProc;
          HLine          := @ptc_HLineProc_16bpp;
@@ -2759,6 +2917,8 @@ end;
          PutPixel       := @ptc_PutPixelProc_16bpp;
          PutImage       := @ptc_PutImageProc_16bpp;
          GetPixel       := @ptc_GetPixelProc_16bpp;
+         GetScanLine    := @ptc_GetScanLineProc_16bpp;
+         GetImage       := @ptc_GetImageProc_16bpp;
          SetRGBPalette  := @ptc_SetRGBPaletteProc;
          GetRGBPalette  := @ptc_GetRGBPaletteProc;
          HLine          := @ptc_HLineProc_16bpp;
@@ -2791,6 +2951,8 @@ end;
          PutPixel       := @ptc_PutPixelProc_8bpp;
          PutImage       := @ptc_PutImageProc_8bpp;
          GetPixel       := @ptc_GetPixelProc_8bpp;
+         GetScanLine    := @ptc_GetScanLineProc_8bpp;
+         GetImage       := @ptc_GetImageProc_8bpp;
          SetRGBPalette  := @ptc_SetRGBPaletteProc;
          GetRGBPalette  := @ptc_GetRGBPaletteProc;
 
@@ -2822,6 +2984,8 @@ end;
          PutPixel       := @ptc_PutPixelProc_8bpp;
          PutImage       := @ptc_PutImageProc_8bpp;
          GetPixel       := @ptc_GetPixelProc_8bpp;
+         GetScanLine    := @ptc_GetScanLineProc_8bpp;
+         GetImage       := @ptc_GetImageProc_8bpp;
          SetRGBPalette  := @ptc_SetRGBPaletteProc;
          GetRGBPalette  := @ptc_GetRGBPaletteProc;
          //SetAllPalette  := @ptc_SetRGBAllPaletteProc;
@@ -2854,6 +3018,8 @@ end;
          PutPixel       := @ptc_PutPixelProc_16bpp;
          PutImage       := @ptc_PutImageProc_16bpp;
          GetPixel       := @ptc_GetPixelProc_16bpp;
+         GetScanLine    := @ptc_GetScanLineProc_16bpp;
+         GetImage       := @ptc_GetImageProc_16bpp;
          SetRGBPalette  := @ptc_SetRGBPaletteProc;
          GetRGBPalette  := @ptc_GetRGBPaletteProc;
          HLine          := @ptc_HLineProc_16bpp;
@@ -2883,6 +3049,8 @@ end;
          PutPixel       := @ptc_PutPixelProc_16bpp;
          PutImage       := @ptc_PutImageProc_16bpp;
          GetPixel       := @ptc_GetPixelProc_16bpp;
+         GetScanLine    := @ptc_GetScanLineProc_16bpp;
+         GetImage       := @ptc_GetImageProc_16bpp;
          SetRGBPalette  := @ptc_SetRGBPaletteProc;
          GetRGBPalette  := @ptc_GetRGBPaletteProc;
          HLine          := @ptc_HLineProc_16bpp;
@@ -2920,6 +3088,8 @@ end;
              PutPixel       := @ptc_PutPixelProc_8bpp;
              PutImage       := @ptc_PutImageProc_8bpp;
              GetPixel       := @ptc_GetPixelProc_8bpp;
+             GetScanLine    := @ptc_GetScanLineProc_8bpp;
+             GetImage       := @ptc_GetImageProc_8bpp;
              SetRGBPalette  := @ptc_SetRGBPaletteProc;
              GetRGBPalette  := @ptc_GetRGBPaletteProc;
 
@@ -2954,6 +3124,8 @@ end;
              PutPixel       := @ptc_PutPixelProc_8bpp;
              PutImage       := @ptc_PutImageProc_8bpp;
              GetPixel       := @ptc_GetPixelProc_8bpp;
+             GetScanLine    := @ptc_GetScanLineProc_8bpp;
+             GetImage       := @ptc_GetImageProc_8bpp;
              SetRGBPalette  := @ptc_SetRGBPaletteProc;
              GetRGBPalette  := @ptc_GetRGBPaletteProc;
              //SetAllPalette  := @ptc_SetRGBAllPaletteProc;
@@ -2989,6 +3161,8 @@ end;
              PutPixel       := @ptc_PutPixelProc_16bpp;
              PutImage       := @ptc_PutImageProc_16bpp;
              GetPixel       := @ptc_GetPixelProc_16bpp;
+             GetScanLine    := @ptc_GetScanLineProc_16bpp;
+             GetImage       := @ptc_GetImageProc_16bpp;
              SetRGBPalette  := @ptc_SetRGBPaletteProc;
              GetRGBPalette  := @ptc_GetRGBPaletteProc;
              HLine          := @ptc_HLineProc_16bpp;
@@ -3021,6 +3195,8 @@ end;
              PutPixel       := @ptc_PutPixelProc_16bpp;
              PutImage       := @ptc_PutImageProc_16bpp;
              GetPixel       := @ptc_GetPixelProc_16bpp;
+             GetScanLine    := @ptc_GetScanLineProc_16bpp;
+             GetImage       := @ptc_GetImageProc_16bpp;
              SetRGBPalette  := @ptc_SetRGBPaletteProc;
              GetRGBPalette  := @ptc_GetRGBPaletteProc;
              HLine          := @ptc_HLineProc_16bpp;
