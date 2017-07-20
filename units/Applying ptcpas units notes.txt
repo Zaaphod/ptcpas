@@ -1,0 +1,11 @@
+to apply these modified units to FPC 3.0.4rc1:  
+
+Go to units directory of appropriate target OS
+
+go to graph folder
+remove ptcgraph,ptcmouse, and ptccrt files
+
+remove ptc folder
+
+make new ptcpas folder
+copy new files to it
