@@ -1584,13 +1584,16 @@ Procedure PTC_GetScanlineProc_8bpp (X1, X2, Y : smallint; Var Data); {$ifndef fp
   {   so it is usable for GetImage too (JM)                  }
   {**********************************************************}
   Var
-    pixels:Pword;
-    x : smallint;
+    pixels : Pword;
+    x,x3   : smallint;
   Begin
      pixels := ptc_surface_lock;
      For x:=X1 to X2 Do
-       If clipcoords(X,Y) then
-         WordArray(Data)[x-x1]:=pixels[x+y*PTCWidth] and ColorMask;
+       Begin
+         x3:=x;
+         If clipcoords(x3,Y) then
+           WordArray(Data)[x-x1]:=pixels[x+y*PTCWidth] and ColorMask;
+       End;
      ptc_surface_unlock;       
   End;
 Procedure PTC_GetScanlineProc_16bpp (X1, X2, Y : smallint; Var Data); {$ifndef fpc}far;{$endif fpc}
@@ -1605,13 +1608,16 @@ Procedure PTC_GetScanlineProc_16bpp (X1, X2, Y : smallint; Var Data); {$ifndef f
   {   so it is usable for GetImage too (JM)                  }
   {**********************************************************}
   Var
-    pixels:Pword;
-    x : smallint;
+    pixels : Pword;
+    x,x3   : smallint;
   Begin
      pixels := ptc_surface_lock;
      For x:=X1 to X2 Do
-       If clipcoords(X,Y) then
-         WordArray(Data)[x-x1]:=pixels[x+y*PTCWidth];
+       Begin
+         x3:=x;
+         If clipcoords(x3,Y) then
+           WordArray(Data)[x-x1]:=pixels[x+y*PTCWidth];
+       End;
      ptc_surface_unlock;       
   End;
 
@@ -1621,18 +1627,30 @@ type
   pt = array[0..{$ifdef cpu16}16382{$else}$fffffff{$endif}] of word;
   ptw = array[0..2] of longint;
 var
-  pixels:Pword;
-  x,y,i,j: smallint;
-  k: longint;
+  pixels : Pword;
+  x,y,i  : smallint;
+  k      : longint;
 Begin
+ { check which part of the image is in the viewport }
+  if clipPixels then
+    begin
+      if x1 < startXViewPort then
+        x1 := startXViewPort;
+      if x2 > startXViewPort + viewWidth then
+        x2 := startXViewPort + viewWidth;
+      if y1 > startYViewPort then
+        y1 := startYViewPort;
+      if y2 > startYViewPort+viewHeight then
+        y2 := startYViewPort+viewHeight;
+    end;
+  
   k:= 3 * Sizeof(longint) div sizeof(word); { Three reserved longs at start of bitmap }
   i := x2 - x1 + 1;
   pixels := ptc_surface_lock;
   for y:=Y1 to Y2 do
    Begin
      For x:=X1 to X2 Do
-       If clipcoords(X,Y) then
-           WordArray(pt(Bitmap)[k])[x-x1]:=pixels[x+y*PTCWidth];
+       pt(Bitmap)[k]:=pixels[x+y*PTCWidth];
      inc(k,i);
    end;
    ptc_surface_unlock;       
@@ -1641,23 +1659,36 @@ Begin
    ptw(bitmap)[2] := 0;         { Third longint is reserved}
 end;
 
+  
 Procedure PTC_GetImageProc_8bpp(X1,Y1,X2,Y2: smallint; Var Bitmap); {$ifndef fpc}far;{$endif fpc}
 type
   pt = array[0..{$ifdef cpu16}16382{$else}$fffffff{$endif}] of word;
   ptw = array[0..2] of longint;
 var
-  pixels:Pword;
-  x,y,i,j: smallint;
-  k: longint;
+  pixels : Pword;
+  x,y,i  : smallint;
+  k      : longint;
 Begin
+ { check which part of the image is in the viewport }
+  if clipPixels then
+    begin
+      if x1 < startXViewPort then
+        x1 := startXViewPort;
+      if x2 > startXViewPort + viewWidth then
+        x2 := startXViewPort + viewWidth;
+      if y1 > startYViewPort then
+        y1 := startYViewPort;
+      if y2 > startYViewPort+viewHeight then
+        y2 := startYViewPort+viewHeight;
+    end;
+  
   k:= 3 * Sizeof(longint) div sizeof(word); { Three reserved longs at start of bitmap }
   i := x2 - x1 + 1;
   pixels := ptc_surface_lock;
   for y:=Y1 to Y2 do
    Begin
      For x:=X1 to X2 Do
-       If clipcoords(X,Y) then
-           WordArray(pt(Bitmap)[k])[x-x1]:=pixels[x+y*PTCWidth] and ColorMask;
+       pt(Bitmap)[k]:=pixels[x+y*PTCWidth] and ColorMask;
      inc(k,i);
    end;
    ptc_surface_unlock;       
