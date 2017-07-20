@@ -1362,7 +1362,7 @@ begin
   BlueValue := VGAPalette[ColorNum, 2] shl 2;
 end;
 
-Procedure ptc_PutImageproc(X,Y: smallint; var Bitmap; BitBlt: Word; bpp16:boolean); {$ifndef fpc}far;{$endif fpc}
+Procedure ptc_PutImageproc_16bpp(X,Y: smallint; var Bitmap; BitBlt: Word); {$ifndef fpc}far;{$endif fpc}
 type
   pt = array[0..{$ifdef cpu16}16382{$else}$fffffff{$endif}] of word;
   ptw = array[0..2] of longint;
@@ -1403,173 +1403,203 @@ Begin
         end;
     end;
   pixels := ptc_surface_lock;
-  If bpp16 Then
-    Begin
-      case BitBlt of
-        XORPut:
+  case BitBlt of
+    XORPut:
+      Begin
+        for j:=Y to Y1 do
           Begin
-            for j:=Y to Y1 do
-              Begin
-                JxW:=j*PTCWidth;
-                inc(k,deltaX);
-                for i:=X to X1 do
-                  begin
-                    I_JxW:=i+JxW;
-                    pixels[I_JxW] := pixels[I_JxW] xor pt(bitmap)[k];
-                    inc(k);
-                  end;
-                inc(k,deltaX1);
-              End;
+            JxW:=j*PTCWidth;
+            inc(k,deltaX);
+            for i:=X to X1 do
+              begin
+                I_JxW:=i+JxW;
+                pixels[I_JxW] := pixels[I_JxW] xor pt(bitmap)[k];
+                inc(k);
+              end;
+            inc(k,deltaX1);
           End;
-        ORPut:
+      End;
+    ORPut:
+      Begin
+        for j:=Y to Y1 do
           Begin
-            for j:=Y to Y1 do
-              Begin
-                JxW:=j*PTCWidth;
-                inc(k,deltaX);
-                for i:=X to X1 do
-                  begin
-                    I_JxW:=i+JxW;
-                    pixels[I_JxW] := pixels[I_JxW] or pt(bitmap)[k];
-                    inc(k);
-                  end;
-                inc(k,deltaX1);
-              End;
+            JxW:=j*PTCWidth;
+            inc(k,deltaX);
+            for i:=X to X1 do
+              begin
+                I_JxW:=i+JxW;
+                pixels[I_JxW] := pixels[I_JxW] or pt(bitmap)[k];
+                inc(k);
+              end;
+            inc(k,deltaX1);
           End;
-        AndPut:
+      End;
+    AndPut:
+      Begin
+        for j:=Y to Y1 do
           Begin
-            for j:=Y to Y1 do
-              Begin
-                JxW:=j*PTCWidth;
-                inc(k,deltaX);
-                for i:=X to X1 do
-                  begin
-                    I_JxW:=i+JxW;
-                    pixels[I_JxW] := pixels[I_JxW] and pt(bitmap)[k];
-                    inc(k);
-                  end;
-                inc(k,deltaX1);
-              End;
+            JxW:=j*PTCWidth;
+            inc(k,deltaX);
+            for i:=X to X1 do
+              begin
+                I_JxW:=i+JxW;
+                pixels[I_JxW] := pixels[I_JxW] and pt(bitmap)[k];
+                inc(k);
+              end;
+            inc(k,deltaX1);
           End;
-        NotPut:
+      End;
+    NotPut:
+      Begin
+        for j:=Y to Y1 do
           Begin
-            for j:=Y to Y1 do
-              Begin
-                JxW:=j*PTCWidth;
-                inc(k,deltaX);
-                for i:=X to X1 do
-                  begin
-                    pixels[i+JxW] := pt(bitmap)[k] xor $FFFF;
-                    inc(k);
-                  end;
-                inc(k,deltaX1);
-              End;
+            JxW:=j*PTCWidth;
+            inc(k,deltaX);
+            for i:=X to X1 do
+              begin
+                pixels[i+JxW] := pt(bitmap)[k] xor $FFFF;
+                inc(k);
+              end;
+            inc(k,deltaX1);
           End;
-        Else
+      End;
+    Else
+      Begin
+        for j:=Y to Y1 do
           Begin
-            for j:=Y to Y1 do
-              Begin
-                JxW:=j*PTCWidth;
-                inc(k,deltaX);
-                for i:=X to X1 do
-                  begin
-                    pixels[i+JxW] := pt(bitmap)[k];
-                    inc(k);
-                  end;
-                inc(k,deltaX1);
-              End;
+            JxW:=j*PTCWidth;
+            inc(k,deltaX);
+            for i:=X to X1 do
+              begin
+                pixels[i+JxW] := pt(bitmap)[k];
+                inc(k);
+              end;
+            inc(k,deltaX1);
           End;
-      End; {case}
-    End
-  Else
-    Begin
-      case BitBlt of
-        XORPut:
-          Begin
-            for j:=Y to Y1 do
-              Begin
-                JxW:=j*PTCWidth;
-                inc(k,deltaX);
-                for i:=X to X1 do
-                  begin
-                    I_JxW:=i+JxW;
-                    pixels[I_JxW] := pixels[I_JxW] xor (pt(bitmap)[k] and ColorMask);
-                    inc(k);
-                  end;
-                inc(k,deltaX1);
-              End;
-          End;
-        ORPut:
-          Begin
-            for j:=Y to Y1 do
-              Begin
-                JxW:=j*PTCWidth;
-                inc(k,deltaX);
-                for i:=X to X1 do
-                  begin
-                    I_JxW:=i+JxW;
-                    pixels[I_JxW] := pixels[I_JxW] or (pt(bitmap)[k] and ColorMask);
-                    inc(k);
-                  end;
-                inc(k,deltaX1);
-              End;
-          End;
-        AndPut:
-          Begin
-            for j:=Y to Y1 do
-              Begin
-                JxW:=j*PTCWidth;
-                inc(k,deltaX);
-                for i:=X to X1 do
-                  begin
-                    I_JxW:=i+JxW;
-                    pixels[I_JxW] := pixels[I_JxW] and (pt(bitmap)[k] and ColorMask);
-                    inc(k);
-                  end;
-                inc(k,deltaX1);
-              End;
-          End;
-        NotPut:
-          Begin
-            for j:=Y to Y1 do
-              Begin
-                JxW:=j*PTCWidth;
-                inc(k,deltaX);
-                for i:=X to X1 do
-                  begin
-                    pixels[i+JxW] := (pt(bitmap)[k] and ColorMask) xor ColorMask;
-                    inc(k);
-                  end;
-                inc(k,deltaX1);
-              End;
-          End;
-        Else
-          Begin
-            for j:=Y to Y1 do
-              Begin
-                JxW:=j*PTCWidth;
-                inc(k,deltaX);
-                for i:=X to X1 do
-                  begin
-                    pixels[i+JxW] := pt(bitmap)[k] and ColorMask;
-                    inc(k);
-                  end;
-                inc(k,deltaX1);
-              End;
-          End;
-      End; {case}    
-    End;
+      End;
+  End; {case}
   ptc_surface_unlock;
   ptc_update;
 end;
 
-Procedure ptc_PutImageproc_8bpp(X,Y: smallint; var Bitmap; BitBlt: Word);
+Procedure ptc_PutImageproc_8bpp(X,Y: smallint; var Bitmap; BitBlt: Word); {$ifndef fpc}far;{$endif fpc}
+type
+  pt = array[0..{$ifdef cpu16}16382{$else}$fffffff{$endif}] of word;
+  ptw = array[0..2] of longint;
+var
+  pixels:Pword;
+  k: longint;
+  i, j, y1, x1, deltaX, deltaX1, deltaY: smallint;
+  JxW, I_JxW: Longword;
 Begin
-  ptc_PutImageProc(X,Y,Bitmap,Bitblt,False);
-end;
-Procedure ptc_PutImageproc_16bpp(X,Y: smallint; var Bitmap; BitBlt: Word);
-Begin
-  ptc_PutImageProc(X,Y,Bitmap,Bitblt,True);
+  inc(x,startXViewPort);
+  inc(y,startYViewPort);
+  { width/height are 1-based, coordinates are zero based }
+  x1 := ptw(Bitmap)[0]+x-1; { get width and adjust end coordinate accordingly }
+  y1 := ptw(Bitmap)[1]+y-1; { get height and adjust end coordinate accordingly }
+  deltaX := 0;
+  deltaX1 := 0;
+  k := 3 * sizeOf(Longint) div sizeOf(Word); { Three reserved longs at start of bitmap }
+ { check which part of the image is in the viewport }
+  if clipPixels then
+    begin
+      if y < startYViewPort then
+        begin
+          deltaY := startYViewPort - y;
+          inc(k,(x1-x+1)*deltaY);
+          y := startYViewPort;
+         end;
+      if y1 > startYViewPort+viewHeight then
+        y1 := startYViewPort+viewHeight;
+      if x < startXViewPort then
+        begin
+          deltaX := startXViewPort-x;
+          x := startXViewPort;
+        end;
+      if x1 > startXViewPort + viewWidth then
+        begin
+          deltaX1 := x1 - (startXViewPort + viewWidth);
+          x1 := startXViewPort + viewWidth;
+        end;
+    end;
+  pixels := ptc_surface_lock;
+  case BitBlt of
+    XORPut:
+      Begin
+        for j:=Y to Y1 do
+          Begin
+            JxW:=j*PTCWidth;
+            inc(k,deltaX);
+            for i:=X to X1 do
+              begin
+                I_JxW:=i+JxW;
+                pixels[I_JxW] := pixels[I_JxW] xor (pt(bitmap)[k] and ColorMask);
+                inc(k);
+              end;
+            inc(k,deltaX1);
+          End;
+      End;
+    ORPut:
+      Begin
+        for j:=Y to Y1 do
+          Begin
+            JxW:=j*PTCWidth;
+            inc(k,deltaX);
+            for i:=X to X1 do
+              begin
+                I_JxW:=i+JxW;
+                pixels[I_JxW] := pixels[I_JxW] or (pt(bitmap)[k] and ColorMask);
+                inc(k);
+              end;
+            inc(k,deltaX1);
+          End;
+      End;
+    AndPut:
+      Begin
+        for j:=Y to Y1 do
+          Begin
+            JxW:=j*PTCWidth;
+            inc(k,deltaX);
+            for i:=X to X1 do
+              begin
+                I_JxW:=i+JxW;
+                pixels[I_JxW] := pixels[I_JxW] and (pt(bitmap)[k] and ColorMask);
+                inc(k);
+              end;
+            inc(k,deltaX1);
+          End;
+      End;
+    NotPut:
+      Begin
+        for j:=Y to Y1 do
+          Begin
+            JxW:=j*PTCWidth;
+            inc(k,deltaX);
+            for i:=X to X1 do
+              begin
+                pixels[i+JxW] := (pt(bitmap)[k] and ColorMask) xor ColorMask;
+                inc(k);
+              end;
+            inc(k,deltaX1);
+          End;
+      End;
+    Else
+      Begin
+        for j:=Y to Y1 do
+          Begin
+            JxW:=j*PTCWidth;
+            inc(k,deltaX);
+            for i:=X to X1 do
+              begin
+                pixels[i+JxW] := pt(bitmap)[k] and ColorMask;
+                inc(k);
+              end;
+            inc(k,deltaX1);
+          End;
+      End;
+  End; {case}    
+  ptc_surface_unlock;
+  ptc_update;
 end;
 
 Procedure PTC_GetScanlineProc_8bpp (X1, X2, Y : smallint; Var Data); {$ifndef fpc}far;{$endif fpc}
