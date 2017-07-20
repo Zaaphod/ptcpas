@@ -1377,6 +1377,7 @@ Begin
   { width/height are 1-based, coordinates are zero based }
   x1 := ptw(Bitmap)[0]+x-1; { get width and adjust end coordinate accordingly }
   y1 := ptw(Bitmap)[1]+y-1; { get height and adjust end coordinate accordingly }
+  deltaY := 0;
   deltaX := 0;
   deltaX1 := 0;
   k := 3 * sizeOf(Longint) div sizeOf(Word); { Three reserved longs at start of bitmap }
@@ -1497,6 +1498,7 @@ Begin
   { width/height are 1-based, coordinates are zero based }
   x1 := ptw(Bitmap)[0]+x-1; { get width and adjust end coordinate accordingly }
   y1 := ptw(Bitmap)[1]+y-1; { get height and adjust end coordinate accordingly }
+  deltaY := 0;
   deltaX := 0;
   deltaX1 := 0;
   k := 3 * sizeOf(Longint) div sizeOf(Word); { Three reserved longs at start of bitmap }
@@ -1680,7 +1682,7 @@ Begin
   for y:=Y1 to Y2 do
    Begin
      For x:=X1 to X2 Do
-       pt(Bitmap)[k]:=pixels[x+y*PTCWidth];
+       pt(Bitmap)[k+x-x1]:=pixels[x+y*PTCWidth];
      inc(k,i);
    end;
    ptc_surface_unlock;       
@@ -1718,7 +1720,7 @@ Begin
   for y:=Y1 to Y2 do
    Begin
      For x:=X1 to X2 Do
-       pt(Bitmap)[k]:=pixels[x+y*PTCWidth] and ColorMask;
+       pt(Bitmap)[k+x-x1]:=pixels[x+y*PTCWidth] and ColorMask;
      inc(k,i);
    end;
    ptc_surface_unlock;       
