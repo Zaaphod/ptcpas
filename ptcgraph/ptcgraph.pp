@@ -1652,7 +1652,6 @@ Procedure PTC_GetScanlineProc_16bpp (X1, X2, Y : smallint; Var Data); {$ifndef f
        End;
      ptc_surface_unlock;       
   End;
-
   
 Procedure PTC_GetImageProc_16bpp(X1,Y1,X2,Y2: smallint; Var Bitmap); {$ifndef fpc}far;{$endif fpc}
 type
@@ -1678,12 +1677,21 @@ Begin
         vpx1 := startXViewPort;
       if vpx2 > startXViewPort + viewWidth then
         vpx2 := startXViewPort + viewWidth;
-      if vpy1 > startYViewPort then
+      if vpy1 < startYViewPort then
         vpy1 := startYViewPort;
       if vpy2 > startYViewPort+viewHeight then
         vpy2 := startYViewPort+viewHeight;
     end;
-  
+  { check if coordinates are on the screen}
+  if vpx1 < 0 then
+    vpx1 := 0;
+  if vpx2 > PTCwidth then
+    vpx2 := PTCwidth;
+  if vpy1 < 0 then
+    vpy1 := 0;
+  if vpy2 > PTCheight then
+    vpy2 := PTCheight;
+    
   i := (x2 - x1 + 1) * (vpy1 - y1 +1);
   pixels := ptc_surface_lock;
   for y:=vpy1 to vpy2 do
@@ -1719,12 +1727,21 @@ Begin
         vpx1 := startXViewPort;
       if vpx2 > startXViewPort + viewWidth then
         vpx2 := startXViewPort + viewWidth;
-      if vpy1 > startYViewPort then
+      if vpy1 < startYViewPort then
         vpy1 := startYViewPort;
       if vpy2 > startYViewPort+viewHeight then
         vpy2 := startYViewPort+viewHeight;
     end;
-  
+  { check if coordinates are on the screen}
+  if vpx1 < 0 then
+    vpx1 := 0;
+  if vpx2 > PTCwidth then
+    vpx2 := PTCwidth;
+  if vpy1 < 0 then
+    vpy1 := 0;
+  if vpy2 > PTCheight then
+    vpy2 := PTCheight;
+    
   i := (x2 - x1 + 1) * (vpy1 - y1 +1);
   pixels := ptc_surface_lock;
   for y:=vpy1 to vpy2 do
