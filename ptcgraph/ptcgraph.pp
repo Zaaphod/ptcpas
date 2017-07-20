@@ -1660,75 +1660,81 @@ type
   ptw = array[0..2] of longint;
 var
   pixels : Pword;
-  x,y,i  : smallint;
+  x,y,i,vpx1,vpx2,vpy1,vpy2  : smallint;
   k      : longint;
 Begin
- { check which part of the image is in the viewport }
+  ptw(Bitmap)[0] := X2-X1+1;   { First longint  is width  }
+  ptw(Bitmap)[1] := Y2-Y1+1;   { Second longint is height }
+  ptw(bitmap)[2] := 0;         { Third longint is reserved}
+  k:= 3 * Sizeof(longint) div sizeof(word); { Three reserved longs at start of bitmap }
+  vpx1:=x1;
+  vpx2:=x2;
+  vpy1:=y1;
+  vpy2:=y2;
+  { check which part of the image is in the viewport }
   if clipPixels then
     begin
-      if x1 < startXViewPort then
-        x1 := startXViewPort;
-      if x2 > startXViewPort + viewWidth then
-        x2 := startXViewPort + viewWidth;
-      if y1 > startYViewPort then
-        y1 := startYViewPort;
-      if y2 > startYViewPort+viewHeight then
-        y2 := startYViewPort+viewHeight;
+      if vpx1 < startXViewPort then
+        vpx1 := startXViewPort;
+      if vpx2 > startXViewPort + viewWidth then
+        vpx2 := startXViewPort + viewWidth;
+      if vpy1 > startYViewPort then
+        vpy1 := startYViewPort;
+      if vpy2 > startYViewPort+viewHeight then
+        vpy2 := startYViewPort+viewHeight;
     end;
   
-  k:= 3 * Sizeof(longint) div sizeof(word); { Three reserved longs at start of bitmap }
-  i := x2 - x1 + 1;
+  i := (x2 - x1 + 1) * (vpy1 - y1 +1);
   pixels := ptc_surface_lock;
-  for y:=Y1 to Y2 do
+  for y:=vpy1 to vpy2 do
    Begin
-     For x:=X1 to X2 Do
-       pt(Bitmap)[k+x-x1]:=pixels[x+y*PTCWidth];
+     For x:=vpx1 to vpx2 Do
+       pt(Bitmap)[k+(x-x1)]:=pixels[x+y*PTCWidth];
      inc(k,i);
    end;
    ptc_surface_unlock;       
-   ptw(Bitmap)[0] := X2-X1+1;   { First longint  is width  }
-   ptw(Bitmap)[1] := Y2-Y1+1;   { Second longint is height }
-   ptw(bitmap)[2] := 0;         { Third longint is reserved}
 end;
 
-  
 Procedure PTC_GetImageProc_8bpp(X1,Y1,X2,Y2: smallint; Var Bitmap); {$ifndef fpc}far;{$endif fpc}
 type
   pt = array[0..{$ifdef cpu16}16382{$else}$fffffff{$endif}] of word;
   ptw = array[0..2] of longint;
 var
   pixels : Pword;
-  x,y,i  : smallint;
+  x,y,i,vpx1,vpx2,vpy1,vpy2  : smallint;
   k      : longint;
 Begin
- { check which part of the image is in the viewport }
+  ptw(Bitmap)[0] := X2-X1+1;   { First longint  is width  }
+  ptw(Bitmap)[1] := Y2-Y1+1;   { Second longint is height }
+  ptw(bitmap)[2] := 0;         { Third longint is reserved}
+  k:= 3 * Sizeof(longint) div sizeof(word); { Three reserved longs at start of bitmap }
+  vpx1:=x1;
+  vpx2:=x2;
+  vpy1:=y1;
+  vpy2:=y2;
+  { check which part of the image is in the viewport }
   if clipPixels then
     begin
-      if x1 < startXViewPort then
-        x1 := startXViewPort;
-      if x2 > startXViewPort + viewWidth then
-        x2 := startXViewPort + viewWidth;
-      if y1 > startYViewPort then
-        y1 := startYViewPort;
-      if y2 > startYViewPort+viewHeight then
-        y2 := startYViewPort+viewHeight;
+      if vpx1 < startXViewPort then
+        vpx1 := startXViewPort;
+      if vpx2 > startXViewPort + viewWidth then
+        vpx2 := startXViewPort + viewWidth;
+      if vpy1 > startYViewPort then
+        vpy1 := startYViewPort;
+      if vpy2 > startYViewPort+viewHeight then
+        vpy2 := startYViewPort+viewHeight;
     end;
   
-  k:= 3 * Sizeof(longint) div sizeof(word); { Three reserved longs at start of bitmap }
-  i := x2 - x1 + 1;
+  i := (x2 - x1 + 1) * (vpy1 - y1 +1);
   pixels := ptc_surface_lock;
-  for y:=Y1 to Y2 do
+  for y:=vpy1 to vpy2 do
    Begin
-     For x:=X1 to X2 Do
-       pt(Bitmap)[k+x-x1]:=pixels[x+y*PTCWidth] and ColorMask;
+     For x:=vpx1 to vpx2 Do
+       pt(Bitmap)[k+(x-x1)]:=pixels[x+y*PTCWidth] and ColorMask;
      inc(k,i);
    end;
    ptc_surface_unlock;       
-   ptw(Bitmap)[0] := X2-X1+1;   { First longint  is width  }
-   ptw(Bitmap)[1] := Y2-Y1+1;   { Second longint is height }
-   ptw(bitmap)[2] := 0;         { Third longint is reserved}
 end;
-
 
 {************************************************************************}
 {*                       General routines                               *}
