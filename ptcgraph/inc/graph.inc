@@ -1092,29 +1092,6 @@ end;
 {                                                                          }
 {--------------------------------------------------------------------------}
 
-
-  Procedure GetScanlineDefault (X1, X2, Y : smallint; Var Data); {$ifndef fpc}far;{$endif fpc}
-  {**********************************************************}
-  { Procedure GetScanLine()                                  }
-  {----------------------------------------------------------}
-  { Returns the full scanline of the video line of the Y     }
-  { coordinate. The values are returned in a WORD array      }
-  { each WORD representing a pixel of the specified scanline }
-  { note: we only need the pixels inside the ViewPort! (JM)  }
-  { note2: extended so you can specify start and end X coord }
-  {   so it is usable for GetImage too (JM)                  }
-  {**********************************************************}
-
-
-  Var
-    x : smallint;
-  Begin
-     For x:=X1 to X2 Do
-       WordArray(Data)[x-x1]:=GetPixel(x, y);
-  End;
-
-
-
 Function DefaultImageSize(X1,Y1,X2,Y2: smallint): longint; {$ifndef fpc}far;{$endif fpc}
 Begin
   { each pixel uses two bytes, to enable modes with colors up to 64K }
@@ -1122,147 +1099,73 @@ Begin
   DefaultImageSize := 12 + (((X2-X1+1)*(Y2-Y1+1))*2);
 end;
 
-Procedure DefaultPutImage(X,Y: smallint; var Bitmap; BitBlt: Word); {$ifndef fpc}far;{$endif fpc}
-type
-  pt = array[0..{$ifdef cpu16}16382{$else}$fffffff{$endif}] of word;
-  ptw = array[0..2] of longint;
-var
-  k: longint;
-  oldCurrentColor: word;
-  oldCurrentWriteMode, i, j, y1, x1, deltaX, deltaX1, deltaY: smallint;
-Begin
-{$ifdef logging}
-  LogLn('putImage at ('+strf(x)+','+strf(y)+') with width '+strf(ptw(Bitmap)[0])+
-    ' and height '+strf(ptw(Bitmap)[1]));
-  deltaY := 0;
-{$endif logging}
-  inc(x,startXViewPort);
-  inc(y,startYViewPort);
-  { width/height are 1-based, coordinates are zero based }
-  x1 := ptw(Bitmap)[0]+x-1; { get width and adjust end coordinate accordingly }
-  y1 := ptw(Bitmap)[1]+y-1; { get height and adjust end coordinate accordingly }
-
-  deltaX := 0;
-  deltaX1 := 0;
-  k := 3 * sizeOf(Longint) div sizeOf(Word); { Three reserved longs at start of bitmap }
- { check which part of the image is in the viewport }
-  if clipPixels then
-    begin
-      if y < startYViewPort then
-        begin
-          deltaY := startYViewPort - y;
-          inc(k,(x1-x+1)*deltaY);
-          y := startYViewPort;
-         end;
-      if y1 > startYViewPort+viewHeight then
-        y1 := startYViewPort+viewHeight;
-      if x < startXViewPort then
-        begin
-          deltaX := startXViewPort-x;
-          x := startXViewPort;
-        end;
-      if x1 > startXViewPort + viewWidth then
-        begin
-          deltaX1 := x1 - (startXViewPort + viewWidth);
-          x1 := startXViewPort + viewWidth;
-        end;
-    end;
-{$ifdef logging}
-  LogLn('deltax: '+strf(deltax)+', deltax1: '+strf(deltax1)+',deltay: '+strf(deltay));
-{$endif logging}
-  oldCurrentColor := currentColor;
-  oldCurrentWriteMode := currentWriteMode;
-  currentWriteMode := bitBlt;
-  for j:=Y to Y1 do
-   Begin
-     inc(k,deltaX);
-     for i:=X to X1 do
-      begin
-        currentColor := pt(bitmap)[k];
-        directPutPixel(i,j);
-        inc(k);
-     end;
-     inc(k,deltaX1);
-   end;
-  currentWriteMode := oldCurrentWriteMode;
-  currentColor := oldCurrentColor;
-end;
-
-Procedure DefaultGetImage(X1,Y1,X2,Y2: smallint; Var Bitmap); {$ifndef fpc}far;{$endif fpc}
-type
-  pt = array[0..{$ifdef cpu16}16382{$else}$fffffff{$endif}] of word;
-  ptw = array[0..2] of longint;
-var
-  i,j: smallint;
-  k: longint;
-Begin
-  k:= 3 * Sizeof(longint) div sizeof(word); { Three reserved longs at start of bitmap }
-  i := x2 - x1 + 1;
-  for j:=Y1 to Y2 do
-   Begin
-     GetScanLine(x1,x2,j,pt(Bitmap)[k]);
-     inc(k,i);
-   end;
-   ptw(Bitmap)[0] := X2-X1+1;   { First longint  is width  }
-   ptw(Bitmap)[1] := Y2-Y1+1;   { Second longint is height }
-   ptw(bitmap)[2] := 0;       { Third longint is reserved}
-end;
-
-
-
-
-
-
-  Procedure GetArcCoords(var ArcCoords: ArcCoordsType);
-   Begin
+Procedure GetArcCoords(var ArcCoords: ArcCoordsType);
+  Begin
      ArcCoords.X := ArcCall.X;
      ArcCoords.Y := ArcCall.Y;
      ArcCoords.XStart := ArcCall.XStart;
      ArcCoords.YStart := ArcCall.YStart;
      ArcCoords.XEnd := ArcCall.XEnd;
      ArcCoords.YEnd := ArcCall.YEnd;
-   end;
+  End;
+
+Procedure SetVisualPageDefault(page : word); {$ifndef fpc}far;{$endif fpc}
+  Begin
+  End;
 
 
-  procedure SetVisualPageDefault(page : word); {$ifndef fpc}far;{$endif fpc}
+Procedure SetActivePageDefault(page : word); {$ifndef fpc}far;{$endif fpc}
+  Begin
+  End;
+
+   {the following procedures are defined in ptcgraph.pp  if these end up attempting to run, it's 
+   because InitGraph failed}
+
+Procedure UnusedProcedure;
+  Begin
+    Writeln(stderr,'Error: Not in graphics mode (use InitGraph and test GraphResult afterwards)');
+    Halt(1);
+  End;
+
+Procedure DirectPutPixelDefault(X,Y: smallint);
+  Begin
+    UnusedProcedure;
+  End;
+
+Function GetPixelDefault(X,Y: smallint): word;
+  Begin
+    UnusedProcedure;
+    Exit(0); { avoid warning }
+  End;
+
+Procedure PutPixelDefault(X,Y: smallint; Color: Word);
+  Begin
+    UnusedProcedure;
+  End;
+
+Procedure DefaultPutImage(X,Y: smallint; var Bitmap; BitBlt: Word); {$ifndef fpc}far;{$endif fpc}
+  Begin
+    UnusedProcedure;
+  End;
+
+Procedure GetScanlineDefault (X1, X2, Y : smallint; Var Data); {$ifndef fpc}far;{$endif fpc}
+  Begin
+    UnusedProcedure;
+  End;
+
+Procedure DefaultGetImage(X1,Y1,X2,Y2: smallint; Var Bitmap); {$ifndef fpc}far;{$endif fpc}
+  Begin
+    UnusedProcedure;
+  End;
+
+Procedure SetRGBPaletteDefault(ColorNum, RedValue, GreenValue, BlueValue: smallint);
+  Begin
+    UnusedProcedure;
+  End;
+
+Procedure GetRGBPaletteDefault(ColorNum: smallint; var RedValue, GreenValue, BlueValue: smallint);
    begin
-   end;
-
-
-  procedure SetActivePageDefault(page : word); {$ifndef fpc}far;{$endif fpc}
-   begin
-   end;
-
-  procedure DirectPutPixelDefault(X,Y: smallint);
-   begin
-     Writeln(stderr,'Error: Not in graphics mode (use InitGraph and test GraphResult afterwards)');
-     Halt(1);
-   end;
-
-  function GetPixelDefault(X,Y: smallint): word;
-   begin
-     Writeln(stderr,'Error: Not in graphics mode (use InitGraph and test GraphResult afterwards)');
-     Halt(1);
-     exit(0); { avoid warning }
-   end;
-
-  procedure PutPixelDefault(X,Y: smallint; Color: Word);
-   begin
-     Writeln(stderr,'Error: Not in graphics mode (use InitGraph and test GraphResult afterwards)');
-     Halt(1);
-   end;
-
-  procedure SetRGBPaletteDefault(ColorNum, RedValue, GreenValue, BlueValue: smallint);
-   begin
-     Writeln(stderr,'Error: Not in graphics mode (use InitGraph and test GraphResult afterwards)');
-     Halt(1);
-   end;
-
-  procedure GetRGBPaletteDefault(ColorNum: smallint; var
-            RedValue, GreenValue, BlueValue: smallint);
-   begin
-     Writeln(stderr,'Error: Not in graphics mode (use InitGraph and test GraphResult afterwards)');
-     Halt(1);
+      UnusedProcedure;
    end;
 
 
@@ -1922,7 +1825,7 @@ end;
       ppointtype = ^pointtype;
       pt = array[0..8190] of pointtype;
     var
-      i, j, LastPolygonStart: longint;
+      i, LastPolygonStart: longint;
       Closing: boolean;
     begin
       if numpoints < 2 then

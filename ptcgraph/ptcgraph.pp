@@ -1362,126 +1362,20 @@ begin
   BlueValue := VGAPalette[ColorNum, 2] shl 2;
 end;
 
-Procedure ptc_PutImageproc_16bpp(X,Y: smallint; var Bitmap; BitBlt: Word); {$ifndef fpc}far;{$endif fpc}
-type
-  pt = array[0..{$ifdef cpu16}16382{$else}$fffffff{$endif}] of word;
-  ptw = array[0..2] of longint;
-var
-  pixels:Pword;
-  k: longint;
-  i, j, y1, x1, deltaX, deltaX1, deltaY: smallint;
-  JxW, I_JxW: Longword;
-Begin
-  inc(x,startXViewPort);
-  inc(y,startYViewPort);
-  { width/height are 1-based, coordinates are zero based }
-  x1 := ptw(Bitmap)[0]+x-1; { get width and adjust end coordinate accordingly }
-  y1 := ptw(Bitmap)[1]+y-1; { get height and adjust end coordinate accordingly }
-  deltaY := 0;
-  deltaX := 0;
-  deltaX1 := 0;
-  k := 3 * sizeOf(Longint) div sizeOf(Word); { Three reserved longs at start of bitmap }
- { check which part of the image is in the viewport }
-  if clipPixels then
-    begin
-      if y < startYViewPort then
-        begin
-          deltaY := startYViewPort - y;
-          inc(k,(x1-x+1)*deltaY);
-          y := startYViewPort;
-         end;
-      if y1 > startYViewPort+viewHeight then
-        y1 := startYViewPort+viewHeight;
-      if x < startXViewPort then
-        begin
-          deltaX := startXViewPort-x;
-          x := startXViewPort;
-        end;
-      if x1 > startXViewPort + viewWidth then
-        begin
-          deltaX1 := x1 - (startXViewPort + viewWidth);
-          x1 := startXViewPort + viewWidth;
-        end;
-    end;
-  pixels := ptc_surface_lock;
-  case BitBlt of
-    XORPut:
-      Begin
-        for j:=Y to Y1 do
-          Begin
-            JxW:=j*PTCWidth;
-            inc(k,deltaX);
-            for i:=X to X1 do
-              begin
-                I_JxW:=i+JxW;
-                pixels[I_JxW] := pixels[I_JxW] xor pt(bitmap)[k];
-                inc(k);
-              end;
-            inc(k,deltaX1);
-          End;
-      End;
-    ORPut:
-      Begin
-        for j:=Y to Y1 do
-          Begin
-            JxW:=j*PTCWidth;
-            inc(k,deltaX);
-            for i:=X to X1 do
-              begin
-                I_JxW:=i+JxW;
-                pixels[I_JxW] := pixels[I_JxW] or pt(bitmap)[k];
-                inc(k);
-              end;
-            inc(k,deltaX1);
-          End;
-      End;
-    AndPut:
-      Begin
-        for j:=Y to Y1 do
-          Begin
-            JxW:=j*PTCWidth;
-            inc(k,deltaX);
-            for i:=X to X1 do
-              begin
-                I_JxW:=i+JxW;
-                pixels[I_JxW] := pixels[I_JxW] and pt(bitmap)[k];
-                inc(k);
-              end;
-            inc(k,deltaX1);
-          End;
-      End;
-    NotPut:
-      Begin
-        for j:=Y to Y1 do
-          Begin
-            JxW:=j*PTCWidth;
-            inc(k,deltaX);
-            for i:=X to X1 do
-              begin
-                pixels[i+JxW] := pt(bitmap)[k] xor $FFFF;
-                inc(k);
-              end;
-            inc(k,deltaX1);
-          End;
-      End;
-    Else
-      Begin
-        for j:=Y to Y1 do
-          Begin
-            JxW:=j*PTCWidth;
-            inc(k,deltaX);
-            for i:=X to X1 do
-              begin
-                pixels[i+JxW] := pt(bitmap)[k];
-                inc(k);
-              end;
-            inc(k,deltaX1);
-          End;
-      End;
-  End; {case}
-  ptc_surface_unlock;
-  ptc_update;
-end;
+{**********************************************************}
+{ Procedure PutImage()                                     }
+{----------------------------------------------------------}
+{ Displays the image contained in a bitmap starting at X,Y }
+{ the first 2 bytes of the bitmap structure define the     }
+{ width and height of the bitmap                           }
+{ note: This optomized version does not use PutPixel       }
+{   Which would be checking the viewport for every pixel   }
+{   Instead it just does it's own viewport check once then }
+{   puts all the pixels within the veiwport without further}
+{   checking.  Also instead of checking BitBlt every pixel }
+{   it is only checked once before all the pixels are      }
+{   displayed at once   (JMR)                              }
+{**********************************************************}
 
 Procedure ptc_PutImageproc_8bpp(X,Y: smallint; var Bitmap; BitBlt: Word); {$ifndef fpc}far;{$endif fpc}
 type
@@ -1603,113 +1497,225 @@ Begin
   ptc_surface_unlock;
   ptc_update;
 end;
-
-Procedure PTC_GetScanlineProc_8bpp (X1, X2, Y : smallint; Var Data); {$ifndef fpc}far;{$endif fpc}
-  {**********************************************************}
-  { Procedure GetScanLine()                                  }
-  {----------------------------------------------------------}
-  { Returns the full scanline of the video line of the Y     }
-  { coordinate. The values are returned in a WORD array      }
-  { each WORD representing a pixel of the specified scanline }
-  { note: we only need the pixels inside the ViewPort! (JM)  }
-  { note2: extended so you can specify start and end X coord }
-  {   so it is usable for GetImage too (JM)                  }
-  {**********************************************************}
-  Var
-    pixels : Pword;
-    x,x3   : smallint;
-  Begin
-     pixels := ptc_surface_lock;
-     For x:=X1 to X2 Do
-       Begin
-         x3:=x;
-         If clipcoords(x3,Y) then
-           WordArray(Data)[x-x1]:=pixels[x+y*PTCWidth] and ColorMask;
-       End;
-     ptc_surface_unlock;       
-  End;
-Procedure PTC_GetScanlineProc_16bpp (X1, X2, Y : smallint; Var Data); {$ifndef fpc}far;{$endif fpc}
-  {**********************************************************}
-  { Procedure GetScanLine()                                  }
-  {----------------------------------------------------------}
-  { Returns the full scanline of the video line of the Y     }
-  { coordinate. The values are returned in a WORD array      }
-  { each WORD representing a pixel of the specified scanline }
-  { note: we only need the pixels inside the ViewPort! (JM)  }
-  { note2: extended so you can specify start and end X coord }
-  {   so it is usable for GetImage too (JM)                  }
-  {**********************************************************}
-  Var
-    pixels : Pword;
-    x,x3   : smallint;
-  Begin
-     pixels := ptc_surface_lock;
-     For x:=X1 to X2 Do
-       Begin
-         x3:=x;
-         If clipcoords(x3,Y) then
-           WordArray(Data)[x-x1]:=pixels[x+y*PTCWidth];
-       End;
-     ptc_surface_unlock;       
-  End;
-  
-Procedure PTC_GetImageProc_16bpp(X1,Y1,X2,Y2: smallint; Var Bitmap); {$ifndef fpc}far;{$endif fpc}
+Procedure ptc_PutImageproc_16bpp(X,Y: smallint; var Bitmap; BitBlt: Word); {$ifndef fpc}far;{$endif fpc}
 type
   pt = array[0..{$ifdef cpu16}16382{$else}$fffffff{$endif}] of word;
   ptw = array[0..2] of longint;
 var
-  pixels : Pword;
-  x,y,i,vpx1,vpx2,vpy1,vpy2  : smallint;
-  k      : longint;
+  pixels:Pword;
+  k: longint;
+  i, j, y1, x1, deltaX, deltaX1, deltaY: smallint;
+  JxW, I_JxW: Longword;
 Begin
-  ptw(Bitmap)[0] := X2-X1+1;   { First longint  is width  }
-  ptw(Bitmap)[1] := Y2-Y1+1;   { Second longint is height }
-  ptw(bitmap)[2] := 0;         { Third longint is reserved}
-  k:= 3 * Sizeof(longint) div sizeof(word); { Three reserved longs at start of bitmap }
-  vpx1:=x1;
-  vpx2:=x2;
-  vpy1:=y1;
-  vpy2:=y2;
-  { check which part of the image is in the viewport }
+  inc(x,startXViewPort);
+  inc(y,startYViewPort);
+  { width/height are 1-based, coordinates are zero based }
+  x1 := ptw(Bitmap)[0]+x-1; { get width and adjust end coordinate accordingly }
+  y1 := ptw(Bitmap)[1]+y-1; { get height and adjust end coordinate accordingly }
+  deltaY := 0;
+  deltaX := 0;
+  deltaX1 := 0;
+  k := 3 * sizeOf(Longint) div sizeOf(Word); { Three reserved longs at start of bitmap }
+ { check which part of the image is in the viewport }
   if clipPixels then
     begin
-      if vpx1 < startXViewPort then
-        vpx1 := startXViewPort;
-      if vpx2 > startXViewPort + viewWidth then
-        vpx2 := startXViewPort + viewWidth;
-      if vpy1 < startYViewPort then
-        vpy1 := startYViewPort;
-      if vpy2 > startYViewPort+viewHeight then
-        vpy2 := startYViewPort+viewHeight;
+      if y < startYViewPort then
+        begin
+          deltaY := startYViewPort - y;
+          inc(k,(x1-x+1)*deltaY);
+          y := startYViewPort;
+         end;
+      if y1 > startYViewPort+viewHeight then
+        y1 := startYViewPort+viewHeight;
+      if x < startXViewPort then
+        begin
+          deltaX := startXViewPort-x;
+          x := startXViewPort;
+        end;
+      if x1 > startXViewPort + viewWidth then
+        begin
+          deltaX1 := x1 - (startXViewPort + viewWidth);
+          x1 := startXViewPort + viewWidth;
+        end;
     end;
-  { check if coordinates are on the screen}
-  if vpx1 < 0 then
-    vpx1 := 0;
-  if vpx2 > PTCwidth then
-    vpx2 := PTCwidth;
-  if vpy1 < 0 then
-    vpy1 := 0;
-  if vpy2 > PTCheight then
-    vpy2 := PTCheight;
-    
-  i := (x2 - x1 + 1) * (vpy1 - y1 +1);
   pixels := ptc_surface_lock;
-  for y:=vpy1 to vpy2 do
-   Begin
-     For x:=vpx1 to vpx2 Do
-       pt(Bitmap)[k+(x-x1)]:=pixels[x+y*PTCWidth];
-     inc(k,i);
-   end;
-   ptc_surface_unlock;       
+  case BitBlt of
+    XORPut:
+      Begin
+        for j:=Y to Y1 do
+          Begin
+            JxW:=j*PTCWidth;
+            inc(k,deltaX);
+            for i:=X to X1 do
+              begin
+                I_JxW:=i+JxW;
+                pixels[I_JxW] := pixels[I_JxW] xor pt(bitmap)[k];
+                inc(k);
+              end;
+            inc(k,deltaX1);
+          End;
+      End;
+    ORPut:
+      Begin
+        for j:=Y to Y1 do
+          Begin
+            JxW:=j*PTCWidth;
+            inc(k,deltaX);
+            for i:=X to X1 do
+              begin
+                I_JxW:=i+JxW;
+                pixels[I_JxW] := pixels[I_JxW] or pt(bitmap)[k];
+                inc(k);
+              end;
+            inc(k,deltaX1);
+          End;
+      End;
+    AndPut:
+      Begin
+        for j:=Y to Y1 do
+          Begin
+            JxW:=j*PTCWidth;
+            inc(k,deltaX);
+            for i:=X to X1 do
+              begin
+                I_JxW:=i+JxW;
+                pixels[I_JxW] := pixels[I_JxW] and pt(bitmap)[k];
+                inc(k);
+              end;
+            inc(k,deltaX1);
+          End;
+      End;
+    NotPut:
+      Begin
+        for j:=Y to Y1 do
+          Begin
+            JxW:=j*PTCWidth;
+            inc(k,deltaX);
+            for i:=X to X1 do
+              begin
+                pixels[i+JxW] := pt(bitmap)[k] xor $FFFF;
+                inc(k);
+              end;
+            inc(k,deltaX1);
+          End;
+      End;
+    Else
+      Begin
+        for j:=Y to Y1 do
+          Begin
+            JxW:=j*PTCWidth;
+            inc(k,deltaX);
+            for i:=X to X1 do
+              begin
+                pixels[i+JxW] := pt(bitmap)[k];
+                inc(k);
+              end;
+            inc(k,deltaX1);
+          End;
+      End;
+  End; {case}
+  ptc_surface_unlock;
+  ptc_update;
 end;
+
+{**********************************************************}
+{ Procedure GetScanLine()                                  }
+{----------------------------------------------------------}
+{ Returns the full scanline of the video line of the Y     }
+{ coordinate. The values are returned in a WORD array      }
+{ each WORD representing a pixel of the specified scanline }
+{ note: we only need the pixels inside the ViewPort! (JM)  }
+{ note2: extended so you can specify start and end X coord }
+{   so it is usable for GetImage too (JM)                  }
+{ note3: This optomized version does not use GetPixel,     }
+{   Whcih would be checking the viewport for every pixel.  }
+{   Instead it just does it's own viewport check once then }
+{   gets all the pixels on the scan line without further   }
+{   checking  (JMR)                                        }
+{**********************************************************}
+
+Procedure PTC_GetScanlineProc_8bpp (X1, X2, Y : smallint; Var Data); {$ifndef fpc}far;{$endif fpc}
+Var
+  pixels        : Pword;
+  x,vpx1,vpx2   : smallint;
+Begin
+   vpx1:=x1;
+   vpx2:=x2;
+    { constrain to the part of the scanline that is in the viewport }
+    if clipPixels then
+       begin
+          if vpx1 <  startXViewPort then
+             vpx1 := startXViewPort;
+          if vpx2 >  startXViewPort + viewWidth then
+             vpx2 := startXViewPort + viewWidth;
+       end;
+    { constrain to the part of the scanline that is on the screen }
+    if vpx1 <  0 then
+       vpx1 := 0;
+    if vpx2 >  PTCwidth then
+       vpx2 := PTCwidth;
+    If (ClipPixels AND (y <= startYViewPort+viewHeight) and (y >= startYViewPort) and (y>=0) and (y<=PTCheight)) or Not(ClipPixels) then
+       Begin
+          pixels := ptc_surface_lock;
+          For x:=vpx1 to vpx2 Do
+             WordArray(Data)[x-vpx1]:=pixels[x+y*PTCWidth] and ColorMask;
+          ptc_surface_unlock;
+       End;
+End;
+
+Procedure PTC_GetScanlineProc_16bpp (X1, X2, Y : smallint; Var Data); {$ifndef fpc}far;{$endif fpc}
+Var
+  pixels        : Pword;
+  x,vpx1,vpx2   : smallint;
+Begin
+   vpx1:=x1;
+   vpx2:=x2;
+    { constrain to the part of the scanline that is in the viewport }
+    if clipPixels then
+       begin
+          if vpx1 <  startXViewPort then
+             vpx1 := startXViewPort;
+          if vpx2 >  startXViewPort + viewWidth then
+             vpx2 := startXViewPort + viewWidth;
+       end;
+    { constrain to the part of the scanline that is on the screen }
+    if vpx1 <  0 then
+       vpx1 := 0;
+    if vpx2 >  PTCwidth then
+       vpx2 := PTCwidth;
+    If (ClipPixels AND (y <= startYViewPort+viewHeight) and (y >= startYViewPort) and (y>=0) and (y<=PTCheight)) or Not(ClipPixels) then
+       Begin
+          pixels := ptc_surface_lock;
+          For x:=vpx1 to vpx2 Do
+             WordArray(Data)[x-vpx1]:=pixels[x+y*PTCWidth];
+          ptc_surface_unlock;
+       End;
+End;
+
+{**********************************************************}
+{ Procedure GetImage()                                     }
+{----------------------------------------------------------}
+{ Returns a bitmap full the video specified by a rectagle  }
+{ defined by X1,Y1 to X2,Y2                                }
+{ the first 2 bytes of the bitmap structure define the     }
+{ width and height of the rectangle                        }
+{ These are later used by PutImage() so the bitmap is      }
+{ properly represented                                     }
+{ there is a 3rd reserved byte before data starts          }
+{ note: This optomized version does not use GetScanLine or }
+{   GetPixel, Whcih would be checking the viewport for     }
+{   every pixel. Instead it just does it's own viewport    }
+{   check once then gets all the pixels within the veiwport}
+{   without further checking  (JMR)                        }
+{**********************************************************}
 
 Procedure PTC_GetImageProc_8bpp(X1,Y1,X2,Y2: smallint; Var Bitmap); {$ifndef fpc}far;{$endif fpc}
 type
   pt = array[0..{$ifdef cpu16}16382{$else}$fffffff{$endif}] of word;
   ptw = array[0..2] of longint;
 var
-  pixels : Pword;
-  x,y,i,vpx1,vpx2,vpy1,vpy2  : smallint;
+  pixels                       : Pword;
+  x,y,i,j,vpx1,vpx2,vpy1,vpy2  : smallint;
   k      : longint;
 Begin
   ptw(Bitmap)[0] := X2-X1+1;   { First longint  is width  }
@@ -1741,8 +1747,9 @@ Begin
     vpy1 := 0;
   if vpy2 > PTCheight then
     vpy2 := PTCheight;
-    
-  i := (x2 - x1 + 1) * (vpy1 - y1 +1);
+  i := (x2 - x1 + 1);
+  j := i * (vpy1 - y1);
+  inc(k,j);
   pixels := ptc_surface_lock;
   for y:=vpy1 to vpy2 do
    Begin
@@ -1751,6 +1758,57 @@ Begin
      inc(k,i);
    end;
    ptc_surface_unlock;       
+end;
+
+Procedure PTC_GetImageProc_16bpp(X1,Y1,X2,Y2: smallint; Var Bitmap); {$ifndef fpc}far;{$endif fpc}
+type
+  pt = array[0..{$ifdef cpu16}16382{$else}$fffffff{$endif}] of word;
+  ptw = array[0..2] of longint;
+var
+  pixels : Pword;
+  x,y,i,j,vpx1,vpx2,vpy1,vpy2  : smallint;
+  k      : longint;
+Begin
+  ptw(Bitmap)[0] := X2-X1+1;   { First longint  is width  }
+  ptw(Bitmap)[1] := Y2-Y1+1;   { Second longint is height }
+  ptw(bitmap)[2] := 0;         { Third longint is reserved}
+  k:= 3 * Sizeof(longint) div sizeof(word); { Three reserved longs at start of bitmap }
+  vpx1:=x1;
+  vpx2:=x2;
+  vpy1:=y1;
+  vpy2:=y2;
+  { check which part of the image is in the viewport }
+  if clipPixels then
+    begin
+      if vpx1 < startXViewPort then
+        vpx1 := startXViewPort;
+      if vpx2 > startXViewPort + viewWidth then
+        vpx2 := startXViewPort + viewWidth;
+      if vpy1 < startYViewPort then
+        vpy1 := startYViewPort;
+      if vpy2 > startYViewPort+viewHeight then
+        vpy2 := startYViewPort+viewHeight;
+    end;
+  { check if coordinates are on the screen}
+  if vpx1 < 0 then
+    vpx1 := 0;
+  if vpx2 > PTCwidth then
+    vpx2 := PTCwidth;
+  if vpy1 < 0 then
+    vpy1 := 0;
+  if vpy2 > PTCheight then
+    vpy2 := PTCheight;
+  i := (x2 - x1 + 1);
+  j := i * (vpy1 - y1);
+  inc(k,j);
+  pixels := ptc_surface_lock;
+  for y:=vpy1 to vpy2 do
+   Begin
+     For x:=vpx1 to vpx2 Do
+       pt(Bitmap)[k+(x-x1)]:=pixels[x+y*PTCWidth];
+      inc(k,i);
+   end;
+   ptc_surface_unlock;
 end;
 
 {************************************************************************}
