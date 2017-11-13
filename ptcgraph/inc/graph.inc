@@ -1121,27 +1121,31 @@ Procedure SetActivePageDefault(page : word); {$ifndef fpc}far;{$endif fpc}
    {the following procedures are defined in ptcgraph.pp  if these end up attempting to run, it's 
    because InitGraph failed}
 
-Procedure UnusedProcedure;
-  Begin
-    Writeln(stderr,'Error: Not in graphics mode (use InitGraph and test GraphResult afterwards)');
-    Halt(1);
-  End;
+  procedure NotInGraphicsMode; noreturn;
+   begin
+     Writeln(stderr,'Error: Not in graphics mode (use InitGraph and test GraphResult afterwards)');
+     Halt(1);
+   end;
 
-Procedure DirectPutPixelDefault(X,Y: smallint);
-  Begin
-    UnusedProcedure;
-  End;
+  procedure DirectPutPixelDefault(X,Y: smallint);
+   begin
+     NotInGraphicsMode;
+   end;
 
-Function GetPixelDefault(X,Y: smallint): word;
-  Begin
-    UnusedProcedure;
-    Exit(0); { avoid warning }
-  End;
+  function GetPixelDefault(X,Y: smallint): word;
+   begin
+     NotInGraphicsMode;
+   end;
 
-Procedure PutPixelDefault(X,Y: smallint; Color: Word);
-  Begin
-    UnusedProcedure;
-  End;
+  procedure PutPixelDefault(X,Y: smallint; Color: Word);
+   begin
+     NotInGraphicsMode;
+   end;
+
+  procedure SetRGBPaletteDefault(ColorNum, RedValue, GreenValue, BlueValue: smallint);
+   begin
+     NotInGraphicsMode;
+   end;
 
 Procedure DefaultPutImage(X,Y: smallint; var Bitmap; BitBlt: Word); {$ifndef fpc}far;{$endif fpc}
   Begin
@@ -1165,7 +1169,7 @@ Procedure SetRGBPaletteDefault(ColorNum, RedValue, GreenValue, BlueValue: smalli
 
 Procedure GetRGBPaletteDefault(ColorNum: smallint; var RedValue, GreenValue, BlueValue: smallint);
    begin
-      UnusedProcedure;
+     NotInGraphicsMode;
    end;
 
 
