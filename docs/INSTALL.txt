@@ -9,8 +9,19 @@ FPC 2.6.4 isn't guaranteed to work for any other platforms, besides Windows.
  - Compiling the library:
 Before starting make sure the FPCDIR environment variable is set correctly.
 For example: (windows, fpc version 3.0.4, default install dir)
+Note that there must not be spaces in the FPC path.
 
   set FPCDIR=c:\fpc\3.0.4
+
+Also you cannot compile the library if there are elements from the library
+already in your FPC units path.  Rename the following files:
+units\i386-win32\graph\ptcgraph.ppu
+units\i386-win32\graph\ptcgraph.0
+units\i386-win32\graph\ptccrt.ppu
+units\i386-win32\graph\ptccrt.0
+units\i386-win32\graph\ptcmouse.ppu
+units\i386-win32\graph\ptcmouse.0
+And all the files in the driectory: units\i386-win32\ptc\
 
 To compile the library type:
 
@@ -30,3 +41,18 @@ some other make! (e.g. GNU make is usually called 'gmake' on *BSD)
   GNU Make version x.xx.x, ... etc. :)
 
 On Windows and DOS this is the 'make' that comes with Free Pascal.
+
+
+To compile the library for x64 Windows
+  Rename the following files:
+units\x86_64-win64\graph\ptcgraph.ppu
+units\x86_64-win64\graph\ptcgraph.0
+units\x86_64-win64\graph\ptccrt.ppu
+units\x86_64-win64\graph\ptccrt.0
+units\x86_64-win64\graph\ptcmouse.ppu
+units\x86_64-win64\graph\ptcmouse.0
+And all the files in the driectory: units\x86_64-win64\ptc\
+  
+  Then type:
+  fpcmake -r -Tx86_64-win64
+  make CPU_TARGET=x86_64 OS_TARGET=win64
