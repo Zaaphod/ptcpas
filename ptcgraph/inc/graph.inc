@@ -52,6 +52,10 @@ type
 
   WordArray = Array [0..StdbufferSize] Of word;
   PWordArray = ^WordArray;
+{$ifdef FPC_GRAPH_SUPPORTS_TRUECOLOR}
+  LongWordArray = Array [0..StdbufferSize] Of LongWord;
+  PLongWordArray = ^LongWordArray;
+{$endif FPC_GRAPH_SUPPORTS_TRUECOLOR}
 
 
 const
@@ -78,8 +82,8 @@ const
 
 
 var
-  CurrentColor:     Word;
-  CurrentBkColor: Word;
+  CurrentColor:     ColorType;
+  CurrentBkColor: ColorType;
   CurrentX : smallint;   { viewport relative }
   CurrentY : smallint;   { viewport relative }
 
@@ -237,7 +241,7 @@ var
       Flag           : Boolean; { determines pixel direction in thick lines }
       NumPixels      : smallint;
       PixelCount     : smallint;
-      OldCurrentColor: Word;
+      OldCurrentColor: ColorType;
       swtmp          : smallint;
       TmpNumPixels   : smallint;
  begin
@@ -673,7 +677,9 @@ var
     TempTerm: graph_float;
     xtemp, ytemp, xp, yp, xm, ym, xnext, ynext,
       plxpyp, plxmyp, plxpym, plxmym: smallint;
-    BackupColor, TmpAngle, OldLineWidth: word;
+    BackupColor: ColorType;
+    TmpAngle, OldLineWidth: word;
+    CounterClockwise : Boolean;
   Begin
    If LineInfo.ThickNess = ThickWidth Then
     { first draw the two outer ellipses using normwidth and no filling (JM) }
@@ -718,7 +724,10 @@ var
        TmpAngle:=EndAngle;
        EndAngle:=StAngle;
        Stangle:=TmpAngle;
-     end;
+       CounterClockwise:=true;
+     end
+   else
+     CounterClockwise:=false;
    { approximate the number of pixels required by using the circumference }
    { equation of an ellipse.                                              }
    { Changed this formula a it (trial and error), but the net result is that }
@@ -765,22 +774,22 @@ var
      plxmyp := -maxsmallint-1;
      plxpym := maxsmallint;
      plxmym := -maxsmallint-1;
-     If (j >= StAngle) and (j <= EndAngle) then
+     If ((j >= StAngle) and (j <= EndAngle)) xor CounterClockwise then
        begin
          plxpyp := xp;
          PutPixel(xp,yp,CurrentColor);
        end;
-     If ((180-j) >= StAngle) and ((180-j) <= EndAngle) then
+     If (((180-j) >= StAngle) and ((180-j) <= EndAngle)) xor CounterClockwise then
        begin
          plxmyp := xm;
          PutPixel(xm,yp,CurrentColor);
        end;
-     If ((j+180) >= StAngle) and ((j+180) <= EndAngle) then
+     If (((j+180) >= StAngle) and ((j+180) <= EndAngle)) xor CounterClockwise then
        begin
          plxmym := xm;
          PutPixel(xm,ym,CurrentColor);
        end;
-     If ((360-j) >= StAngle) and ((360-j) <= EndAngle) then
+     If (((360-j) >= StAngle) and ((360-j) <= EndAngle)) xor CounterClockwise then
        begin
          plxpym := xp;
          PutPixel(xp,ym,CurrentColor);
@@ -813,7 +822,7 @@ var
     j           : smallint;
     TmpFillPattern : byte;
     OldWriteMode : word;
-    OldCurrentColor : word;
+    OldCurrentColor : ColorType;
    begin
      { convert to global coordinates ... }
      x1 := x1 + StartXViewPort;
@@ -987,7 +996,8 @@ var
 Procedure ClearViewPortDefault; {$ifndef fpc}far;{$endif fpc}
 var
  j: smallint;
- OldWriteMode, OldCurColor: word;
+ OldWriteMode: word;
+ OldCurColor: ColorType;
  LineSets : LineSettingsType;
 Begin
   { CP is always RELATIVE coordinates }
@@ -1092,15 +1102,192 @@ end;
 {                                                                          }
 {--------------------------------------------------------------------------}
 
+
+  Procedure GetScanlineDefault (X1, X2, Y : smallint; Var Data); {$ifndef fpc}far;{$endif fpc}
+  {**********************************************************}
+  { Procedure GetScanLine()                                  }
+  {----------------------------------------------------------}
+  { Returns the full scanline of the video line of the Y     }
+  { coordinate. The values are returned in a WORD array      }
+  { each WORD representing a pixel of the specified scanline }
+  { note: we only need the pixels inside the ViewPort! (JM)  }
+  { note2: extended so you can specify start and end X coord }
+  {   so it is usable for GetImage too (JM)                  }
+  {**********************************************************}
+
+
+  Var
+    x : smallint;
+  Begin
+{$ifdef FPC_GRAPH_SUPPORTS_TRUECOLOR}
+    if MaxColor > 65536 then
+    begin
+      For x:=X1 to X2 Do
+        LongWordArray(Data)[x-x1]:=GetPixel(x, y);
+    end
+    else
+{$endif FPC_GRAPH_SUPPORTS_TRUECOLOR}
+    begin
+      For x:=X1 to X2 Do
+        WordArray(Data)[x-x1]:=GetPixel(x, y);
+    end;
+  End;
+
+
+
 Function DefaultImageSize(X1,Y1,X2,Y2: smallint): longint; {$ifndef fpc}far;{$endif fpc}
 Begin
-  { each pixel uses two bytes, to enable modes with colors up to 64K }
-  { to work.                                                         }
-  DefaultImageSize := 12 + (((X2-X1+1)*(Y2-Y1+1))*2);
+{$ifdef FPC_GRAPH_SUPPORTS_TRUECOLOR}
+  if MaxColor > 65536 then
+  begin
+    DefaultImageSize := 12 + (((X2-X1+1)*(Y2-Y1+1))*4);
+  end
+  else
+{$endif FPC_GRAPH_SUPPORTS_TRUECOLOR}
+  begin
+    { each pixel uses two bytes, to enable modes with colors up to 64K }
+    { to work.                                                         }
+    DefaultImageSize := 12 + (((X2-X1+1)*(Y2-Y1+1))*2);
+  end;
 end;
 
-Procedure GetArcCoords(var ArcCoords: ArcCoordsType);
-  Begin
+Procedure DefaultPutImage(X,Y: smallint; var Bitmap; BitBlt: Word); {$ifndef fpc}far;{$endif fpc}
+type
+{$ifdef FPC_GRAPH_SUPPORTS_TRUECOLOR}
+  ptl = array[0..{$ifdef cpu16}8191{$else}$fffffff{$endif}] of longword;
+{$endif FPC_GRAPH_SUPPORTS_TRUECOLOR}
+  pt = array[0..{$ifdef cpu16}16382{$else}$fffffff{$endif}] of word;
+  ptw = array[0..2] of longint;
+var
+  k: longint;
+  oldCurrentColor: ColorType;
+  oldCurrentWriteMode, i, j, y1, x1, deltaX, deltaX1, deltaY: smallint;
+Begin
+{$ifdef logging}
+  LogLn('putImage at ('+strf(x)+','+strf(y)+') with width '+strf(ptw(Bitmap)[0])+
+    ' and height '+strf(ptw(Bitmap)[1]));
+  deltaY := 0;
+{$endif logging}
+  inc(x,startXViewPort);
+  inc(y,startYViewPort);
+  { width/height are 1-based, coordinates are zero based }
+  x1 := ptw(Bitmap)[0]+x-1; { get width and adjust end coordinate accordingly }
+  y1 := ptw(Bitmap)[1]+y-1; { get height and adjust end coordinate accordingly }
+
+  deltaX := 0;
+  deltaX1 := 0;
+{$ifdef FPC_GRAPH_SUPPORTS_TRUECOLOR}
+  if MaxColor > 65536 then
+    k := 3 * sizeOf(Longint) div sizeOf(LongWord) { Three reserved longs at start of bitmap }
+  else
+{$endif FPC_GRAPH_SUPPORTS_TRUECOLOR}
+    k := 3 * sizeOf(Longint) div sizeOf(Word); { Three reserved longs at start of bitmap }
+ { check which part of the image is in the viewport }
+  if clipPixels then
+    begin
+      if y < startYViewPort then
+        begin
+          deltaY := startYViewPort - y;
+          inc(k,(x1-x+1)*deltaY);
+          y := startYViewPort;
+         end;
+      if y1 > startYViewPort+viewHeight then
+        y1 := startYViewPort+viewHeight;
+      if x < startXViewPort then
+        begin
+          deltaX := startXViewPort-x;
+          x := startXViewPort;
+        end;
+      if x1 > startXViewPort + viewWidth then
+        begin
+          deltaX1 := x1 - (startXViewPort + viewWidth);
+          x1 := startXViewPort + viewWidth;
+        end;
+    end;
+{$ifdef logging}
+  LogLn('deltax: '+strf(deltax)+', deltax1: '+strf(deltax1)+',deltay: '+strf(deltay));
+{$endif logging}
+  oldCurrentColor := currentColor;
+  oldCurrentWriteMode := currentWriteMode;
+  currentWriteMode := bitBlt;
+{$ifdef FPC_GRAPH_SUPPORTS_TRUECOLOR}
+  if MaxColor > 65536 then
+  begin
+    for j:=Y to Y1 do
+    Begin
+      inc(k,deltaX);
+      for i:=X to X1 do
+      begin
+        currentColor := ptl(bitmap)[k];
+        directPutPixel(i,j);
+        inc(k);
+      end;
+      inc(k,deltaX1);
+    end;
+  end
+  else
+{$endif FPC_GRAPH_SUPPORTS_TRUECOLOR}
+  begin
+    for j:=Y to Y1 do
+    Begin
+      inc(k,deltaX);
+      for i:=X to X1 do
+      begin
+        currentColor := pt(bitmap)[k];
+        directPutPixel(i,j);
+        inc(k);
+      end;
+      inc(k,deltaX1);
+    end;
+  end;
+  currentWriteMode := oldCurrentWriteMode;
+  currentColor := oldCurrentColor;
+end;
+
+Procedure DefaultGetImage(X1,Y1,X2,Y2: smallint; Var Bitmap); {$ifndef fpc}far;{$endif fpc}
+type
+{$ifdef FPC_GRAPH_SUPPORTS_TRUECOLOR}
+  ptl = array[0..{$ifdef cpu16}8191{$else}$fffffff{$endif}] of longword;
+{$endif FPC_GRAPH_SUPPORTS_TRUECOLOR}
+  pt = array[0..{$ifdef cpu16}16382{$else}$fffffff{$endif}] of word;
+  ptw = array[0..2] of longint;
+var
+  i,j: smallint;
+  k: longint;
+Begin
+  i := x2 - x1 + 1;
+{$ifdef FPC_GRAPH_SUPPORTS_TRUECOLOR}
+  if MaxColor > 65536 then
+  begin
+    k:= 3 * Sizeof(longint) div sizeof(longword); { Three reserved longs at start of bitmap }
+    for j:=Y1 to Y2 do
+    Begin
+      GetScanLine(x1,x2,j,ptl(Bitmap)[k]);
+      inc(k,i);
+    end;
+  end
+  else
+{$endif FPC_GRAPH_SUPPORTS_TRUECOLOR}
+  begin
+    k:= 3 * Sizeof(longint) div sizeof(word); { Three reserved longs at start of bitmap }
+    for j:=Y1 to Y2 do
+    Begin
+      GetScanLine(x1,x2,j,pt(Bitmap)[k]);
+      inc(k,i);
+    end;
+  end;
+  ptw(Bitmap)[0] := X2-X1+1;   { First longint  is width  }
+  ptw(Bitmap)[1] := Y2-Y1+1;   { Second longint is height }
+  ptw(bitmap)[2] := 0;       { Third longint is reserved}
+end;
+
+
+
+
+
+
+  Procedure GetArcCoords(var ArcCoords: ArcCoordsType);
+   Begin
      ArcCoords.X := ArcCall.X;
      ArcCoords.Y := ArcCall.Y;
      ArcCoords.XStart := ArcCall.XStart;
@@ -1132,12 +1319,12 @@ Procedure SetActivePageDefault(page : word); {$ifndef fpc}far;{$endif fpc}
      NotInGraphicsMode;
    end;
 
-  function GetPixelDefault(X,Y: smallint): word;
+  function GetPixelDefault(X,Y: smallint): ColorType;
    begin
      NotInGraphicsMode;
    end;
 
-  procedure PutPixelDefault(X,Y: smallint; Color: Word);
+  procedure PutPixelDefault(X,Y: smallint; Color: ColorType);
    begin
      NotInGraphicsMode;
    end;
@@ -1175,8 +1362,8 @@ Procedure GetRGBPaletteDefault(ColorNum: smallint; var RedValue, GreenValue, Blu
 
   procedure OutTextXYDefault(x,y : smallint;const TextString : string);forward;
   procedure CircleDefault(X, Y: smallint; Radius:Word);forward;
-  procedure SetBkColorDefault(ColorNum: Word);forward;
-  function GetBkColorDefault: Word;forward;
+  procedure SetBkColorDefault(ColorNum: ColorType);forward;
+  function GetBkColorDefault: ColorType;forward;
 
 {$i palette.inc}
 
@@ -1425,7 +1612,18 @@ Procedure GetRGBPaletteDefault(ColorNum: smallint; var RedValue, GreenValue, Blu
  end;
 
  procedure Sector(x, y: smallint; StAngle,EndAngle, XRadius, YRadius: Word);
+  var
+    TmpAngle : Word;
   begin
+     { sector does not draw counter-clock wise }
+     StAngle := StAngle mod 361;
+     EndAngle := EndAngle mod 361;
+     if Endangle < StAngle then
+       Begin
+         TmpAngle:=EndAngle;
+         EndAngle:=StAngle;
+         StAngle:=TmpAngle;
+       end;
      internalellipse(x,y,XRadius, YRadius, StAngle, EndAngle, {$ifdef fpc}@{$endif}SectorPL);
      Line(ArcCall.XStart, ArcCall.YStart, x,y);
      Line(x,y,ArcCall.Xend,ArcCall.YEnd);
@@ -1433,7 +1631,7 @@ Procedure GetRGBPaletteDefault(ColorNum: smallint; var RedValue, GreenValue, Blu
 
 
 
-   procedure SetFillStyle(Pattern : word; Color: word);
+   procedure SetFillStyle(Pattern : word; Color: ColorType);
 
    begin
      { on invalid input, the current fill setting will be }
@@ -1451,7 +1649,7 @@ Procedure GetRGBPaletteDefault(ColorNum: smallint; var RedValue, GreenValue, Blu
    end;
 
 
-  procedure SetFillPattern(Pattern: FillPatternType; Color: word);
+  procedure SetFillPattern(Pattern: FillPatternType; Color: ColorType);
   {********************************************************}
   { Changes the Current FillPattern to a user defined      }
   { pattern and changes also the current fill color.       }
@@ -1487,7 +1685,7 @@ Procedure GetRGBPaletteDefault(ColorNum: smallint; var RedValue, GreenValue, Blu
   {     - No contour is drawn for the lines                }
   {********************************************************}
   var y               : smallint;
-      origcolor       : longint;
+      origcolor       : ColorType;
       origlinesettings: Linesettingstype;
       origwritemode   : smallint;
    begin
@@ -1598,27 +1796,27 @@ end;
 {--------------------------------------------------------------------------}
 
 
-  procedure SetColor(Color: Word);
+  procedure SetColor(Color: ColorType);
 
    Begin
      CurrentColor := Color;
    end;
 
 
-  function GetColor: Word;
+  function GetColor: ColorType;
 
    Begin
      GetColor := CurrentColor;
    end;
 
-  function GetBkColorDefault: Word;
+  function GetBkColorDefault: ColorType;
 
    Begin
      GetBkColorDefault := CurrentBkColor;
    end;
 
 
-  procedure SetBkColorDefault(ColorNum: Word);
+  procedure SetBkColorDefault(ColorNum: ColorType);
   { Background color means background screen color in this case, and it is  }
   { INDEPENDANT of the viewport settings, so we must clear the whole screen }
   { with the color.                                                         }
@@ -1644,7 +1842,7 @@ end;
    end;
 
 
-  function GetMaxColor: word;
+  function GetMaxColor: ColorType;
   { Checked against TP VGA driver - CEC }
 
    begin
