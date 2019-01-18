@@ -1580,6 +1580,167 @@ begin
   ptc_update;
 end;
 
+procedure ptc_PatternLineProc_8bpp(x1,x2,y: smallint);
+{********************************************************}
+{ Draws a horizontal patterned line according to the     }
+{ current Fill Settings.                                 }
+{********************************************************}
+{ Important notes:                                       }
+{  - CurrentColor must be set correctly before entering  }
+{    this routine.                                       }
+{********************************************************}
+var
+  pixels: PByte;
+  NrIterations: smallint;
+  i           : smallint;
+  j           : smallint;
+  TmpFillPattern : byte;
+begin
+  { convert to global coordinates ... }
+  x1 := x1 + StartXViewPort;
+  x2 := x2 + StartXViewPort;
+  y  := y + StartYViewPort;
+  { if line was fully clipped then exit...}
+  if LineClipped(x1,y,x2,y,StartXViewPort,StartYViewPort,
+     StartXViewPort+ViewWidth, StartYViewPort+ViewHeight) then
+      exit;
+
+  { Get the current pattern }
+  TmpFillPattern := FillPatternTable
+    [FillSettings.Pattern][(y and $7)+1];
+
+  pixels := ptc_surface_lock;
+
+  { number of times to go throuh the 8x8 pattern }
+  NrIterations := abs(x2 - x1+8) div 8;
+  for i := 0 to NrIterations do
+    for j := 0 to 7 do
+    begin
+      { x1 mod 8 }
+      if RevBitArray[x1 and 7] and TmpFillPattern <> 0 then
+        pixels[x1+y*PTCWidth] := FillSettings.Color and ColorMask
+      else
+        pixels[x1+y*PTCWidth] := CurrentBkColor and ColorMask;
+      Inc(x1);
+      if x1 > x2 then
+      begin
+        ptc_surface_unlock;
+        ptc_update;
+        exit;
+      end;
+    end;
+  ptc_surface_unlock;
+  ptc_update;
+end;
+
+procedure ptc_PatternLineProc_16bpp(x1,x2,y: smallint);
+{********************************************************}
+{ Draws a horizontal patterned line according to the     }
+{ current Fill Settings.                                 }
+{********************************************************}
+{ Important notes:                                       }
+{  - CurrentColor must be set correctly before entering  }
+{    this routine.                                       }
+{********************************************************}
+var
+  pixels: PWord;
+  NrIterations: smallint;
+  i           : smallint;
+  j           : smallint;
+  TmpFillPattern : byte;
+begin
+  { convert to global coordinates ... }
+  x1 := x1 + StartXViewPort;
+  x2 := x2 + StartXViewPort;
+  y  := y + StartYViewPort;
+  { if line was fully clipped then exit...}
+  if LineClipped(x1,y,x2,y,StartXViewPort,StartYViewPort,
+     StartXViewPort+ViewWidth, StartYViewPort+ViewHeight) then
+      exit;
+
+  { Get the current pattern }
+  TmpFillPattern := FillPatternTable
+    [FillSettings.Pattern][(y and $7)+1];
+
+  pixels := ptc_surface_lock;
+
+  { number of times to go throuh the 8x8 pattern }
+  NrIterations := abs(x2 - x1+8) div 8;
+  for i := 0 to NrIterations do
+    for j := 0 to 7 do
+    begin
+      { x1 mod 8 }
+      if RevBitArray[x1 and 7] and TmpFillPattern <> 0 then
+        pixels[x1+y*PTCWidth] := FillSettings.Color
+      else
+        pixels[x1+y*PTCWidth] := CurrentBkColor;
+      Inc(x1);
+      if x1 > x2 then
+      begin
+        ptc_surface_unlock;
+        ptc_update;
+        exit;
+      end;
+    end;
+  ptc_surface_unlock;
+  ptc_update;
+end;
+
+{$ifdef FPC_GRAPH_SUPPORTS_TRUECOLOR}
+procedure ptc_PatternLineProc_32bpp(x1,x2,y: smallint);
+{********************************************************}
+{ Draws a horizontal patterned line according to the     }
+{ current Fill Settings.                                 }
+{********************************************************}
+{ Important notes:                                       }
+{  - CurrentColor must be set correctly before entering  }
+{    this routine.                                       }
+{********************************************************}
+var
+  pixels: PLongWord;
+  NrIterations: smallint;
+  i           : smallint;
+  j           : smallint;
+  TmpFillPattern : byte;
+begin
+  { convert to global coordinates ... }
+  x1 := x1 + StartXViewPort;
+  x2 := x2 + StartXViewPort;
+  y  := y + StartYViewPort;
+  { if line was fully clipped then exit...}
+  if LineClipped(x1,y,x2,y,StartXViewPort,StartYViewPort,
+     StartXViewPort+ViewWidth, StartYViewPort+ViewHeight) then
+      exit;
+
+  { Get the current pattern }
+  TmpFillPattern := FillPatternTable
+    [FillSettings.Pattern][(y and $7)+1];
+
+  pixels := ptc_surface_lock;
+
+  { number of times to go throuh the 8x8 pattern }
+  NrIterations := abs(x2 - x1+8) div 8;
+  for i := 0 to NrIterations do
+    for j := 0 to 7 do
+    begin
+      { x1 mod 8 }
+      if RevBitArray[x1 and 7] and TmpFillPattern <> 0 then
+        pixels[x1+y*PTCWidth] := FillSettings.Color
+      else
+        pixels[x1+y*PTCWidth] := CurrentBkColor;
+      Inc(x1);
+      if x1 > x2 then
+      begin
+        ptc_surface_unlock;
+        ptc_update;
+        exit;
+      end;
+    end;
+  ptc_surface_unlock;
+  ptc_update;
+end;
+{$endif FPC_GRAPH_SUPPORTS_TRUECOLOR}
+
 procedure ptc_SetRGBAllPaletteProc(const Palette: PaletteType);
 begin
   {...}
@@ -1863,6 +2024,128 @@ Begin
   ptc_surface_unlock;
   ptc_update;
 end;
+{$ifdef FPC_GRAPH_SUPPORTS_TRUECOLOR}
+Procedure ptc_PutImageproc_32bpp(X,Y: smallint; var Bitmap; BitBlt: Word);
+type
+  pt = array[0..{$ifdef cpu16}16382{$else}$fffffff{$endif}] of longword;
+  ptw = array[0..2] of longint;
+var
+  pixels:Plongword;
+  k: longint;
+  i, j, y1, x1, deltaX, deltaX1, deltaY: smallint;
+  JxW, I_JxW: Longword;
+Begin
+  inc(x,startXViewPort);
+  inc(y,startYViewPort);
+  { width/height are 1-based, coordinates are zero based }
+  x1 := ptw(Bitmap)[0]+x-1; { get width and adjust end coordinate accordingly }
+  y1 := ptw(Bitmap)[1]+y-1; { get height and adjust end coordinate accordingly }
+  deltaY := 0;
+  deltaX := 0;
+  deltaX1 := 0;
+  k := 3 * sizeOf(Longint) div sizeOf(LongWord); { Three reserved longs at start of bitmap }
+ { check which part of the image is in the viewport }
+  if clipPixels then
+    begin
+      if y < startYViewPort then
+        begin
+          deltaY := startYViewPort - y;
+          inc(k,(x1-x+1)*deltaY);
+          y := startYViewPort;
+         end;
+      if y1 > startYViewPort+viewHeight then
+        y1 := startYViewPort+viewHeight;
+      if x < startXViewPort then
+        begin
+          deltaX := startXViewPort-x;
+          x := startXViewPort;
+        end;
+      if x1 > startXViewPort + viewWidth then
+        begin
+          deltaX1 := x1 - (startXViewPort + viewWidth);
+          x1 := startXViewPort + viewWidth;
+        end;
+    end;
+  pixels := ptc_surface_lock;
+  case BitBlt of
+    XORPut:
+      Begin
+        for j:=Y to Y1 do
+          Begin
+            JxW:=j*PTCWidth;
+            inc(k,deltaX);
+            for i:=X to X1 do
+              begin
+                I_JxW:=i+JxW;
+                pixels[I_JxW] := pixels[I_JxW] xor pt(bitmap)[k];
+                inc(k);
+              end;
+            inc(k,deltaX1);
+          End;
+      End;
+    ORPut:
+      Begin
+        for j:=Y to Y1 do
+          Begin
+            JxW:=j*PTCWidth;
+            inc(k,deltaX);
+            for i:=X to X1 do
+              begin
+                I_JxW:=i+JxW;
+                pixels[I_JxW] := pixels[I_JxW] or pt(bitmap)[k];
+                inc(k);
+              end;
+            inc(k,deltaX1);
+          End;
+      End;
+    AndPut:
+      Begin
+        for j:=Y to Y1 do
+          Begin
+            JxW:=j*PTCWidth;
+            inc(k,deltaX);
+            for i:=X to X1 do
+              begin
+                I_JxW:=i+JxW;
+                pixels[I_JxW] := pixels[I_JxW] and pt(bitmap)[k];
+                inc(k);
+              end;
+            inc(k,deltaX1);
+          End;
+      End;
+    NotPut:
+      Begin
+        for j:=Y to Y1 do
+          Begin
+            JxW:=j*PTCWidth;
+            inc(k,deltaX);
+            for i:=X to X1 do
+              begin
+                pixels[i+JxW] := pt(bitmap)[k] xor $FFFFFF;
+                inc(k);
+              end;
+            inc(k,deltaX1);
+          End;
+      End;
+    Else
+      Begin
+        for j:=Y to Y1 do
+          Begin
+            JxW:=j*PTCWidth;
+            inc(k,deltaX);
+            for i:=X to X1 do
+              begin
+                pixels[i+JxW] := pt(bitmap)[k];
+                inc(k);
+              end;
+            inc(k,deltaX1);
+          End;
+      End;
+  End; {case}
+  ptc_surface_unlock;
+  ptc_update;
+end;
+{$endif FPC_GRAPH_SUPPORTS_TRUECOLOR}
 
 {**********************************************************}
 { Procedure GetScanLine()                                  }
@@ -1939,6 +2222,38 @@ Begin
           ptc_surface_unlock;
        End;
 End;
+
+{$ifdef FPC_GRAPH_SUPPORTS_TRUECOLOR}
+Procedure PTC_GetScanlineProc_32bpp (X1, X2, Y : smallint; Var Data);
+Var
+  pixels        : Plongword;
+  x,vpx1,vpx2   : smallint;
+Begin
+   vpx1:=X1+StartXViewPort;
+   vpx2:=X2+StartXViewPort;
+   Y:=Y+StartYViewPort;
+    { constrain to the part of the scanline that is in the viewport }
+    if clipPixels then
+       begin
+          if vpx1 <  startXViewPort then
+             vpx1 := startXViewPort;
+          if vpx2 >  startXViewPort + viewWidth then
+             vpx2 := startXViewPort + viewWidth;
+       end;
+    { constrain to the part of the scanline that is on the screen }
+    if vpx1 <  0 then
+       vpx1 := 0;
+    if vpx2 >= PTCwidth then
+       vpx2 := PTCwidth-1;
+    If (ClipPixels AND (y <= startYViewPort+viewHeight) and (y >= startYViewPort) and (y>=0) and (y<PTCheight)) or Not(ClipPixels) then
+       Begin
+          pixels := ptc_surface_lock;
+          For x:=vpx1 to vpx2 Do
+             LongWordArray(Data)[x-StartXViewPort-x1]:=pixels[x+y*PTCWidth];
+          ptc_surface_unlock;
+       End;
+End;
+{$endif FPC_GRAPH_SUPPORTS_TRUECOLOR}
 
 {**********************************************************}
 { Procedure GetImage()                                     }
@@ -2058,6 +2373,59 @@ Begin
    end;
    ptc_surface_unlock;
 end;
+
+{$ifdef FPC_GRAPH_SUPPORTS_TRUECOLOR}
+Procedure PTC_GetImageProc_32bpp(X1,Y1,X2,Y2: smallint; Var Bitmap);
+type
+  pt = array[0..{$ifdef cpu16}16382{$else}$fffffff{$endif}] of longword;
+  ptw = array[0..2] of longint;
+var
+  pixels : Plongword;
+  x,y,i,j,vpx1,vpx2,vpy1,vpy2  : smallint;
+  k      : longint;
+Begin
+  ptw(Bitmap)[0] := X2-X1+1;   { First longint  is width  }
+  ptw(Bitmap)[1] := Y2-Y1+1;   { Second longint is height }
+  ptw(bitmap)[2] := 0;         { Third longint is reserved}
+  k:= 3 * Sizeof(longint) div sizeof(longword); { Three reserved longs at start of bitmap }
+  vpx1:=x1+StartXViewPort;
+  vpx2:=x2+StartXViewPort;
+  vpy1:=y1+StartYViewPort;
+  vpy2:=y2+StartYViewPort;
+  { check which part of the image is in the viewport }
+  if clipPixels then
+    begin
+      if vpx1 < startXViewPort then
+        vpx1 := startXViewPort;
+      if vpx2 > startXViewPort + viewWidth then
+        vpx2 := startXViewPort + viewWidth;
+      if vpy1 < startYViewPort then
+        vpy1 := startYViewPort;
+      if vpy2 > startYViewPort+viewHeight then
+        vpy2 := startYViewPort+viewHeight;
+    end;
+  { check if coordinates are on the screen}
+  if vpx1 < 0 then
+    vpx1 := 0;
+  if vpx2 >= PTCwidth then
+    vpx2 := PTCwidth-1;
+  if vpy1 < 0 then
+    vpy1 := 0;
+  if vpy2 >= PTCheight then
+    vpy2 := PTCheight-1;
+  i := (x2 - x1 + 1);
+  j := i * (vpy1 - StartYViewPort - y1);
+  inc(k,j);
+  pixels := ptc_surface_lock;
+  for y:=vpy1 to vpy2 do
+   Begin
+     For x:=vpx1 to vpx2 Do
+       pt(Bitmap)[k+(x-StartXViewPort-x1)]:=pixels[x+y*PTCWidth];
+      inc(k,i);
+   end;
+   ptc_surface_unlock;
+end;
+{$endif FPC_GRAPH_SUPPORTS_TRUECOLOR}
 
 {************************************************************************}
 {*                       General routines                               *}
@@ -2202,6 +2570,7 @@ end;
       //mode.SetAllPalette := {$ifdef fpc}@{$endif}SetVGARGBAllPalette;
       mode.HLine           := @ptc_HLineProc_8bpp;
       mode.VLine           := @ptc_VLineProc_8bpp;
+      mode.PatternLine     := @ptc_PatternLineProc_8bpp;
       mode.SetBkColor      := @SetBkColorCGA320;
       mode.GetBkColor      := @GetBkColorCGA320;
       mode.SetVisualPage   := @ptc_SetVisualPage;
@@ -2229,6 +2598,7 @@ end;
       //mode.SetAllPalette := {$ifdef fpc}@{$endif}SetVGARGBAllPalette;
       mode.HLine           := @ptc_HLineProc_8bpp;
       mode.VLine           := @ptc_VLineProc_8bpp;
+      mode.PatternLine     := @ptc_PatternLineProc_8bpp;
       mode.SetBkColor      := @SetBkColorCGA640;
       mode.GetBkColor      := @GetBkColorCGA640;
       mode.SetVisualPage   := @ptc_SetVisualPage;
@@ -2253,6 +2623,7 @@ end;
       //mode.SetAllPalette := {$ifdef fpc}@{$endif}SetVGARGBAllPalette;
       mode.HLine          := @ptc_HLineProc_8bpp;
       mode.VLine          := @ptc_VLineProc_8bpp;
+      mode.PatternLine     := @ptc_PatternLineProc_8bpp;
       mode.SetVisualPage  := @ptc_SetVisualPage;
       mode.SetActivePage  := @ptc_SetActivePage;
     end;
@@ -2273,6 +2644,7 @@ end;
       mode.GetRGBPalette   := @ptc_GetRGBPaletteProc;
       mode.HLine           := @ptc_HLineProc_8bpp;
       mode.VLine           := @ptc_VLineProc_8bpp;
+      mode.PatternLine     := @ptc_PatternLineProc_8bpp;
       mode.SetVisualPage   := @ptc_SetVisualPage;
       mode.SetActivePage   := @ptc_SetActivePage;
     end;
@@ -2294,6 +2666,7 @@ end;
       //mode.SetAllPalette := {$ifdef fpc}@{$endif}SetVGARGBAllPalette;
       mode.HLine           := @ptc_HLineProc_8bpp;
       mode.VLine           := @ptc_VLineProc_8bpp;
+      mode.PatternLine     := @ptc_PatternLineProc_8bpp;
       mode.SetVisualPage   := @ptc_SetVisualPage;
       mode.SetActivePage   := @ptc_SetActivePage;
     end;
@@ -2313,6 +2686,7 @@ end;
       //mode.SetAllPalette := {$ifdef fpc}@{$endif}SetVGARGBAllPalette;
       mode.HLine           := @ptc_HLineProc_16bpp;
       mode.VLine           := @ptc_VLineProc_16bpp;
+      mode.PatternLine     := @ptc_PatternLineProc_16bpp;
       mode.SetVisualPage   := @ptc_SetVisualPage;
       mode.SetActivePage   := @ptc_SetActivePage;
     end;
@@ -2340,14 +2714,15 @@ end;
       mode.DirectPutPixel  := @ptc_DirectPixelProc_32bpp;
       mode.PutPixel        := @ptc_PutPixelProc_32bpp;
       mode.GetPixel        := @ptc_GetPixelProc_32bpp;
-//      mode.PutImage        := @ptc_PutImageProc_32bpp;
-//      mode.GetImage        := @ptc_GetImageProc_32bpp;
-//      mode.GetScanLine     := @ptc_GetScanLineProc_32bpp;
+      mode.PutImage        := @ptc_PutImageProc_32bpp;
+      mode.GetImage        := @ptc_GetImageProc_32bpp;
+      mode.GetScanLine     := @ptc_GetScanLineProc_32bpp;
       mode.SetRGBPalette   := @ptc_SetRGBPaletteProc;
       mode.GetRGBPalette   := @ptc_GetRGBPaletteProc;
       //mode.SetAllPalette := {$ifdef fpc}@{$endif}SetVGARGBAllPalette;
       mode.HLine           := @ptc_HLineProc_32bpp;
       mode.VLine           := @ptc_VLineProc_32bpp;
+      mode.PatternLine     := @ptc_PatternLineProc_32bpp;
       mode.SetVisualPage   := @ptc_SetVisualPage;
       mode.SetActivePage   := @ptc_SetActivePage;
     end;
@@ -2524,6 +2899,7 @@ end;
 
        HLine          := @ptc_HLineProc_8bpp;
        VLine          := @ptc_VLineProc_8bpp;
+       PatternLine    := @ptc_PatternLineProc_8bpp;
 
        SetVisualPage  := @ptc_SetVisualPage;
        SetActivePage  := @ptc_SetActivePage;
@@ -2561,6 +2937,7 @@ end;
          GetRGBPalette  := @ptc_GetRGBPaletteProc;
          HLine          := @ptc_HLineProc_8bpp;
          VLine          := @ptc_VLineProc_8bpp;
+         PatternLine    := @ptc_PatternLineProc_8bpp;
          SetVisualPage  := @ptc_SetVisualPage;
          SetActivePage  := @ptc_SetActivePage;
          SetBkColor     := @SetBkColorHGC720;
@@ -2676,6 +3053,7 @@ end;
 
        HLine          := @ptc_HLineProc_8bpp;
        VLine          := @ptc_VLineProc_8bpp;
+       PatternLine    := @ptc_PatternLineProc_8bpp;
 
        SetVisualPage  := @ptc_SetVisualPage;
        SetActivePage  := @ptc_SetActivePage;
@@ -2710,6 +3088,7 @@ end;
 
        HLine          := @ptc_HLineProc_8bpp;
        VLine          := @ptc_VLineProc_8bpp;
+       PatternLine    := @ptc_PatternLineProc_8bpp;
 
        SetVisualPage  := @ptc_SetVisualPage;
        SetActivePage  := @ptc_SetActivePage;
